@@ -678,19 +678,14 @@
       </div>
 
       <!-- FPS -->
-      <div class="project-card reveal" onclick="window.open('https://github.com/RiyanMujtaba/fps-multiplayer','_blank')" style="cursor:pointer">
+      <div class="project-card reveal">
         <div class="project-icon" style="background:rgba(239,68,68,0.15)">🎮</div>
         <div class="project-header">
           <div>
             <div class="project-name">Browser FPS</div>
           </div>
-          <div class="project-links">
-            <a href="https://github.com/RiyanMujtaba/fps-multiplayer" target="_blank" class="project-link" onclick="event.stopPropagation()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            </a>
-          </div>
         </div>
-        <p class="project-desc">A browser-based first-person shooter built in JavaScript. Still a work in progress — the multiplayer side isn't fully there yet but the core game is built.</p>
+        <p class="project-desc">A browser-based first-person shooter built with raycasting in JavaScript. Multiplayer via Socket.io — players can join rooms and shoot each other in real time. Needs a server to run so no live demo yet, but the game works.</p>
         <div class="project-tags">
           <span class="project-tag">JavaScript</span>
           <span class="project-tag">FPS</span>
@@ -699,14 +694,16 @@
       </div>
 
       <!-- Footy Scores -->
-      <div class="project-card reveal" onclick="window.open('https://github.com/RiyanMujtaba/footy-scores','_blank')" style="cursor:pointer">
+      <div class="project-card reveal" onclick="window.open('https://riyanmujtaba.github.io/footy-scores','_blank')" style="cursor:pointer">
         <div class="project-icon" style="background:rgba(16,185,129,0.15)">⚽</div>
         <div class="project-header">
           <div>
+            <div class="project-live">Live</div>
             <div class="project-name">Footy Scores</div>
           </div>
           <div class="project-links">
-            <a href="https://github.com/RiyanMujtaba/footy-scores" target="_blank" class="project-link">
+            <a href="https://riyanmujtaba.github.io/footy-scores" target="_blank" class="project-link" onclick="event.stopPropagation()">↗</a>
+            <a href="https://github.com/RiyanMujtaba/footy-scores" target="_blank" class="project-link" onclick="event.stopPropagation()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
             </a>
           </div>
@@ -780,8 +777,8 @@
         <div class="research-authors">
           Shahan Ali Memon, Soham De, Sungha Kang, <strong>Riyan Mujtaba</strong>, Bedoor K. AlShebli, Katie Davis, Jaime Snyder, Jevin D. West
         </div>
-        <div class="research-venue">CHI 2025 Workshop on Human-centered Evaluation and Auditing of Language Models (HEAL)</div>
-        <div class="research-abstract">Explores how "context voids" — deliberate gaps in context — can be used to study and audit the behaviour of generative AI systems. Co-authored with researchers from the University of Washington's Information School.</div>
+        <div class="research-venue">CHI 2025 Workshop on Human-centered Evaluation and Auditing of Language Models (HEAL) · Yokohama, Japan</div>
+        <div class="research-abstract">When you ask an AI to generate an image of a "CEO" or a "nurse", it fills in the gaps with its own assumptions — race, gender, age. This paper introduces the idea of <em>context voids</em>: deliberately leaving parts of a prompt blank to reveal those hidden biases. We used this method to study and audit generative AI systems, analysing how models behave when context is stripped away. The title comes from the findings — the AI goes from inferring job titles all the way down to filling in physical features like jawlines. Co-authored with researchers from the University of Washington's Information School.</div>
         <div class="research-badge">✓ Accepted · CHI 2025</div>
       </div>
     </a>
