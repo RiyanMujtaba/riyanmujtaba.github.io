@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riyan Mujtaba</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080a0f;
+      --surface: #0f1117;
+      --surface2: #161820;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f5;
+      --muted: #6b7280;
+      --accent: #7c3aed;
+      --accent2: #06b6d4;
+      --green: #10b981;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(8,10,15,0.7);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    .nav-logo {
+      font-weight: 800;
+      font-size: 18px;
+      background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 120px 24px 80px;
+      text-align: center;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+      top: 30%; left: 60%;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 800px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: #a78bfa;
+      font-weight: 500;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 88px);
+      font-weight: 900;
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(124,58,237,0.5); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--surface); border-color: rgba(255,255,255,0.15); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      animation: fadeUp 0.6s 0.5s ease both;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(0.6)} }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 100px 24px; position: relative; z-index: 1; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #a78bfa;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 560px;
+      margin-bottom: 56px;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 4/5;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.1));
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+    .about-photo-placeholder {
+      font-size: 64px;
+      opacity: 0.3;
+    }
+    .about-photo-note {
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+    .about-float {
+      position: absolute;
+      bottom: -16px;
+      right: -16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      backdrop-filter: blur(10px);
+    }
+    .about-float-num { font-size: 28px; font-weight: 900; color: #a78bfa; }
+    .about-float-label { font-size: 12px; color: var(--muted); }
+
+    .about-text h2 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 20px; }
+    .about-text p { color: var(--muted); font-size: 16px; margin-bottom: 16px; line-height: 1.8; }
+    .about-text p strong { color: var(--text); }
+    .skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .skill-tag {
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 13px;
+      color: #a78bfa;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124,58,237,0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .project-card:hover::before { opacity: 1; }
+    .project-card.featured { border-color: rgba(124,58,237,0.3); grid-column: span 2; }
+    @media (max-width: 700px) { .project-card.featured { grid-column: span 1; } }
+
+    .project-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .project-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+    .project-name { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+    .project-links { display: flex; gap: 8px; }
+    .project-link {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .project-link:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .project-desc { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; flex: 1; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+    .project-tag {
+      background: var(--surface2);
+      border-radius: 5px;
+      padding: 3px 9px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .project-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .project-live::before { content: '●'; font-size: 7px; }
+
+    /* ── RESEARCH ── */
+    #research { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .research-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 36px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: start;
+      transition: border-color 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .research-card:hover { border-color: rgba(6,182,212,0.4); }
+    .research-year-box {
+      background: rgba(6,182,212,0.1);
+      border: 1px solid rgba(6,182,212,0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: center;
+      min-width: 70px;
+    }
+    .research-year { font-size: 22px; font-weight: 900; color: var(--accent2); display: block; }
+    .research-venue-short { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .research-title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; line-height: 1.4; }
+    .research-authors { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+    .research-authors strong { color: #a78bfa; }
+    .research-venue { font-size: 13px; color: var(--accent2); font-weight: 500; margin-bottom: 14px; }
+    .research-abstract { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .research-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 600;
+      margin-top: 14px;
+    }
+    @media (max-width: 600px) {
+      .research-card { grid-template-columns: 1fr; }
+    }
+
+    /* ── CONTACT ── */
+    #contact { text-align: center; }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    #contact .section-title { margin-bottom: 8px; }
+    #contact .section-desc { margin: 0 auto 40px; }
+    .contact-links {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .contact-card:hover { border-color: rgba(124,58,237,0.4); background: rgba(124,58,237,0.05); transform: translateY(-2px); }
+    .contact-icon { font-size: 20px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RM</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#research">Research</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Open to opportunities</div>
+    <h1>Riyan<br><span>Mujtaba</span></h1>
+    <p class="hero-sub">Developer & researcher building things that actually get used — from fitness apps to AI auditing tools.</p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal">
+        <div class="about-photo">
+          <!-- Replace the emoji below with: <img src="your-photo.jpg" alt="Riyan Mujtaba"> -->
+          <div class="about-photo-placeholder">👤</div>
+          <div class="about-photo-note">Add your photo here</div>
+        </div>
+        <div class="about-float">
+          <div class="about-float-num">7+</div>
+          <div class="about-float-label">Projects shipped</div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <div class="section-label">About me</div>
+        <h2>Builder. Researcher.<br>Problem solver.</h2>
+        <p>I'm a developer with a thing for building <strong>practical tools people actually use</strong>. Whether it's a calorie tracker, a university search engine, or a multiplayer FPS — I like projects that solve real problems.</p>
+        <p>On the research side, I co-authored a paper accepted at <strong>CHI 2025</strong> with researchers from the University of Washington, studying how generative AI systems can be evaluated through context voids.</p>
+        <p>I like working across the stack — frontend, backend, databases, and AI integrations.</p>
+        <div class="skills-wrap">
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">Firebase</span>
+          <span class="skill-tag">Three.js</span>
+          <span class="skill-tag">Groq API</span>
+          <span class="skill-tag">Pico-8</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">AI/LLMs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Work</div>
+      <div class="section-title">Things I've built</div>
+      <p class="section-desc">A mix of tools, games, and experiments — mostly built from scratch.</p>
+    </div>
+    <div class="projects-grid">
+
+      <!-- KiloTrack -->
+      <div class="project-card featured reveal">
+        <div class="project-icon" style="background:rgba(124,58,237,0.15)">💪</div>
+        <div class="project-header">
+          <div>
+            <div class="project-live">Live</div>
+            <div class="project-name">KiloTrack</div>
+          </div>
+          <div class="project-links">
+            <a href="https://riyanmujtaba.github.io/KiloTrack" target="_blank" class="project-link" title="Live site">↗</a>
+            <a href="https://github.com/RiyanMujtaba/KiloTrack" target="_blank" class="project-link" title="GitHub">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+        <p class="project-desc">A full-stack gym and calorie tracking progressive web app. Features gym split setup with ratings, personal record tracking with bodyweight-ratio rankings, AI-powered food photo analysis using Groq's Llama vision model, and a Pakistani/South Asian food database. Built with Firebase for real-time sync across devices.</p>
+        <div class="project-tags">
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">Firebase</span>
+          <span class="project-tag">Groq AI</span>
+          <span class="project-tag">PWA</span>
+        </div>
+      </div>
+
+      <!-- Uni Finder -->
+      <div class="project-card reveal">
+        <div class="project-icon" style="background:rgba(6,182,212,0.15)">🎓</div>
+        <div class="project-header">
+          <div>
+            <div class="project-live">Live</div>
+            <div class="project-name">Uni Finder</div>
+          </div>
+          <div class="project-links">
+            <a href="https://riyanmujtaba.github.io/uni-finder" target="_blank" class="project-link">↗</a>
+            <a href="https://github.com/RiyanMujtaba/uni-finder" target="_blank" class="project-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+        <p class="project-desc">A university search and filtering tool for students exploring international study options. Filter by country, English requirements, GPA, and accepted tests (IELTS, TOEFL, Duolingo). Covers universities across Europe, North America, Australia and more.</p>
+        <div class="project-tags">
+          <span class="project-tag">HTML</span>
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">CSS</span>
+        </div>
+      </div>
+
+      <!-- FPS Multiplayer -->
+      <div class="project-card reveal">
+        <div class="project-icon" style="background:rgba(239,68,68,0.15)">🎮</div>
+        <div class="project-header">
+          <div>
+            <div class="project-name">FPS Multiplayer</div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/RiyanMujtaba/fps-multiplayer" target="_blank" class="project-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+        <p class="project-desc">A browser-based first-person shooter with multiplayer support. Built with real-time networking to let players face off against each other online.</p>
+        <div class="project-tags">
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">Multiplayer</span>
+          <span class="project-tag">WebSockets</span>
+        </div>
+      </div>
+
+      <!-- Footy Scores -->
+      <div class="project-card reveal">
+        <div class="project-icon" style="background:rgba(16,185,129,0.15)">⚽</div>
+        <div class="project-header">
+          <div>
+            <div class="project-name">Footy Scores</div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/RiyanMujtaba/footy-scores" target="_blank" class="project-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+        <p class="project-desc">A retro-styled football scores website tracking match results with a classic scoreboard aesthetic. Built for fans who love the look of old football graphics.</p>
+        <div class="project-tags">
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">CSS</span>
+        </div>
+      </div>
+
+      <!-- Pico-8 Game -->
+      <div class="project-card reveal">
+        <div class="project-icon" style="background:rgba(245,158,11,0.15)">🕹️</div>
+        <div class="project-header">
+          <div>
+            <div class="project-name">Pico-8 Game</div>
+          </div>
+        </div>
+        <p class="project-desc">A game built in Pico-8 — a fantasy console with a 128×128 pixel display and a strict limitations philosophy. Designed, coded, and shipped entirely within Pico-8's constrained environment.</p>
+        <div class="project-tags">
+          <span class="project-tag">Pico-8</span>
+          <span class="project-tag">Lua</span>
+          <span class="project-tag">Game Dev</span>
+        </div>
+      </div>
+
+      <!-- Three.js Journey -->
+      <div class="project-card reveal">
+        <div class="project-icon" style="background:rgba(99,102,241,0.15)">🌐</div>
+        <div class="project-header">
+          <div>
+            <div class="project-name">Three.js Experiments</div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/RiyanMujtaba/threejs-journey" target="_blank" class="project-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+        <p class="project-desc">Explorations in 3D web graphics using Three.js. Working through 3D scenes, shaders, and interactive environments in the browser.</p>
+        <div class="project-tags">
+          <span class="project-tag">Three.js</span>
+          <span class="project-tag">WebGL</span>
+          <span class="project-tag">JavaScript</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Research</div>
+      <div class="section-title">Published work</div>
+      <p class="section-desc">Academic research at the intersection of AI, human-computer interaction, and evaluation methods.</p>
+    </div>
+    <a class="research-card reveal" href="https://ischool.uw.edu/research/updates/2025-04-15" target="_blank">
+      <div class="research-year-box">
+        <span class="research-year">2025</span>
+        <span class="research-venue-short">CHI</span>
+      </div>
+      <div>
+        <div class="research-title">From Job Titles to Jawlines: Using Context Voids to Study Generative AI Systems</div>
+        <div class="research-authors">
+          Shahan Ali Memon, Soham De, Sungha Kang, <strong>Riyan Mujtaba</strong>, Bedoor K. AlShebli, Katie Davis, Jaime Snyder, Jevin D. West
+        </div>
+        <div class="research-venue">CHI 2025 Workshop on Human-centered Evaluation and Auditing of Language Models (HEAL) · University of Washington</div>
+        <div class="research-abstract">Explores how "context voids" — deliberate ambiguities — can be used to audit and evaluate the behaviour of generative AI systems, contributing to more human-centered evaluation frameworks.</div>
+        <div class="research-badge">✓ Accepted · CHI 2025</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-inner reveal">
+      <div class="section-label">Contact</div>
+      <div class="section-title">Let's talk</div>
+      <p class="section-desc">Whether it's a project, an opportunity, or just to say hey.</p>
+      <div class="contact-links">
+        <a href="https://github.com/RiyanMujtaba" target="_blank" class="contact-card">
+          <span class="contact-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </span>
+          GitHub
+        </a>
+        <!-- Add your email below -->
+        <a href="mailto:your@email.com" class="contact-card">
+          <span class="contact-icon">✉️</span>
+          Email
+        </a>
+        <!-- Add LinkedIn if you have one -->
+        <!-- <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-card">
+          <span class="contact-icon">💼</span>
+          LinkedIn
+        </a> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built by Riyan Mujtaba · <a href="https://github.com/RiyanMujtaba" style="color:var(--muted);text-decoration:none">GitHub</a></p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav shrink on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.padding = window.scrollY > 60 ? '14px 40px' : '20px 40px';
+  });
+</script>
+</body>
+</html>
