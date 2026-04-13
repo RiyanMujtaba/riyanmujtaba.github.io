@@ -491,7 +491,7 @@
   <div class="hero-inner">
     <div class="hero-badge">18 · Hyderabad, Pakistan</div>
     <h1>Riyan<br><span>Mujtaba</span></h1>
-    <p class="hero-sub">Self-taught developer who just finished A-levels and spends way too much time building stuff on the internet.</p>
+    <p class="hero-sub">Self-taught developer from Pakistan who just finished school and spends way too much time building stuff on the internet.</p>
     <div class="hero-ctas">
       <a href="#projects" class="btn btn-primary">View Projects</a>
       <a href="#contact" class="btn btn-outline">Get in touch</a>
@@ -521,7 +521,7 @@
       <div class="about-text reveal">
         <div class="section-label">About me</div>
         <h2>18. Self-taught.<br>Always building.</h2>
-        <p>I'm Riyan — 18 years old from Hyderabad, Pakistan. Just finished school at <strong>The City School</strong> and have been teaching myself to code and building projects ever since.</p>
+        <p>I'm Riyan — 18 years old from Hyderabad, Pakistan. Just finished school and have been teaching myself to code and building projects ever since.</p>
         <p>I got the chance to co-author a research paper that got accepted at <strong>CHI 2025</strong> — still kind of surreal honestly. The paper looks at how generative AI systems can be studied and audited.</p>
         <p>Most of what I build is stuff I actually want to use — a gym tracker, a uni search tool, an FPS game. I figure that's a good reason to build something.</p>
         <div class="skills-wrap">
@@ -550,7 +550,7 @@
     <div class="projects-grid">
 
       <!-- KiloTrack -->
-      <div class="project-card featured reveal">
+      <div class="project-card featured reveal" onclick="window.open('https://riyanmujtaba.github.io/KiloTrack','_blank')" style="cursor:pointer">
         <div class="project-icon" style="background:rgba(124,58,237,0.15)">💪</div>
         <div class="project-header">
           <div>
@@ -574,7 +574,7 @@
       </div>
 
       <!-- Uni Finder -->
-      <div class="project-card reveal">
+      <div class="project-card reveal" onclick="window.open('https://riyanmujtaba.github.io/uni-finder','_blank')" style="cursor:pointer">
         <div class="project-icon" style="background:rgba(6,182,212,0.15)">🎓</div>
         <div class="project-header">
           <div>
@@ -596,29 +596,29 @@
         </div>
       </div>
 
-      <!-- FPS Multiplayer -->
-      <div class="project-card reveal">
+      <!-- FPS -->
+      <div class="project-card reveal" onclick="window.open('https://github.com/RiyanMujtaba/fps-multiplayer','_blank')" style="cursor:pointer">
         <div class="project-icon" style="background:rgba(239,68,68,0.15)">🎮</div>
         <div class="project-header">
           <div>
-            <div class="project-name">FPS Multiplayer</div>
+            <div class="project-name">Browser FPS</div>
           </div>
           <div class="project-links">
-            <a href="https://github.com/RiyanMujtaba/fps-multiplayer" target="_blank" class="project-link">
+            <a href="https://github.com/RiyanMujtaba/fps-multiplayer" target="_blank" class="project-link" onclick="event.stopPropagation()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
             </a>
           </div>
         </div>
-        <p class="project-desc">A browser-based first-person shooter with multiplayer support. Built with real-time networking to let players face off against each other online.</p>
+        <p class="project-desc">A browser-based first-person shooter built in JavaScript. Still a work in progress — the multiplayer side isn't fully there yet but the core game is built.</p>
         <div class="project-tags">
           <span class="project-tag">JavaScript</span>
-          <span class="project-tag">Multiplayer</span>
-          <span class="project-tag">WebSockets</span>
+          <span class="project-tag">FPS</span>
+          <span class="project-tag">WIP</span>
         </div>
       </div>
 
       <!-- Footy Scores -->
-      <div class="project-card reveal">
+      <div class="project-card reveal" onclick="window.open('https://github.com/RiyanMujtaba/footy-scores','_blank')" style="cursor:pointer">
         <div class="project-icon" style="background:rgba(16,185,129,0.15)">⚽</div>
         <div class="project-header">
           <div>
@@ -645,7 +645,7 @@
             <div class="project-name">Pico-8 Game</div>
           </div>
         </div>
-        <p class="project-desc">A game built in Pico-8 — a fantasy console with a 128×128 pixel display and a strict limitations philosophy. Designed, coded, and shipped entirely within Pico-8's constrained environment.</p>
+        <p class="project-desc">Built a game in Pico-8 — a fantasy console limited to 128×128 pixels and a tiny colour palette. Was hosted on Replit but that went paid. The game's gone now but it was built and it was fun.</p>
         <div class="project-tags">
           <span class="project-tag">Pico-8</span>
           <span class="project-tag">Lua</span>
@@ -654,7 +654,7 @@
       </div>
 
       <!-- Three.js Journey -->
-      <div class="project-card reveal">
+      <div class="project-card reveal" onclick="window.open('https://github.com/RiyanMujtaba/threejs-journey','_blank')" style="cursor:pointer">
         <div class="project-icon" style="background:rgba(99,102,241,0.15)">🌐</div>
         <div class="project-header">
           <div>
