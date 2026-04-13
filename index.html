@@ -558,9 +558,7 @@
     <div class="about-grid">
       <div class="about-photo-wrap reveal">
         <div class="about-photo">
-          <!-- Replace the emoji below with: <img src="your-photo.jpg" alt="Riyan Mujtaba"> -->
-          <div class="about-photo-placeholder">👤</div>
-          <div class="about-photo-note">Add your photo here</div>
+          <img src="imgs/riyan.jpeg" alt="Riyan Mujtaba">
         </div>
         <div class="about-float">
           <div class="about-float-num">7+</div>
@@ -630,7 +628,7 @@
       </div>
 
       <!-- Mail Mission -->
-      <div class="project-card reveal" style="cursor:pointer">
+      <div class="project-card reveal" onclick="window.open('https://mail-mission-production.up.railway.app/','_blank')" style="cursor:pointer">
         <div class="project-preview">
           <img src="imgs/mail-mission.png" alt="Mail Mission screenshot">
         </div>
@@ -639,6 +637,9 @@
           <div>
             <div class="project-live">Live</div>
             <div class="project-name">Mail Mission</div>
+          </div>
+          <div class="project-links">
+            <a href="https://mail-mission-production.up.railway.app/" target="_blank" class="project-link" title="Live site" onclick="event.stopPropagation()">↗</a>
           </div>
         </div>
         <p class="project-desc">An AI email task extractor with a terminal hacker aesthetic. Connects to your Gmail, scans your inbox, and pulls out exactly what you need to do — ranked HIGH/MEDIUM/LOW. Generates a daily brief automatically. Green-on-black boot sequence included.</p>
@@ -800,8 +801,7 @@
           </span>
           GitHub
         </a>
-        <!-- Add your email below -->
-        <a href="mailto:your@email.com" class="contact-card">
+        <a href="mailto:mujtabariyan91@gmail.com" class="contact-card">
           <span class="contact-icon">✉️</span>
           Email
         </a>
