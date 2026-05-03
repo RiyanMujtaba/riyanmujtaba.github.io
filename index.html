@@ -578,6 +578,19 @@
       transform: translateY(0);
     }
 
+    /* ── RESEARCH REVEAL ── */
+    .reveal-research {
+      opacity: 0;
+      transform: translateX(-40px) scale(0.97);
+      filter: blur(4px);
+      transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
+    }
+    .reveal-research.visible {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      filter: blur(0);
+    }
+
     /* ── CURSOR GLOW BLOB ── */
     #cursor-glow {
       position: fixed;
@@ -883,7 +896,7 @@
       <div class="section-title">Published work</div>
       <p class="section-desc">Academic research at the intersection of AI, human-computer interaction, and evaluation methods.</p>
     </div>
-    <a class="research-card reveal" href="https://ischool.uw.edu/research/updates/2025-04-15" target="_blank">
+    <a class="research-card reveal-research" href="https://ischool.uw.edu/research/updates/2025-04-15" target="_blank">
       <div class="research-year-box">
         <span class="research-year">2025</span>
         <span class="research-venue-short">CHI</span>
@@ -940,7 +953,7 @@
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
   }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal, .reveal-research').forEach(el => observer.observe(el));
 
   // Nav shrink on scroll
   window.addEventListener('scroll', () => {
