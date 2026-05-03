@@ -75,10 +75,45 @@
     .nav-links a:hover { color: var(--text); }
     .nav-icon { display: flex; align-items: center; color: var(--muted); transition: color 0.2s; }
     .nav-icon:hover { color: var(--text); }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     @media (max-width: 600px) {
       nav { padding: 16px 20px; }
-      .nav-links { gap: 18px; }
-      .nav-links a { font-size: 13px; }
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(8,10,15,0.97);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        z-index: 150;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 20px; color: var(--text); }
+      .nav-icon svg { width: 26px; height: 26px; }
     }
 
     /* ── HERO ── */
@@ -323,6 +358,18 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
+    /* shine sweep */
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+      transition: left 0.55s ease;
+      pointer-events: none;
+    }
+    .project-card:hover::after { left: 140%; }
     .project-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
     .project-card:hover::before { opacity: 1; }
     .project-card.featured { border-color: rgba(124,58,237,0.3); grid-column: span 2; }
@@ -559,7 +606,10 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo">RM</div>
-  <div class="nav-links">
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="#about">About</a>
     <a href="#projects">Projects</a>
     <a href="#research">Research</a>
@@ -602,7 +652,7 @@
           <img src="imgs/riyan.jpeg" alt="Riyan Mujtaba">
         </div>
         <div class="about-float">
-          <div class="about-float-num">7+</div>
+          <div class="about-float-num" id="project-count">0</div>
           <div class="about-float-label">Projects shipped</div>
         </div>
       </div>
@@ -671,6 +721,9 @@
 
       <!-- Crème by SI -->
       <div class="project-card reveal" onclick="window.open('https://cremebysi.netlify.app','_blank')" style="cursor:pointer">
+        <div class="project-preview">
+          <img src="imgs/creme.png" alt="Crème by SI screenshot">
+        </div>
         <div class="project-icon" style="background:rgba(201,169,110,0.15)">☕</div>
         <div class="project-header">
           <div>
@@ -892,6 +945,33 @@
   window.addEventListener('scroll', () => {
     document.querySelector('nav').style.padding = window.scrollY > 60 ? '14px 40px' : '20px 40px';
   });
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // Count-up for projects shipped
+  const countEl = document.getElementById('project-count');
+  const countObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      let n = 0;
+      const target = 7;
+      const step = () => { n++; countEl.textContent = n + (n >= target ? '+' : ''); if (n < target) setTimeout(step, 80); };
+      step();
+      countObs.disconnect();
+    }
+  }, { threshold: 0.5 });
+  countObs.observe(countEl);
 
   // ── Interactive effects ──
   const isTouch = window.matchMedia('(hover:none)').matches;
