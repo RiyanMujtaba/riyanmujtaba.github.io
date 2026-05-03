@@ -654,6 +654,7 @@
         <div class="about-float">
           <div class="about-float-num" id="project-count">0</div>
           <div class="about-float-label">Projects shipped</div>
+
         </div>
       </div>
       <div class="about-text reveal">
@@ -965,8 +966,8 @@
   const countObs = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
       let n = 0;
-      const target = 7;
-      const step = () => { n++; countEl.textContent = n + (n >= target ? '+' : ''); if (n < target) setTimeout(step, 80); };
+      const target = 8;
+      const step = () => { n++; countEl.textContent = n + (n >= target ? '+' : ''); if (n < target) setTimeout(step, 180); };
       step();
       countObs.disconnect();
     }
