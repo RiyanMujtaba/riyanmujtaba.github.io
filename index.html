@@ -1014,20 +1014,20 @@
     // Cursor dots: only spawn on actual movement
     document.addEventListener('mousemove', e => {
       const now = performance.now();
-      if (now - lastCursorSpawn < 38) return;
+      if (now - lastCursorSpawn < 80) return;
       lastCursorSpawn = now;
       const color = CURSOR_COLORS[Math.floor(Math.random() * CURSOR_COLORS.length)];
       cursorDots.push({
-        x: e.clientX + (Math.random() - 0.5) * 10,
-        y: e.clientY + (Math.random() - 0.5) * 10,
-        vx: (Math.random() - 0.5) * 0.55,
-        vy: (Math.random() - 0.5) * 0.55 - 0.15,
-        r: Math.random() * 2.2 + 1.4,
+        x: e.clientX + (Math.random() - 0.5) * 8,
+        y: e.clientY + (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35 - 0.1,
+        r: Math.random() * 1.4 + 0.8,
         life: 1,
-        decay: Math.random() * 0.005 + 0.004,
+        decay: Math.random() * 0.007 + 0.006,
         color,
       });
-      if (cursorDots.length > 55) cursorDots.shift();
+      if (cursorDots.length > 25) cursorDots.shift();
     });
 
     // Ambient dots: spawn randomly across viewport on a slow timer
