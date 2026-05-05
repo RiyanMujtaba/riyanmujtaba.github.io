@@ -994,80 +994,101 @@
   const glow = document.getElementById('cursor-glow');
 
   if (!isTouch) {
-    // ── Constellation cursor ──
+    // ── Constellation cursor + ambient bg ──
     const canvas = document.getElementById('constellation-canvas');
     const ctx = canvas.getContext('2d');
-    const COLORS = ['rgba(124,58,237,', 'rgba(6,182,212,', 'rgba(167,139,250,'];
-    const CONNECT_DIST = 130;
-    const MAX_DOTS = 60;
-    let dots = [];
-    let mx = -999, my = -999;
-    let lastSpawn = 0;
+    const CURSOR_COLORS = ['rgba(124,58,237,', 'rgba(6,182,212,', 'rgba(167,139,250,'];
+    const AMBIENT_COLORS = ['rgba(124,58,237,', 'rgba(6,182,212,', 'rgba(99,102,241,', 'rgba(56,189,248,'];
+    const CONNECT_DIST = 140;
+
+    // Two pools: cursor trail + ambient bg
+    let cursorDots = [];
+    let ambientDots = [];
+    let lastCursorSpawn = 0;
+    let lastAmbientSpawn = 0;
 
     function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     resize();
     window.addEventListener('resize', resize);
 
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-    function spawnDot() {
-      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      dots.push({
-        x: mx + (Math.random() - 0.5) * 12,
-        y: my + (Math.random() - 0.5) * 12,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5 - 0.2,
-        r: Math.random() * 2.5 + 1.5,
+    // Cursor dots: only spawn on actual movement
+    document.addEventListener('mousemove', e => {
+      const now = performance.now();
+      if (now - lastCursorSpawn < 38) return;
+      lastCursorSpawn = now;
+      const color = CURSOR_COLORS[Math.floor(Math.random() * CURSOR_COLORS.length)];
+      cursorDots.push({
+        x: e.clientX + (Math.random() - 0.5) * 10,
+        y: e.clientY + (Math.random() - 0.5) * 10,
+        vx: (Math.random() - 0.5) * 0.55,
+        vy: (Math.random() - 0.5) * 0.55 - 0.15,
+        r: Math.random() * 2.2 + 1.4,
         life: 1,
-        decay: Math.random() * 0.004 + 0.003,
+        decay: Math.random() * 0.005 + 0.004,
         color,
       });
-      if (dots.length > MAX_DOTS) dots.shift();
+      if (cursorDots.length > 55) cursorDots.shift();
+    });
+
+    // Ambient dots: spawn randomly across viewport on a slow timer
+    function spawnAmbient() {
+      const color = AMBIENT_COLORS[Math.floor(Math.random() * AMBIENT_COLORS.length)];
+      ambientDots.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        r: Math.random() * 1.4 + 0.4,
+        life: 1,
+        decay: Math.random() * 0.0008 + 0.0004,   // very slow fade (10–20s)
+        color,
+      });
+      if (ambientDots.length > 70) ambientDots.shift();
     }
+    // Pre-seed a bunch so it's not empty on load
+    for (let i = 0; i < 45; i++) spawnAmbient();
 
     (function loop(t) {
       requestAnimationFrame(loop);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Spawn dots near cursor
-      if (mx > -900 && t - lastSpawn > 40) {
-        spawnDot();
-        lastSpawn = t;
-      }
+      // Trickle in new ambient dots
+      if (t - lastAmbientSpawn > 900) { spawnAmbient(); lastAmbientSpawn = t; }
 
-      // Update
-      dots = dots.filter(d => d.life > 0);
-      dots.forEach(d => {
-        d.x  += d.vx;
-        d.y  += d.vy;
-        d.life -= d.decay;
-      });
+      // Update both pools
+      cursorDots  = cursorDots.filter(d => d.life > 0);
+      ambientDots = ambientDots.filter(d => d.life > 0);
+      const all = [...ambientDots, ...cursorDots];
+      all.forEach(d => { d.x += d.vx; d.y += d.vy; d.life -= d.decay; });
 
       // Draw connections
-      for (let i = 0; i < dots.length; i++) {
-        for (let j = i + 1; j < dots.length; j++) {
-          const a = dots[i], b = dots[j];
+      for (let i = 0; i < all.length; i++) {
+        for (let j = i + 1; j < all.length; j++) {
+          const a = all[i], b = all[j];
           const dx = a.x - b.x, dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < CONNECT_DIST) {
-            const alpha = (1 - dist / CONNECT_DIST) * Math.min(a.life, b.life) * 0.4;
+            // cursor-to-cursor lines brighter; ambient-to-ambient subtler
+            const isCursor = i >= ambientDots.length || j >= ambientDots.length;
+            const baseAlpha = isCursor ? 0.35 : 0.12;
+            const alpha = (1 - dist / CONNECT_DIST) * Math.min(a.life, b.life) * baseAlpha;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
             ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = isCursor ? 0.8 : 0.4;
             ctx.stroke();
           }
         }
       }
 
       // Draw dots
-      dots.forEach(d => {
+      all.forEach((d, i) => {
+        const isAmbient = i < ambientDots.length;
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = `${d.color}${d.life.toFixed(2)})`;
-        ctx.shadowColor = `${d.color}0.8)`;
-        ctx.shadowBlur = 8;
+        ctx.fillStyle = `${d.color}${(d.life * (isAmbient ? 0.45 : 1)).toFixed(2)})`;
+        if (!isAmbient) { ctx.shadowColor = `${d.color}0.8)`; ctx.shadowBlur = 7; }
         ctx.fill();
         ctx.shadowBlur = 0;
       });
