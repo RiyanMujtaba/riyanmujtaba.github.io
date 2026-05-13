@@ -622,6 +622,59 @@
     .project-card {
       transform-style: preserve-3d;
     }
+
+    /* ── MOBILE OVERHAUL ── */
+    @media (max-width: 640px) {
+      section { padding: 60px 16px; }
+      #hero { padding: 100px 20px 60px; }
+      .hero-badge { font-size: 12px; padding: 5px 13px; }
+      h1 { font-size: clamp(42px, 12vw, 64px); letter-spacing: -2px; margin-bottom: 16px; }
+      .hero-sub { font-size: 15px; margin-bottom: 28px; }
+      .btn { padding: 12px 20px; font-size: 14px; }
+      .section-title { letter-spacing: -1px; }
+      .section-desc { font-size: 14px; margin-bottom: 36px; }
+
+      /* projects: horizontal scroll row */
+      .projects-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto;
+        gap: 14px;
+        padding-bottom: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        /* hide scrollbar */
+        scrollbar-width: none;
+      }
+      .projects-grid::-webkit-scrollbar { display: none; }
+      .project-card {
+        min-width: 78vw;
+        max-width: 78vw;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        padding: 18px;
+      }
+      .project-card.featured {
+        min-width: 90vw;
+        max-width: 90vw;
+        grid-column: unset !important;
+      }
+      .project-card.featured .featured-inner { grid-template-columns: 1fr !important; }
+      .project-preview { height: 160px; margin-bottom: 16px; }
+      .project-name { font-size: 16px; }
+      .project-desc { font-size: 13px; }
+
+      /* about */
+      .about-grid { gap: 28px; }
+      .about-float { right: 0; bottom: -12px; padding: 10px 14px; }
+      .about-float-num { font-size: 22px; }
+      .about-text h2 { font-size: 26px; }
+      .about-text p { font-size: 14px; }
+
+      /* contact */
+      .contact-links { flex-direction: column; align-items: stretch; gap: 10px; }
+      .contact-card { justify-content: center; padding: 14px 18px; }
+    }
   </style>
 </head>
 <body>
