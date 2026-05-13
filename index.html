@@ -273,7 +273,22 @@
       gap: 60px;
       align-items: center;
     }
-    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      section { padding: 72px 20px; }
+      h1 { letter-spacing: -1px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: span 1; }
+      .project-card.featured .featured-inner { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .hero-btns .btn { width: 100%; max-width: 280px; text-align: center; }
+      .contact-links { flex-direction: column; align-items: center; }
+      .contact-card { width: 100%; max-width: 300px; justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      h1 { letter-spacing: 0px; font-size: clamp(38px, 10vw, 56px); }
+      .hero-scroll { display: none; }
+    }
     .about-photo-wrap {
       position: relative;
     }
@@ -731,26 +746,26 @@
       </div>
 
       <!-- Crème by SI -->
-      <div class="project-card reveal" onclick="window.open('https://cremebysi.netlify.app','_blank')" style="cursor:pointer">
+      <div class="project-card reveal" onclick="window.open('https://eazyburgers.com','_blank')" style="cursor:pointer">
         <div class="project-preview">
-          <img src="imgs/creme.png" alt="Crème by SI screenshot">
+          <img src="imgs/eazypatties.png" alt="Eazy Patties screenshot">
         </div>
-        <div class="project-icon" style="background:rgba(201,169,110,0.15)">☕</div>
+        <div class="project-icon" style="background:rgba(239,68,68,0.15)">🍔</div>
         <div class="project-header">
           <div>
             <div class="project-live">Live</div>
-            <div class="project-name">Crème by SI</div>
+            <div class="project-name">Eazy Patties</div>
           </div>
           <div class="project-links">
-            <a href="https://cremebysi.netlify.app" target="_blank" class="project-link" onclick="event.stopPropagation()">↗</a>
+            <a href="https://eazyburgers.com" target="_blank" class="project-link" onclick="event.stopPropagation()">↗</a>
           </div>
         </div>
-        <p class="project-desc">A luxury café website built for a real business in Hyderabad. Animated drink menu with 90+ custom-cropped product photos, a moody gold-on-dark aesthetic, custom cursor with a trailing ring on desktop, and a touch ripple effect on mobile.</p>
+        <p class="project-desc">Full website for a late-night smash burger joint in Hyderabad — built, designed, and deployed for a real client. Custom hero, animated menu, real Google Maps reviews, Australian Angus beef section, and a WhatsApp floating button. Live on a custom domain.</p>
         <div class="project-tags">
           <span class="project-tag">JavaScript</span>
           <span class="project-tag">CSS</span>
-          <span class="project-tag">Python</span>
           <span class="project-tag">Client Work</span>
+          <span class="project-tag">Live Domain</span>
         </div>
       </div>
 
@@ -843,25 +858,6 @@
         <div class="project-tags">
           <span class="project-tag">JavaScript</span>
           <span class="project-tag">CSS</span>
-        </div>
-      </div>
-
-      <!-- Pico-8 Game -->
-      <div class="project-card reveal">
-        <div class="project-preview">
-          <img src="imgs/pico8.jpeg" alt="Pico-8 breakout game screenshot">
-        </div>
-        <div class="project-icon" style="background:rgba(245,158,11,0.15)">🕹️</div>
-        <div class="project-header">
-          <div>
-            <div class="project-name">Pico-8 Game</div>
-          </div>
-        </div>
-        <p class="project-desc">Built a breakout-style game in Pico-8 — a fantasy console limited to 128×128 pixels and a tiny colour palette. Coded in Lua. Was hosted on Replit but that went paid. The game's gone now but the screenshot lives on.</p>
-        <div class="project-tags">
-          <span class="project-tag">Pico-8</span>
-          <span class="project-tag">Lua</span>
-          <span class="project-tag">Game Dev</span>
         </div>
       </div>
 
