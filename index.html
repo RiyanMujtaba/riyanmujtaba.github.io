@@ -42,8 +42,8 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      background: radial-gradient(700px circle at var(--mouse-x) var(--mouse-y), rgba(229,56,59,0.055), transparent 45%);
-      transition: background 0.1s;
+      background: radial-gradient(560px circle at var(--mouse-x) var(--mouse-y), rgba(229,56,59,0.05), transparent 45%);
+      will-change: background;
     }
 
     /* ── CUSTOM CURSOR ── */
@@ -58,7 +58,8 @@
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
-      transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      transition: width 0.2s, height 0.2s, opacity 0.2s;
+      will-change: transform;
     }
 
     #cursor-ring {
@@ -70,7 +71,8 @@
       pointer-events: none;
       z-index: 9998;
       transform: translate(-50%, -50%);
-      transition: transform 0.18s ease, width 0.25s, height 0.25s, border-color 0.2s, opacity 0.2s;
+      transition: width 0.25s, height 0.25s, border-color 0.2s, opacity 0.2s;
+      will-change: transform;
     }
 
     /* grow ring on hoverable elements */
@@ -779,7 +781,7 @@
     <div class="about-grid">
       <div class="about-photo-wrap reveal">
         <div class="about-photo">
-          <img src="imgs/riyan.jpeg" alt="Riyan Mujtaba">
+          <img loading="lazy" src="imgs/riyan.jpeg" alt="Riyan Mujtaba">
         </div>
         <div class="about-stat">
           <div class="about-stat-num" id="project-count">0</div>
@@ -798,6 +800,7 @@
           <span class="skill-tag">Firebase</span>
           <span class="skill-tag">Three.js</span>
           <span class="skill-tag">Groq API</span>
+          <span class="skill-tag">Claude Code</span>
           <span class="skill-tag">C++</span>
           <span class="skill-tag">Pico-8</span>
           <span class="skill-tag">Git</span>
@@ -841,14 +844,14 @@
             </div>
           </div>
           <div class="feat-preview">
-            <img src="imgs/kilotrack.png" alt="KiloTrack">
+            <img loading="lazy" src="imgs/kilotrack.jpg" alt="KiloTrack">
           </div>
         </div>
       </div>
 
       <!-- Eazy Burgers -->
       <div class="project-card reveal" onclick="window.open('https://eazyburgers.com','_blank')">
-        <div class="project-preview"><img src="imgs/eazypatties.png" alt="Eazy Burgers"></div>
+        <div class="project-preview"><img loading="lazy" src="imgs/eazypatties.jpg" alt="Eazy Burgers"></div>
         <div class="project-live">Live</div>
         <div class="project-header">
           <div class="project-name">Eazy Burgers</div>
@@ -866,7 +869,7 @@
 
       <!-- Mail Mission -->
       <div class="project-card reveal" onclick="window.open('https://mailmission.netlify.app','_blank')">
-        <div class="project-preview"><img src="imgs/mail-mission.png" alt="Mail Mission"></div>
+        <div class="project-preview"><img loading="lazy" src="imgs/mail-mission.jpg" alt="Mail Mission"></div>
         <div class="project-live">Live</div>
         <div class="project-header">
           <div class="project-name">Mail Mission</div>
@@ -884,7 +887,7 @@
 
       <!-- Uni Finder -->
       <div class="project-card reveal" onclick="window.open('https://riyanmujtaba.github.io/uni-finder','_blank')">
-        <div class="project-preview"><img src="imgs/uni-finder.png" alt="Uni Finder"></div>
+        <div class="project-preview"><img loading="lazy" src="imgs/uni-finder.jpg" alt="Uni Finder"></div>
         <div class="project-live">Live</div>
         <div class="project-header">
           <div class="project-name">Uni Finder</div>
@@ -906,8 +909,8 @@
       <!-- C++ Raycaster -->
       <div class="project-card reveal" onclick="window.open('https://fpspewpew.netlify.app','_blank')">
         <div class="project-preview" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;height:180px;">
-          <img src="screenshot1.jpg" alt="Raycaster" style="width:100%;height:100%;object-fit:cover;border-radius:4px 0 0 4px;">
-          <img src="screenshot2.jpg" alt="Raycaster" style="width:100%;height:100%;object-fit:cover;border-radius:0 4px 4px 0;">
+          <img loading="lazy" src="screenshot1.jpg" alt="Raycaster" style="width:100%;height:100%;object-fit:cover;border-radius:4px 0 0 4px;">
+          <img loading="lazy" src="screenshot2.jpg" alt="Raycaster" style="width:100%;height:100%;object-fit:cover;border-radius:0 4px 4px 0;">
         </div>
         <div class="project-live">Live</div>
         <div class="project-header">
@@ -923,7 +926,7 @@
 
       <!-- Pico-8 -->
       <div class="project-card reveal">
-        <div class="project-preview"><img src="imgs/pico8.jpeg" alt="Pico-8"></div>
+        <div class="project-preview"><img loading="lazy" src="imgs/pico8.jpeg" alt="Pico-8"></div>
         <div class="project-header">
           <div class="project-name">Pico-8 Game</div>
         </div>
@@ -1106,16 +1109,13 @@
   const dot  = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
   let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
-  let mouseX = 0, mouseY = 0;
+  let mouseX = 0, mouseY = 0, dotScale = 1;
   let cursorVisible = false;
 
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-
-    // Global spotlight via CSS var
-    document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
-    document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+    // spotlight CSS vars are updated once per frame in animateCursor (below)
 
     if (!cursorVisible) {
       dot.style.opacity = '1';
@@ -1130,32 +1130,38 @@
     cursorVisible = false;
   });
 
-  // Smooth ring follow (lerp)
+  // One rAF drives everything: cursor (GPU transforms) + throttled spotlight
+  let lastVX = -1, lastVY = -1;
   function animateCursor() {
     dotX  += (mouseX - dotX)  * 0.45;
     dotY  += (mouseY - dotY)  * 0.45;
     ringX += (mouseX - ringX) * 0.12;
     ringY += (mouseY - ringY) * 0.12;
 
-    dot.style.left  = dotX  + 'px';
-    dot.style.top   = dotY  + 'px';
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
+    // translate3d keeps this on the compositor (no per-frame layout)
+    dot.style.transform  = `translate3d(${dotX}px,${dotY}px,0) translate(-50%,-50%) scale(${dotScale})`;
+    ring.style.transform = `translate3d(${ringX}px,${ringY}px,0) translate(-50%,-50%)`;
 
+    // spotlight var: update at most once per frame, and only when moved
+    if (mouseX !== lastVX || mouseY !== lastVY) {
+      document.documentElement.style.setProperty('--mouse-x', mouseX + 'px');
+      document.documentElement.style.setProperty('--mouse-y', mouseY + 'px');
+      lastVX = mouseX; lastVY = mouseY;
+    }
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
 
-  // Scale dot + ring on clickable elements
+  // Scale dot + ring on clickable elements (scale folded into the rAF transform)
   document.querySelectorAll('a, button, [onclick]').forEach(el => {
     el.addEventListener('mouseenter', () => {
-      dot.style.transform  = 'translate(-50%,-50%) scale(0)';
+      dotScale = 0;
       ring.style.width     = '48px';
       ring.style.height    = '48px';
       ring.style.borderColor = 'rgba(229,56,59,0.8)';
     });
     el.addEventListener('mouseleave', () => {
-      dot.style.transform  = 'translate(-50%,-50%) scale(1)';
+      dotScale = 1;
       ring.style.width     = '32px';
       ring.style.height    = '32px';
       ring.style.borderColor = 'rgba(229,56,59,0.5)';
