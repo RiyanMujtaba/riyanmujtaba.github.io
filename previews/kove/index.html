@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kóve — Café &amp; Kitchen · Est. 2026</title>
+<meta name="description" content="Kóve — an elegant café & kitchen. Exceptional dining, coffee, and a warm space to gather. Est. 2026. Reserve your table." />
+<meta name="theme-color" content="#1e1712" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Kóve — Café & Kitchen · Est. 2026" />
+<meta property="og:description" content="Exceptional dining, coffee and a warm space to gather. Reserve your table." />
+<meta property="og:image" content="hero.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e1712'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23c9a24b' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#f4ecdf; --cream2:#ece0cd; --paper:#faf6ee;
+    --ink:#2a201780; --ink-1:#2a2017; --muted:#7c6f5d;
+    --terra:#b05e38; --olive:#4c5a3c; --brass:#a9854a;
+    --dark:#1e1712; --dark-2:#2a211a; --line:rgba(42,32,23,0.14); --line-d:rgba(244,236,223,0.16);
+  }
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{font-family:'Jost',sans-serif;background:var(--paper);color:var(--ink-1);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-weight:400}
+  .fr{font-family:'Fraunces',serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 30px}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .kick{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--brass);font-weight:500}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:22px 0;transition:background .4s,padding .4s,box-shadow .4s}
+  nav.scrolled{background:var(--paper);padding:14px 0;box-shadow:0 1px 0 var(--line)}
+  .nav-in{max-width:1180px;margin:0 auto;padding:0 30px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:'Fraunces';font-size:27px;font-weight:500;letter-spacing:1px;color:var(--cream);transition:color .4s}
+  nav.scrolled .brand{color:var(--ink-1)}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--cream);font-weight:400;transition:color .4s,opacity .2s;opacity:.85}
+  nav.scrolled .nav-links a{color:var(--ink-1)}
+  .nav-links a:hover{opacity:1}
+  .reserve{border:1px solid currentColor;color:var(--cream);padding:10px 22px;border-radius:2px;font-size:11px!important;letter-spacing:2px;transition:background .25s,color .25s,border-color .4s}
+  nav.scrolled .reserve{color:var(--terra)}
+  .reserve:hover{background:var(--terra);border-color:var(--terra);color:#fff!important;opacity:1}
+
+  /* HERO */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--cream);overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:#1e1712 url('hero.jpg') center/cover no-repeat;z-index:0}
+  .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,15,10,0.55),rgba(20,15,10,0.4) 40%,rgba(20,15,10,0.78))}
+  .hero-in{position:relative;z-index:2;padding:120px 26px;max-width:820px}
+  .hero .kick{color:var(--brass);margin-bottom:26px;display:block}
+  .hero h1{font-family:'Fraunces';font-weight:300;font-size:clamp(46px,8vw,104px);line-height:.98;letter-spacing:-1px;margin-bottom:22px}
+  .hero h1 em{font-style:italic;color:var(--cream)}
+  .hero p{font-size:clamp(15px,1.8vw,18px);color:rgba(244,236,223,0.82);max-width:520px;margin:0 auto 38px;font-weight:300}
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:2px;text-transform:uppercase;padding:16px 30px;border-radius:2px;cursor:pointer;transition:transform .2s,background .25s,color .25s,border-color .25s}
+  .btn-fill{background:var(--terra);color:#fff}
+  .btn-fill:hover{background:#9a4f2d;transform:translateY(-2px)}
+  .btn-out{border:1px solid rgba(244,236,223,0.5);color:var(--cream)}
+  .btn-out:hover{background:rgba(244,236,223,0.1);transform:translateY(-2px)}
+  .hero .scrolldown{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(244,236,223,0.7)}
+
+  /* OFFER STRIP */
+  .offer{background:var(--olive);color:var(--cream);text-align:center;padding:20px 26px}
+  .offer .fr{font-size:clamp(18px,2.4vw,24px);font-weight:400}
+  .offer .fr b{color:#e9d9a8;font-weight:500}
+  .offer span{display:block;font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.75;margin-top:4px}
+
+  /* SECTIONS */
+  section{padding:100px 0}
+  .head{max-width:640px;margin:0 auto 60px;text-align:center}
+  .head .kick{margin-bottom:18px;display:block}
+  .h2{font-family:'Fraunces';font-weight:300;font-size:clamp(32px,5vw,56px);line-height:1.04;letter-spacing:-.5px}
+  .lead{color:var(--muted);font-size:16px;margin-top:18px;font-weight:300}
+
+  /* ABOUT */
+  #about{background:var(--cream)}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .about-photo{border-radius:4px;overflow:hidden;aspect-ratio:4/5}
+  .about-photo img{width:100%;height:100%;object-fit:cover}
+  .about-text .kick{display:block;margin-bottom:18px}
+  .about-text h2{margin-bottom:22px}
+  .about-text p{color:var(--muted);margin-bottom:18px;font-weight:300;font-size:16px}
+  .about-feats{display:flex;gap:36px;margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+  .about-feats b{font-family:'Fraunces';font-size:26px;font-weight:400;display:block;color:var(--terra)}
+  .about-feats span{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+  /* MENU */
+  #menu{background:var(--paper)}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .mcard{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:3/4;cursor:zoom-in;border:1px solid var(--line)}
+  .mcard img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .6s}
+  .mcard:hover img{transform:scale(1.05)}
+  .mcard::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,23,18,0) 45%,rgba(30,23,18,0.82));transition:opacity .3s}
+  .mcard .cap{position:absolute;left:22px;right:22px;bottom:20px;z-index:2;color:var(--cream)}
+  .mcard .cap .n{font-family:'Fraunces';font-size:20px;font-weight:400;line-height:1.15}
+  .mcard .cap .v{font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-top:6px}
+  .menu-note{text-align:center;margin-top:34px;color:var(--muted);font-size:14px;font-weight:300}
+  .menu-note a{color:var(--terra);border-bottom:1px solid rgba(176,94,56,0.4)}
+
+  /* GALLERY */
+  #gallery{background:var(--dark);color:var(--cream)}
+  #gallery .head .kick{color:var(--brass)}
+  #gallery .h2{color:var(--cream)}
+  .gal{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .gal .cell{border-radius:4px;overflow:hidden;cursor:zoom-in}
+  .gal .cell img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .gal .cell:hover img{transform:scale(1.04)}
+  .gal .stack{display:grid;grid-template-rows:1fr 1fr;gap:16px}
+  .gal .cell.tall img{min-height:520px}
+
+  /* RESERVE */
+  #reserve{background:var(--cream)}
+  .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+  .res-info .kick{display:block;margin-bottom:16px}
+  .res-info h2{margin-bottom:24px}
+  .res-row{display:flex;gap:15px;padding:18px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+  .res-row .ic{color:var(--terra);flex-shrink:0;margin-top:2px}
+  .res-row h4{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;font-weight:500}
+  .res-row p{font-size:16px}
+  .res-row a{color:var(--terra)}
+  .res-note{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:6px}
+  .res-card{background:var(--dark);color:var(--cream);border-radius:4px;padding:54px 44px;text-align:center}
+  .res-card .fr{font-family:'Fraunces';font-weight:300;font-size:clamp(26px,3.5vw,38px);line-height:1.1;margin-bottom:14px}
+  .res-card p{color:rgba(244,236,223,0.7);margin-bottom:28px;font-weight:300}
+
+  /* FOOTER */
+  footer{background:var(--dark-2);color:var(--cream);padding:60px 0 34px}
+  .foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:32px;border-bottom:1px solid var(--line-d);margin-bottom:24px}
+  .foot-brand{max-width:300px}
+  .foot-brand .fr{font-family:'Fraunces';font-size:30px;font-weight:500;letter-spacing:1px}
+  .foot-brand p{color:rgba(244,236,223,0.6);font-size:14px;margin-top:12px;font-weight:300}
+  .foot-col h5{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brass);margin-bottom:16px;font-weight:500}
+  .foot-col a{display:block;color:rgba(244,236,223,0.72);font-size:14px;margin-bottom:11px;font-weight:300}
+  .foot-col a:hover{color:var(--cream)}
+  .foot-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:rgba(244,236,223,0.5)}
+  .foot-bot a{color:var(--brass)}
+
+  /* LIGHTBOX */
+  .lb{position:fixed;inset:0;z-index:200;background:rgba(20,15,10,0.94);display:none;align-items:center;justify-content:center;padding:26px;cursor:zoom-out}
+  .lb.open{display:flex}
+  .lb img{max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .lb-x{position:absolute;top:20px;right:26px;background:none;border:none;color:var(--cream);font-size:30px;cursor:pointer}
+
+  @media(max-width:860px){
+    .nav-links{display:none}
+    .about-grid{grid-template-columns:1fr;gap:36px}
+    .about-photo{order:-1;max-width:440px;margin:0 auto}
+    .menu-grid{grid-template-columns:1fr 1fr}
+    .gal{grid-template-columns:1fr}
+    .gal .cell.tall img{min-height:320px}
+    .res-grid{grid-template-columns:1fr;gap:34px}
+  }
+  @media(max-width:520px){
+    .menu-grid{grid-template-columns:1fr}
+    .hero-cta .btn{flex:1;justify-content:center}
+    .about-feats{gap:24px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-in">
+      <a class="brand fr" href="#">Kóve</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a class="reserve" href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">Reserve</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-in">
+      <span class="kick">Café · Kitchen · Est. 2026</span>
+      <h1 class="fr">Where every plate<br>is an <em>experience.</em></h1>
+      <p>An elegant café and kitchen — exceptional food, unhurried coffee, and a warm space made to gather in. Welcome to Kóve.</p>
+      <div class="hero-cta">
+        <a class="btn btn-fill" href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">Reserve a Table</a>
+        <a class="btn btn-out" href="#menu">View the Menu</a>
+      </div>
+    </div>
+    <div class="scrolldown">scroll</div>
+  </header>
+
+  <!-- OFFER -->
+  <div class="offer">
+    <div class="fr">Grand Opening — <b>20% off</b> your table</div>
+    <span>9 – 15 July · Reserve now on Instagram</span>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="kick">What is Kóve?</span>
+          <h2 class="h2 fr">More than a space — a feeling.</h2>
+          <p>Kóve was built to be <em>that</em> place: warm, comforting and thoughtfully designed, where the coffee is considered, the plates are generous, and every detail is meant to make you stay a little longer.</p>
+          <p>From slow mornings over breakfast to exceptional dinners, it's dining made to be experienced — not rushed.</p>
+          <div class="about-feats">
+            <div><b class="fr">Est. 2026</b><span>Newly Opened</span></div>
+            <div><b class="fr">Dine-In</b><span>Reserve a Table</span></div>
+            <div><b class="fr">All-Day</b><span>Coffee to Dinner</span></div>
+          </div>
+        </div>
+        <div class="about-photo"><img src="sign.jpg" alt="Inside Kóve — signature wall and warm lounge" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="head">
+        <span class="kick">The Menu</span>
+        <h2 class="h2 fr">From the kitchen.</h2>
+        <p class="lead">Coffee and desserts, breakfast, steakhouse, seafood, wood-fired pizza and more — tap any section to see it in full.</p>
+      </div>
+      <div class="menu-grid" id="menu-grid"></div>
+      <p class="menu-note">Full menu available in-store · follow <a href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">@kove_cafe</a> for specials</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="wrap">
+      <div class="head">
+        <span class="kick">The Space</span>
+        <h2 class="h2 fr">Come sit a while.</h2>
+      </div>
+      <div class="gal">
+        <div class="cell tall"><img src="hero.jpg" alt="Kóve arched dining room" loading="lazy"></div>
+        <div class="stack">
+          <div class="cell"><img src="interior.jpg" alt="Warm interior at Kóve" loading="lazy"></div>
+          <div class="cell"><img src="sign.jpg" alt="Kóve signature wall" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVE -->
+  <section id="reserve">
+    <div class="wrap">
+      <div class="res-grid">
+        <div class="res-info">
+          <span class="kick">Visit</span>
+          <h2 class="h2 fr">Reserve your table.</h2>
+          <div class="res-row">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+            <div><h4>Location</h4><p>Karachi</p><p class="res-note">Exact address — to be added</p></div>
+          </div>
+          <div class="res-row">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+            <div><h4>Reservations &amp; Instagram</h4><p><a href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">@kove_cafe</a></p></div>
+          </div>
+          <div class="res-row">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+            <div><h4>Hours</h4><p>All Day</p><p class="res-note">Timings — to be added</p></div>
+          </div>
+        </div>
+        <div class="res-card">
+          <div class="fr">Experience<br>exceptional dining.</div>
+          <p>Message us on Instagram to book your table at Kóve.</p>
+          <a class="btn btn-fill" href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">Reserve on Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <span class="fr">Kóve</span>
+          <p>Café &amp; kitchen. Exceptional dining and a warm space to gather. Est. 2026.</p>
+        </div>
+        <div class="foot-col">
+          <h5>Explore</h5>
+          <a href="#about">About</a>
+          <a href="#menu">Menu</a>
+          <a href="#gallery">Gallery</a>
+        </div>
+        <div class="foot-col">
+          <h5>Visit</h5>
+          <a href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">Reserve a Table</a>
+          <a href="https://www.instagram.com/kove_cafe/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+      <div class="foot-bot">
+        <p>© 2026 Kóve · Karachi</p>
+        <p>designed &amp; built by <a href="https://riyanmujtaba.github.io" target="_blank" rel="noopener">Riyan Mujtaba</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lb" class="lb" onclick="closeLb()"><button class="lb-x" aria-label="Close">&times;</button><img id="lb-img" src="" alt=""></div>
+
+  <script>
+    addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>60));
+
+    // Menu cards
+    var MENU=[
+      {img:'menu-drinks.jpg',     n:'Coffee, Shakes & Desserts'},
+      {img:'menu-breakfast.jpg',  n:'Breakfast'},
+      {img:'menu-bbq.jpg',        n:'BBQ, Grill & Steakhouse'},
+      {img:'menu-mains.jpg',      n:'Signature Mains & Seafood'},
+      {img:'menu-pasta.jpg',      n:'Pasta & Wood-Fired Pizza'},
+      {img:'menu-sandwiches.jpg', n:'Sandwiches & Burgers'},
+      {img:'menu-chinese.jpg',    n:'Chinese Kitchen'},
+      {img:'menu-broths.jpg',     n:'Broths & Greens'},
+      {img:'menu-signatures.jpg', n:'Signatures'}
+    ];
+    document.getElementById('menu-grid').innerHTML = MENU.map(function(m){
+      return '<div class="mcard" data-img="'+m.img+'"><img src="'+m.img+'" alt="'+m.n+' menu" loading="lazy"><div class="cap"><div class="n fr">'+m.n+'</div><div class="v">View menu</div></div></div>';
+    }).join('');
+
+    // Lightbox (menu + gallery)
+    function openLb(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('open');}
+    function closeLb(){document.getElementById('lb').classList.remove('open');}
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb();});
+    document.querySelectorAll('.mcard').forEach(function(c){c.addEventListener('click',function(){openLb(c.getAttribute('data-img'));});});
+    document.querySelectorAll('.gal .cell img').forEach(function(img){img.style.cursor='zoom-in';img.parentElement.addEventListener('click',function(){openLb(img.src);});});
+  </script>
+</body>
+</html>
