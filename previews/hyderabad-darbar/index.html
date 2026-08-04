@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hyderabad Darbar — Royal Desi Dining · Hyderabad</title>
+<meta name="description" content="Hyderabad Darbar — biryani, BBQ and desi favourites on Bypass Road, Hyderabad. Where every guest is welcomed like royalty." />
+<meta name="theme-color" content="#4a0f1a" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Hyderabad Darbar — Royal Desi Dining" />
+<meta property="og:description" content="Biryani, BBQ & desi favourites on Bypass Road, Hyderabad. Welcomed like royalty." />
+<meta property="og:image" content="img/bbq.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%234a0f1a'/%3E%3Cpath d='M16 5c5 0 8 3 8 8v12H8V13c0-5 3-8 8-8z' fill='none' stroke='%23d4af5a' stroke-width='1.6'/%3E%3Ccircle cx='16' cy='9.5' r='1.4' fill='%23d4af5a'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Marcellus&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --maroon:#4a0f1a; --maroon-2:#3a0b14; --maroon-3:#611523;
+    --gold:#d4af5a; --gold-2:#e6cd8a; --gold-d:#a8863a;
+    --cream:#f6efe1; --cream-2:#efe4cf; --ink:#2a1a12; --muted:#a9927a;
+    --line:rgba(212,175,90,0.22);
+  }
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition-duration:.001ms!important}}
+  body{font-family:'Inter',sans-serif;background:var(--maroon);color:var(--cream);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  .cor{font-family:'Cormorant Garamond',serif}
+  .mar{font-family:'Marcellus',serif}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .gold{color:var(--gold)}
+
+  /* ornamental divider */
+  .orn{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:0 auto}
+  .orn::before,.orn::after{content:'';height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .orn::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .orn svg{opacity:.9}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;transition:background .3s,padding .3s,box-shadow .3s;border-bottom:1px solid transparent}
+  nav.scrolled{background:rgba(58,11,20,0.96);padding:12px 0;border-bottom-color:var(--line);box-shadow:0 6px 30px rgba(0,0,0,0.4)}
+  .nav-in{max-width:1160px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;flex-direction:column;line-height:1}
+  .brand .b1{font-family:'Marcellus',serif;font-size:22px;letter-spacing:3px;color:var(--gold)}
+  .brand .b2{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{color:var(--cream);font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;opacity:.8;transition:opacity .2s,color .2s}
+  .nav-links a:hover{opacity:1;color:var(--gold)}
+  .nav-cta{border:1px solid var(--gold);color:var(--gold)!important;padding:10px 22px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:background .25s,color .25s;opacity:1!important}
+  .nav-cta:hover{background:var(--gold);color:var(--maroon)!important}
+
+  /* HERO — centred, arch motif, ornamental */
+  .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 22px 80px;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;z-index:0;
+    background:radial-gradient(60% 55% at 50% 12%,rgba(212,175,90,0.14),transparent 62%),
+      radial-gradient(80% 60% at 50% 120%,rgba(0,0,0,0.5),transparent 60%);}
+  /* faint royal arch behind the title */
+  .arch{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:min(560px,86vw);height:min(680px,90vh);z-index:0;opacity:.5;pointer-events:none}
+  .arch svg{width:100%;height:100%}
+  .hero-in{position:relative;z-index:2;max-width:820px}
+  .hero .est{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px}
+  .hero h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(52px,10vw,120px);line-height:.92;color:var(--cream);margin-bottom:6px}
+  .hero h1 em{display:block;font-style:italic;color:var(--gold);font-size:.86em}
+  .hero .tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.4vw,26px);color:var(--cream-2);margin:22px 0 34px}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:15px 30px;border-radius:2px;transition:transform .15s,background .25s,color .25s,border-color .25s;cursor:pointer}
+  .btn-gold{background:var(--gold);color:var(--maroon)}
+  .btn-gold:hover{background:var(--gold-2);transform:translateY(-2px)}
+  .btn-out{border:1px solid var(--line);color:var(--cream)}
+  .btn-out:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+  .hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+
+  /* SECTION */
+  section{padding:104px 0;position:relative}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 56px}
+  .sec-kick{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin:16px 0}
+  .sec-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,5.5vw,58px);line-height:1.05;color:var(--cream)}
+  .sec-sub{color:var(--cream-2);opacity:.8;font-size:16px;margin-top:14px}
+
+  /* SIGNATURE (biryani) */
+  #signature{background:var(--maroon-2)}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+  .sig-photo{position:relative;aspect-ratio:4/5;border:1px solid var(--line);border-radius:3px;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% 0%,var(--maroon-3),var(--maroon-2));display:flex;align-items:center;justify-content:center;text-align:center}
+  .sig-photo .ph{color:var(--muted);font-size:13px;letter-spacing:1px;padding:24px}
+  .sig-photo .ph svg{opacity:.5;margin-bottom:10px}
+  .sig-body .sec-kick{margin-top:0;text-align:left}
+  .sig-body h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(32px,4.5vw,50px);line-height:1.05;margin-bottom:18px}
+  .sig-body p{color:var(--cream-2);opacity:.85;margin-bottom:18px;max-width:460px}
+
+  /* MENU */
+  .menu-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px 56px;max-width:900px;margin:0 auto}
+  .mcat{border-top:1px solid var(--line);padding-top:22px}
+  .mcat h3{font-family:'Marcellus',serif;font-size:22px;letter-spacing:1px;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  .mcat h3 svg{opacity:.8}
+  .mcat p{color:var(--cream-2);opacity:.7;font-size:14px}
+  .menu-note{text-align:center;margin-top:40px;color:var(--muted);font-size:13.5px;font-style:italic}
+  .menu-note a{color:var(--gold);border-bottom:1px solid var(--line)}
+
+  /* GALLERY */
+  .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .gcell{position:relative;border:1px solid var(--line);border-radius:3px;overflow:hidden;aspect-ratio:3/4}
+  .gcell img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .gcell:hover img{transform:scale(1.05)}
+  .gcell .lab{position:absolute;left:0;right:0;bottom:0;padding:16px;font-family:'Marcellus',serif;font-size:15px;letter-spacing:1px;color:var(--cream);background:linear-gradient(to top,rgba(58,11,20,0.92),transparent)}
+  @media(max-width:860px){.gal{grid-template-columns:1fr 1fr}.gcell:first-child{grid-column:1/3}}
+
+  /* HOSPITALITY / ABOUT */
+  #about{background:var(--maroon-2);text-align:center}
+  #about .lede{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3.2vw,34px);line-height:1.4;color:var(--cream);max-width:760px;margin:0 auto;font-weight:500}
+  #about .lede em{color:var(--gold);font-style:italic}
+  .about-stats{display:flex;justify-content:center;gap:60px;flex-wrap:wrap;margin-top:52px}
+  .about-stats b{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--gold);display:block;line-height:1}
+  .about-stats span{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:8px;display:block}
+
+  /* VISIT */
+  .visit-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:34px;align-items:stretch}
+  .visit-cards{display:flex;flex-direction:column;gap:14px}
+  .vcard{display:flex;gap:16px;padding:22px;border:1px solid var(--line);border-radius:3px;background:rgba(212,175,90,0.03)}
+  .vcard .ic{width:44px;height:44px;flex-shrink:0;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold)}
+  .vcard h4{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .vcard p{font-size:16px;color:var(--cream)}
+  .vcard a{color:var(--gold)}
+  .map{border:1px solid var(--line);border-radius:3px;overflow:hidden;min-height:360px}
+  .map iframe{width:100%;height:100%;min-height:360px;border:0;filter:sepia(.3) saturate(1.1) brightness(.9)}
+
+  /* CTA band */
+  .reserve{text-align:center;padding:96px 22px;position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .reserve::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 100% at 50% 0%,rgba(212,175,90,0.12),transparent 60%)}
+  .reserve h2{position:relative;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(34px,5.5vw,58px);color:var(--cream);margin-bottom:12px}
+  .reserve p{position:relative;color:var(--cream-2);opacity:.8;margin-bottom:30px}
+
+  /* FOOTER */
+  footer{background:var(--maroon-2);padding:60px 0 34px}
+  .foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:32px;border-bottom:1px solid var(--line);margin-bottom:24px}
+  .foot-brand{max-width:300px}
+  .foot-brand .b1{font-family:'Marcellus',serif;font-size:24px;letter-spacing:3px;color:var(--gold)}
+  .foot-brand p{color:var(--cream-2);opacity:.7;font-size:14px;margin-top:12px}
+  .foot-col h5{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+  .foot-col a{display:block;color:var(--cream-2);opacity:.75;font-size:14px;margin-bottom:11px;transition:opacity .2s}
+  .foot-col a:hover{opacity:1}
+  .foot-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted)}
+  .foot-bot a{color:var(--gold)}
+
+  @media(max-width:860px){
+    .nav-links{display:none}
+    .sig-grid{grid-template-columns:1fr;gap:32px}
+    .sig-photo{order:-1;max-width:420px;margin:0 auto}
+    .menu-cols{grid-template-columns:1fr;gap:20px}
+    .visit-grid{grid-template-columns:1fr}
+    .about-stats{gap:36px}
+  }
+  @media(max-width:520px){.hero-cta .btn{flex:1;justify-content:center}}
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-in">
+      <a class="brand" href="#">
+        <span class="b1">HYDERABAD DARBAR</span>
+        <span class="b2">Royal Desi Dining · Hyderabad</span>
+      </a>
+      <div class="nav-links">
+        <a href="#signature">Signature</a>
+        <a href="#menu">Menu</a>
+        <a href="#about">Our Darbar</a>
+        <a href="#visit">Visit</a>
+        <a class="nav-cta" href="tel:+923213780301">Call to Order</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="arch" aria-hidden="true">
+      <svg viewBox="0 0 400 500" fill="none">
+        <path d="M60 500 V200 C60 90 130 40 200 40 C270 40 340 90 340 200 V500" stroke="#d4af5a" stroke-width="1.2" opacity="0.5"/>
+        <path d="M92 500 V210 C92 118 148 74 200 74 C252 74 308 118 308 210 V500" stroke="#d4af5a" stroke-width="1" opacity="0.3"/>
+        <circle cx="200" cy="150" r="4" fill="#d4af5a" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="hero-in">
+      <div class="est">Bypass Road · Est. Hyderabad</div>
+      <h1 class="cor">Hyderabad <em>Darbar</em></h1>
+      <div class="orn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 6 6 .5-4.5 4 1.5 6-5-3.5-5 3.5 1.5-6L4 8.5 10 8z"/></svg></div>
+      <p class="tag">Biryani, BBQ &amp; desi favourites — where every guest is welcomed like royalty.</p>
+      <div class="hero-cta">
+        <a class="btn btn-gold" href="tel:+923213780301">Call to Order</a>
+        <a class="btn btn-out" href="#menu">View the Menu</a>
+      </div>
+    </div>
+    <div class="hero-scroll">scroll</div>
+  </header>
+
+  <!-- SIGNATURE -->
+  <section id="signature">
+    <div class="wrap">
+      <div class="sig-grid">
+        <div class="sig-photo" style="background:none">
+          <img src="img/bbq.jpg" alt="Charcoal BBQ platter at Hyderabad Darbar" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div class="sig-body">
+          <div class="sec-kick">The Signature</div>
+          <h2 class="cor">Charcoal BBQ &amp;<br>the biryani they love.</h2>
+          <p>Smoky tikka and seekh off the coals, rich karahi, and slow-layered biryani with that deep, aromatic <em style="color:var(--gold);font-style:italic">Hyderabadi</em> spice — cooked the way it should be. This is what made Hyderabad Darbar a name on Bypass Road.</p>
+          <p>Generous desi plates, served with the warmth of a true darbar.</p>
+          <a class="btn btn-gold" href="tel:+923213780301">Order Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="orn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 6 6 .5-4.5 4 1.5 6-5-3.5-5 3.5 1.5-6L4 8.5 10 8z"/></svg></div>
+        <div class="sec-kick">From the Kitchen</div>
+        <h2 class="sec-title cor">The Menu</h2>
+        <p class="sec-sub">Traditional Pakistani flavours, cooked fresh to order.</p>
+      </div>
+      <div class="menu-cols">
+        <div class="mcat">
+          <h3 class="mar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 13h16a8 8 0 01-16 0z"/><path d="M7 13V9a5 5 0 0110 0v4"/></svg> Biryani</h3>
+          <p>The house speciality — chicken, beef &amp; more, layered and dum-cooked.</p>
+        </div>
+        <div class="mcat">
+          <h3 class="mar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v18M6 8h12M18 3v18"/><circle cx="12" cy="8" r="2"/></svg> BBQ &amp; Grill</h3>
+          <p>Smoky tikka, seekh kebab, malai boti and charcoal favourites.</p>
+        </div>
+        <div class="mcat">
+          <h3 class="mar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11h18l-2 8H5z"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Karahi &amp; Handi</h3>
+          <p>Rich, slow-cooked chicken &amp; beef karahi and creamy handi.</p>
+        </div>
+        <div class="mcat">
+          <h3 class="mar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg> Desi &amp; Sides</h3>
+          <p>Daal, naan, raita, salad and everyday desi comfort dishes.</p>
+        </div>
+      </div>
+      <p class="menu-note">Full menu with prices coming soon — call <a href="tel:+923213780301">0321 3780301</a> to order or ask about today's specials.</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kick">Off the Table</div>
+        <h2 class="sec-title cor">Straight from the kitchen</h2>
+      </div>
+      <div class="gal">
+        <div class="gcell"><img src="img/bbq.jpg" alt="BBQ tikka platter" loading="lazy"><span class="lab">Charcoal BBQ</span></div>
+        <div class="gcell"><img src="img/naan.jpg" alt="Fresh naan" loading="lazy"><span class="lab">Fresh Naan</span></div>
+        <div class="gcell"><img src="img/karahi.jpg" alt="Karahi" loading="lazy"><span class="lab">Karahi</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / HOSPITALITY -->
+  <section id="about">
+    <div class="wrap">
+      <div class="orn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 6 6 .5-4.5 4 1.5 6-5-3.5-5 3.5 1.5-6L4 8.5 10 8z"/></svg></div>
+      <div class="sec-kick">Our Darbar</div>
+      <p class="lede">A <em>darbar</em> is a royal court — and here, every guest is treated like royalty. Warm hospitality, generous plates, and the honest flavours of Hyderabad, served with care.</p>
+      <div class="about-stats">
+        <div><b class="cor">100%</b><span>Fresh to Order</span></div>
+        <div><b class="cor">Desi</b><span>Home of Biryani</span></div>
+        <div><b class="cor">Dine · Takeaway</b><span>&amp; Delivery</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVE / CTA -->
+  <div class="reserve">
+    <h2 class="cor">Come dine with us.</h2>
+    <p>Book a table, order for delivery, or just drop by — the darbar is always open to you.</p>
+    <a class="btn btn-gold" href="tel:+923213780301">Call 0321 3780301</a>
+  </div>
+
+  <!-- VISIT -->
+  <section id="visit">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kick">Find Us</div>
+        <h2 class="sec-title cor">Visit the Darbar</h2>
+      </div>
+      <div class="visit-grid">
+        <div class="visit-cards">
+          <div class="vcard">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+            <div><h4>Address</h4><p>Bypass Road, The Palm Residency,<br>Hyderabad Bypass, Hyderabad</p></div>
+          </div>
+          <div class="vcard">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L6.91 8.37a16 16 0 006.72 6.72l1.75-1.75a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 15.66z"/></svg></div>
+            <div><h4>Phone</h4><p><a href="tel:+923213780301">0321 3780301</a></p></div>
+          </div>
+          <div class="vcard">
+            <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+            <div><h4>Hours</h4><p>Open daily · lunch to late<br><span style="color:var(--muted);font-size:13px">(exact timings — to confirm)</span></p></div>
+          </div>
+        </div>
+        <div class="map">
+          <iframe src="https://maps.google.com/maps?q=Hyderabad%20Darbar%2C%20Bypass%20Road%2C%20The%20Palm%20Residency%2C%20Hyderabad%2C%20Sindh%2C%20Pakistan&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Hyderabad Darbar location"></iframe>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:20px">
+        <a class="btn btn-out" href="https://www.google.com/maps/search/?api=1&query=Hyderabad+Darbar+Bypass+Road+Palm+Residency+Hyderabad+Sindh" target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <span class="b1">HYDERABAD DARBAR</span>
+          <p>Royal desi dining on Bypass Road — biryani, BBQ and the warmth of true Hyderabadi hospitality.</p>
+        </div>
+        <div class="foot-col">
+          <h5>Menu</h5>
+          <a href="#signature">Signature Biryani</a>
+          <a href="#menu">BBQ &amp; Grill</a>
+          <a href="#menu">Karahi &amp; Handi</a>
+        </div>
+        <div class="foot-col">
+          <h5>Visit</h5>
+          <a href="#visit">Location</a>
+          <a href="tel:+923213780301">0321 3780301</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Hyderabad+Darbar+Bypass+Road+Hyderabad" target="_blank" rel="noopener">Directions</a>
+        </div>
+      </div>
+      <div class="foot-bot">
+        <p>© 2026 Hyderabad Darbar · Hyderabad, Sindh</p>
+        <p>designed &amp; built by <a href="https://riyanmujtaba.github.io" target="_blank" rel="noopener">Riyan Mujtaba</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
+  </script>
+</body>
+</html>
