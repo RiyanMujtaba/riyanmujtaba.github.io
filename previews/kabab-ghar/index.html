@@ -5,124 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kabab Ghar — Garden Grill · Hyderabad</title>
 <meta name="description" content="Kabab Ghar — steaks, BBQ, tandoor and desi-Chinese in a leafy garden setting on Wadhu Wah Road, Qasimabad, Hyderabad. Grill house, done right." />
-<meta name="theme-color" content="#c8362a" />
+<meta name="theme-color" content="#13211a" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Kabab Ghar — Garden Grill · Hyderabad" />
 <meta property="og:description" content="Steaks, BBQ, tandoor & desi-Chinese in a leafy garden. Wadhu Wah Road, Qasimabad." />
 <meta property="og:image" content="img/garden2.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23c8362a'/%3E%3Cpath d='M9 7v18M16 7v18M23 7v18' stroke='%23f3ebdc' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2313211a'/%3E%3Cpath d='M9 7v18M16 7v18M23 7v18' stroke='%23e6a94e' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --paper:#f3ebdc; --paper-2:#eadfc8; --ink:#201b16; --ink-2:#3a322a;
-    --red:#c8362a; --red-d:#a72a20; --green:#3f5d31; --muted:#7c6f5c;
-    --line:rgba(32,27,22,0.14);
+    --bg:#13211a; --bg2:#182a20; --panel:#1e3326; --panel-2:#24402e;
+    --cream:#f2ede1; --amber:#e6a94e; --amber-2:#f2c579; --ember:#d9633a;
+    --muted:#98ab9c; --line:rgba(242,237,225,0.12); --line-2:rgba(230,169,78,0.3);
   }
   html{scroll-behavior:smooth}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition-duration:.001ms!important}}
-  body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-  .anton{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:.5px}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  .fr{font-family:'Fraunces',serif}
   .wrap{max-width:1120px;margin:0 auto;padding:0 26px}
   a{color:inherit;text-decoration:none}
   img{display:block;max-width:100%}
 
   /* NAV */
-  nav{position:sticky;top:0;z-index:100;background:var(--ink);color:var(--paper);border-bottom:3px solid var(--red)}
-  .nav-in{max-width:1120px;margin:0 auto;padding:12px 26px;display:flex;align-items:center;justify-content:space-between}
-  .brand{font-family:'Anton';font-size:24px;letter-spacing:1.5px;text-transform:uppercase;color:var(--paper)}
-  .brand span{color:var(--red)}
-  .nav-links{display:flex;gap:26px;align-items:center}
-  .nav-links a{color:var(--paper);opacity:.8;font-size:13px;font-weight:600;letter-spacing:.5px;transition:opacity .2s}
-  .nav-links a:hover{opacity:1;color:#f0c9a0}
-  .nav-cta{background:var(--red);color:var(--paper)!important;opacity:1!important;font-family:'Anton';letter-spacing:1px;font-size:13px;padding:9px 18px;border-radius:3px}
-  .nav-cta:hover{background:var(--red-d)}
+  nav{position:sticky;top:0;z-index:100;background:rgba(19,33,26,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{max-width:1120px;margin:0 auto;padding:15px 26px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:24px;letter-spacing:.5px;color:var(--cream)}
+  .brand span{color:var(--amber)}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.5px;transition:color .2s}
+  .nav-links a:hover{color:var(--cream)}
+  .nav-cta{background:var(--amber);color:#20160a!important;font-weight:700;font-size:13px;padding:10px 20px;border-radius:100px;transition:background .2s,transform .15s}
+  .nav-cta:hover{background:var(--amber-2);transform:translateY(-1px)}
 
-  /* HERO — poster */
-  .hero{position:relative;overflow:hidden;border-bottom:3px solid var(--ink)}
+  /* HERO */
+  .hero{position:relative;overflow:hidden}
   .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:stretch}
-  .hero-left{padding:70px 0 70px}
-  .hero-left .in{padding-right:30px}
-  .hero .kick{display:inline-block;background:var(--ink);color:var(--paper);font-family:'Anton';letter-spacing:2px;text-transform:uppercase;font-size:12px;padding:6px 14px;border-radius:2px;margin-bottom:22px}
-  .hero h1{font-family:'Anton';font-size:clamp(60px,10vw,124px);line-height:.86;text-transform:uppercase;letter-spacing:0}
-  .hero h1 .r{color:var(--red)}
-  .hero h1 .stroke{-webkit-text-stroke:2px var(--ink);color:transparent}
-  .hero p.lede{font-size:clamp(16px,2vw,19px);font-weight:500;max-width:400px;margin:24px 0 30px;color:var(--ink-2)}
-  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{display:inline-flex;align-items:center;gap:9px;font-family:'Anton';letter-spacing:1px;font-size:15px;text-transform:uppercase;padding:14px 26px;border-radius:3px;border:3px solid var(--ink);cursor:pointer;transition:transform .12s,box-shadow .12s}
-  .btn-red{background:var(--red);color:var(--paper);box-shadow:5px 5px 0 var(--ink)}
-  .btn-red:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
-  .btn-paper{background:var(--paper);color:var(--ink)}
-  .btn-paper:hover{background:var(--paper-2)}
-  .hero-right{position:relative;min-height:440px;border-left:3px solid var(--ink);background:var(--ink)}
-  .hero-right img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
+  .hero-left{display:flex;align-items:center;padding:80px 0}
+  .hero-left .in{padding-right:40px}
+  .hero .kick{display:inline-flex;align-items:center;gap:9px;color:var(--amber);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
+  .hero .kick::before{content:'';width:26px;height:1px;background:var(--amber)}
+  .hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(50px,8vw,96px);line-height:.98;letter-spacing:-1px}
+  .hero h1 em{font-style:italic;color:var(--amber)}
+  .hero p.lede{font-size:clamp(16px,1.9vw,18px);max-width:410px;margin:24px 0 32px;color:var(--muted)}
+  .hero-cta{display:flex;gap:13px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;padding:15px 28px;border-radius:100px;cursor:pointer;transition:transform .15s,background .2s,border-color .2s,color .2s}
+  .btn-amber{background:var(--amber);color:#20160a}
+  .btn-amber:hover{background:var(--amber-2);transform:translateY(-2px)}
+  .btn-out{border:1px solid var(--line-2);color:var(--cream)}
+  .btn-out:hover{background:rgba(230,169,78,0.08);transform:translateY(-2px)}
+  .hero-right{position:relative;min-height:520px;overflow:hidden}
+  .hero-right img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hero-right::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--bg),transparent 24%),linear-gradient(0deg,rgba(19,33,26,0.4),transparent 40%)}
 
   /* STRIP */
-  .strip{background:var(--red);color:var(--paper);border-bottom:3px solid var(--ink);padding:14px 0}
-  .strip .in{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;font-family:'Anton';letter-spacing:2px;text-transform:uppercase;font-size:15px}
-  .strip .in span{display:flex;align-items:center;gap:40px}
-  .strip .in span::after{content:'✦';color:var(--paper);opacity:.6}
+  .strip{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden}
+  .strip .in{display:flex;justify-content:center;gap:34px;flex-wrap:wrap;font-family:'Fraunces',serif;font-style:italic;font-size:19px;color:var(--cream)}
+  .strip .in span{display:flex;align-items:center;gap:34px}
+  .strip .in span::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber)}
 
   /* SECTION */
-  section{padding:88px 0}
-  .head{margin-bottom:44px}
-  .head .lbl{font-family:'Anton';color:var(--red);letter-spacing:2px;text-transform:uppercase;font-size:14px;margin-bottom:8px}
-  .head h2{font-family:'Anton';font-size:clamp(34px,6vw,60px);text-transform:uppercase;line-height:.95}
-  .head p{color:var(--muted);font-weight:500;margin-top:12px;max-width:520px}
+  section{padding:92px 0}
+  .head{margin-bottom:46px}
+  .head .lbl{color:var(--amber);letter-spacing:2px;text-transform:uppercase;font-size:12px;font-weight:600;margin-bottom:12px}
+  .head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,5.5vw,56px);line-height:1.02;letter-spacing:-.5px}
+  .head p{color:var(--muted);margin-top:12px;max-width:520px}
 
   /* GARDEN */
-  #garden{background:var(--paper-2);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+  #garden{background:var(--bg2)}
   .garden-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
-  .garden-grid .g{border:3px solid var(--ink);border-radius:4px;overflow:hidden}
-  .garden-grid .g img{width:100%;height:100%;object-fit:cover;min-height:260px;transition:transform .5s}
+  .garden-grid .g{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .garden-grid .g img{width:100%;height:100%;object-fit:cover;min-height:280px;transition:transform .5s}
   .garden-grid .g:hover img{transform:scale(1.05)}
 
-  /* MENU (the star) */
-  .menu-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px 56px}
-  .mcat{border-top:3px solid var(--ink);padding-top:16px;break-inside:avoid}
-  .mcat h3{font-family:'Anton';font-size:26px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink);display:flex;align-items:center;gap:12px;margin-bottom:4px}
-  .mcat h3 .price-all{margin-left:auto;font-size:16px;color:var(--red)}
-  .mcat .note{font-size:12.5px;color:var(--muted);font-weight:500;margin-bottom:14px}
+  /* MENU */
+  .menu-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px 56px}
+  .mcat{border-top:1px solid var(--line-2);padding-top:18px;break-inside:avoid}
+  .mcat h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;letter-spacing:.2px;display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .mcat h3 .price-all{margin-left:auto;font-size:17px;color:var(--amber);font-family:'DM Sans';font-weight:700}
+  .mcat .note{font-size:12.5px;color:var(--muted);margin-bottom:14px}
   .mitem{display:flex;align-items:baseline;gap:8px;padding:7px 0}
-  .mitem .n{font-weight:600;font-size:15.5px;white-space:nowrap}
-  .mitem .dots{flex:1;border-bottom:2px dotted rgba(32,27,22,0.25);transform:translateY(-4px)}
-  .mitem .p{font-family:'Anton';font-size:16px;color:var(--red);white-space:nowrap}
-  .menu-foot{margin-top:34px;padding-top:20px;border-top:3px solid var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
-  .menu-foot p{color:var(--muted);font-weight:500;font-size:14px}
-  .tax{font-family:'Anton';letter-spacing:1px;text-transform:uppercase;font-size:12px;color:var(--ink);background:var(--paper-2);border:2px solid var(--ink);padding:6px 12px;border-radius:2px}
+  .mitem .n{font-weight:500;font-size:15.5px;white-space:nowrap}
+  .mitem .dots{flex:1;border-bottom:1px dotted var(--line-2);transform:translateY(-4px)}
+  .mitem .p{font-weight:700;font-size:15.5px;color:var(--amber);white-space:nowrap}
+  .menu-foot{margin-top:36px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
+  .menu-foot p{color:var(--muted);font-size:14px}
+  .tax{font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--amber);border:1px solid var(--line-2);padding:6px 13px;border-radius:100px}
 
   /* VISIT */
-  #visit{background:var(--ink);color:var(--paper);border-top:3px solid var(--red)}
-  #visit .head h2{color:var(--paper)}
-  #visit .head .lbl{color:#f0a58f}
-  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .vcard{border:2px solid rgba(243,235,220,0.18);border-radius:4px;padding:24px;background:rgba(243,235,220,0.03)}
-  .vcard h4{font-family:'Anton';letter-spacing:1px;text-transform:uppercase;font-size:14px;color:#f0a58f;margin-bottom:8px}
+  #visit{background:var(--bg2);border-top:1px solid var(--line)}
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .vcard{border:1px solid var(--line);border-radius:12px;padding:24px;background:var(--panel)}
+  .vcard h4{color:var(--amber);letter-spacing:1px;text-transform:uppercase;font-size:12px;font-weight:600;margin-bottom:8px}
   .vcard p{font-size:17px}
-  .vcard a{color:var(--paper);border-bottom:2px solid var(--red)}
+  .vcard a{color:var(--amber)}
   .vcard.map{grid-column:1/3;padding:0;overflow:hidden;min-height:320px}
-  .vcard.map iframe{width:100%;height:100%;min-height:320px;border:0;filter:grayscale(.3)}
+  .vcard.map iframe{width:100%;height:100%;min-height:320px;border:0;filter:invert(0.9) hue-rotate(80deg) saturate(0.7) brightness(0.95)}
+
+  /* CTA */
+  .cta{text-align:center;padding:88px 22px;position:relative;overflow:hidden;border-top:1px solid var(--line)}
+  .cta::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 130% at 50% 0%,rgba(230,169,78,0.12),transparent 60%)}
+  .cta h2{position:relative;font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,5.5vw,58px);margin-bottom:12px}
+  .cta p{position:relative;color:var(--muted);margin-bottom:28px}
 
   /* FOOTER */
-  footer{background:var(--ink);color:var(--paper);padding:34px 0;border-top:2px solid rgba(243,235,220,0.15)}
+  footer{background:var(--bg);padding:34px 0;border-top:1px solid var(--line)}
   .foot-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center}
   .foot-in .brand{font-size:20px}
-  .foot-in p{font-size:12.5px;color:rgba(243,235,220,0.6)}
-  .foot-in a{color:#f0a58f}
+  .foot-in p{font-size:12.5px;color:var(--muted)}
+  .foot-in a{color:var(--amber)}
 
   @media(max-width:860px){
     .nav-links a:not(.nav-cta){display:none}
     .hero-grid{grid-template-columns:1fr}
-    .hero-right{min-height:300px;border-left:0;border-top:3px solid var(--ink);order:-1}
-    .hero-left{padding:44px 0}.hero-left .in{padding-right:0}
+    .hero-right{min-height:300px;order:-1}
+    .hero-right::after{background:linear-gradient(0deg,var(--bg),transparent 50%)}
+    .hero-left{padding:48px 0}.hero-left .in{padding-right:0}
     .garden-grid{grid-template-columns:1fr}
     .menu-wrap{grid-template-columns:1fr;gap:20px}
     .visit-grid{grid-template-columns:1fr}.vcard.map{grid-column:auto}
   }
-  @media(max-width:520px){.hero-cta .btn{flex:1;justify-content:center}.strip .in{font-size:13px;gap:24px}.strip .in span{gap:24px}}
+  @media(max-width:520px){.hero-cta .btn{flex:1;justify-content:center}.strip .in{font-size:16px;gap:22px}.strip .in span{gap:22px}}
 </style>
 </head>
 <body>
@@ -130,7 +136,7 @@
   <!-- NAV -->
   <nav>
     <div class="nav-in">
-      <a class="brand" href="#">KABAB <span>GHAR</span></a>
+      <a class="brand fr" href="#">Kabab <span>Ghar</span></a>
       <div class="nav-links">
         <a href="#garden">The Garden</a>
         <a href="#menu">Menu</a>
@@ -146,11 +152,11 @@
       <div class="hero-left">
         <div class="wrap"><div class="in">
           <span class="kick">Garden · Grill · Qasimabad</span>
-          <h1 class="anton">Fired up.<br><span class="r">Served</span><br><span class="stroke">outdoors.</span></h1>
-          <p class="lede">Steaks, BBQ, tandoor and desi-Chinese — cooked fresh and served under the string lights of our leafy garden. Welcome to Kabab Ghar.</p>
+          <h1 class="fr">Grilled fresh,<br>served <em>under<br>the stars.</em></h1>
+          <p class="lede">Steaks, BBQ, tandoor and desi-Chinese — cooked to order and served across our leafy garden, lit up every evening. Welcome to Kabab Ghar.</p>
           <div class="hero-cta">
-            <a class="btn btn-red" href="#menu">See the Menu</a>
-            <a class="btn btn-paper" href="tel:+923332622915">Book a Table</a>
+            <a class="btn btn-amber" href="#menu">See the Menu</a>
+            <a class="btn btn-out" href="tel:+923332622915">Book a Table</a>
           </div>
         </div></div>
       </div>
@@ -159,14 +165,14 @@
   </header>
 
   <!-- STRIP -->
-  <div class="strip"><div class="wrap in"><span>Steaks<span></span></span><span>BBQ &amp; Tandoor</span><span>Desi-Chinese</span><span>Garden Dining</span></div></div>
+  <div class="strip"><div class="wrap in"><span>Steaks</span><span>BBQ &amp; Tandoor</span><span>Desi-Chinese</span><span>Garden Dining</span></div></div>
 
   <!-- GARDEN -->
   <section id="garden">
     <div class="wrap">
       <div class="head">
         <div class="lbl">The Setting</div>
-        <h2 class="anton">Dinner in the garden</h2>
+        <h2 class="fr">Dinner in the garden</h2>
         <p>Open-air tables, string lights and a proper grill — Kabab Ghar's garden is where Qasimabad comes to eat out under the stars.</p>
       </div>
       <div class="garden-grid">
@@ -181,13 +187,13 @@
     <div class="wrap">
       <div class="head">
         <div class="lbl">The Menu</div>
-        <h2 class="anton">What's on the grill</h2>
+        <h2 class="fr">What's on the grill</h2>
         <p>A taste of the menu — steaks, stir-fry, tandoor and refreshers. Full menu in-store.</p>
       </div>
       <div class="menu-wrap">
 
         <div class="mcat">
-          <h3 class="anton">Beef Steaks <span class="price-all">Rs 1749</span></h3>
+          <h3 class="fr">Beef Steaks <span class="price-all">Rs 1749</span></h3>
           <div class="note">Choose your doneness · served with mashed potatoes or vegetable rice</div>
           <div class="mitem"><span class="n">Thai Beef Steak</span><span class="dots"></span></div>
           <div class="mitem"><span class="n">Mexican Beef Steak</span><span class="dots"></span></div>
@@ -198,7 +204,7 @@
         </div>
 
         <div class="mcat">
-          <h3 class="anton">Stir Fry</h3>
+          <h3 class="fr">Stir Fry</h3>
           <div class="note">Desi-Chinese · all served with rice</div>
           <div class="mitem"><span class="n">Szechuan Chicken</span><span class="dots"></span><span class="p">1399</span></div>
           <div class="mitem"><span class="n">Honey Ginger Chicken</span><span class="dots"></span><span class="p">1399</span></div>
@@ -210,7 +216,7 @@
         </div>
 
         <div class="mcat">
-          <h3 class="anton">Tandoor</h3>
+          <h3 class="fr">Tandoor</h3>
           <div class="mitem"><span class="n">Chapati</span><span class="dots"></span><span class="p">40</span></div>
           <div class="mitem"><span class="n">Plain Naan</span><span class="dots"></span><span class="p">60</span></div>
           <div class="mitem"><span class="n">Roghni Naan</span><span class="dots"></span><span class="p">80</span></div>
@@ -220,7 +226,7 @@
         </div>
 
         <div class="mcat">
-          <h3 class="anton">Salads</h3>
+          <h3 class="fr">Salads</h3>
           <div class="mitem"><span class="n">Raita (Green)</span><span class="dots"></span><span class="p">170</span></div>
           <div class="mitem"><span class="n">Raita (Red)</span><span class="dots"></span><span class="p">170</span></div>
           <div class="mitem"><span class="n">Green Salad</span><span class="dots"></span><span class="p">200</span></div>
@@ -228,7 +234,7 @@
         </div>
 
         <div class="mcat">
-          <h3 class="anton">Lemonades</h3>
+          <h3 class="fr">Lemonades</h3>
           <div class="mitem"><span class="n">Mint Lemonade</span><span class="dots"></span><span class="p">349</span></div>
           <div class="mitem"><span class="n">Peach Lemonade</span><span class="dots"></span><span class="p">349</span></div>
           <div class="mitem"><span class="n">Strawberry Lemonade</span><span class="dots"></span><span class="p">349</span></div>
@@ -237,14 +243,14 @@
         </div>
 
         <div class="mcat">
-          <h3 class="anton">Mojitos &amp; Margaritas <span class="price-all">Rs 399</span></h3>
-          <div class="note">Mojitos &amp; margaritas — pick your flavour</div>
+          <h3 class="fr">Mojitos &amp; Margaritas <span class="price-all">Rs 399</span></h3>
+          <div class="note">Pick your flavour</div>
           <div class="mitem"><span class="n">Strawberry · Blueberry · Raspberry</span><span class="dots"></span></div>
           <div class="mitem"><span class="n">Mint · Peach</span><span class="dots"></span></div>
         </div>
 
         <div class="mcat">
-          <h3 class="anton">Drinks</h3>
+          <h3 class="fr">Drinks</h3>
           <div class="mitem"><span class="n">Small Water</span><span class="dots"></span><span class="p">80</span></div>
           <div class="mitem"><span class="n">Large Water</span><span class="dots"></span><span class="p">130</span></div>
           <div class="mitem"><span class="n">Sting Can</span><span class="dots"></span><span class="p">130</span></div>
@@ -254,25 +260,32 @@
         </div>
 
         <div class="mcat">
-          <h3 class="anton">…&amp; More</h3>
+          <h3 class="fr">…&amp; More</h3>
           <div class="note">Full BBQ, kebabs, burgers &amp; rolls available in-store.</div>
           <div class="mitem"><span class="n">Ask about today's specials</span><span class="dots"></span></div>
         </div>
 
       </div>
       <div class="menu-foot">
-        <p>Prices in PKR. Menu sampled from Kabab Ghar Garden — call to confirm today's specials.</p>
+        <p>Prices in PKR · menu sampled from Kabab Ghar Garden — call to confirm today's specials.</p>
         <span class="tax">+ 15% tax applies</span>
       </div>
     </div>
   </section>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2 class="fr">Come eat in the garden.</h2>
+    <p>Book a table or drop by — the grill's on every evening.</p>
+    <a class="btn btn-amber" href="tel:+923332622915">Call 0333 2622915</a>
+  </div>
 
   <!-- VISIT -->
   <section id="visit">
     <div class="wrap">
       <div class="head">
         <div class="lbl">Find Us</div>
-        <h2 class="anton">Come eat in the garden</h2>
+        <h2 class="fr">Come eat in the garden</h2>
       </div>
       <div class="visit-grid">
         <div class="vcard">
@@ -301,7 +314,7 @@
   <!-- FOOTER -->
   <footer>
     <div class="wrap foot-in">
-      <a class="brand" href="#">KABAB <span style="color:var(--red)">GHAR</span></a>
+      <a class="brand fr" href="#">Kabab <span style="color:var(--amber)">Ghar</span></a>
       <p>© 2026 Kabab Ghar · Qasimabad, Hyderabad</p>
       <p>designed &amp; built by <a href="https://riyanmujtaba.github.io" target="_blank" rel="noopener">Riyan Mujtaba</a></p>
     </div>
