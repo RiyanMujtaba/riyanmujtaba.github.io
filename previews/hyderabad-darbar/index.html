@@ -9,7 +9,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Hyderabad Darbar — Royal Desi Dining" />
 <meta property="og:description" content="Biryani, BBQ & desi favourites on Bypass Road, Hyderabad. Welcomed like royalty." />
-<meta property="og:image" content="img/bbq.jpg" />
+<meta property="og:image" content="img/hero.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%234a0f1a'/%3E%3Cpath d='M16 5c5 0 8 3 8 8v12H8V13c0-5 3-8 8-8z' fill='none' stroke='%23d4af5a' stroke-width='1.6'/%3E%3Ccircle cx='16' cy='9.5' r='1.4' fill='%23d4af5a'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,9 +54,12 @@
 
   /* HERO — centred, arch motif, ornamental */
   .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 22px 80px;overflow:hidden}
-  .hero::before{content:'';position:absolute;inset:0;z-index:0;
-    background:radial-gradient(60% 55% at 50% 12%,rgba(212,175,90,0.14),transparent 62%),
-      radial-gradient(80% 60% at 50% 120%,rgba(0,0,0,0.5),transparent 60%);}
+  .hero-bg{position:absolute;inset:0;z-index:0;background:#3a0b14 url('img/hero.jpg') center/cover no-repeat;transform:scale(1.03);animation:kb 24s ease-in-out infinite alternate}
+  @keyframes kb{to{transform:scale(1.12)}}
+  .hero-bg::after{content:'';position:absolute;inset:0;
+    background:radial-gradient(70% 60% at 50% 20%,rgba(58,11,20,0.55),rgba(58,11,20,0.82) 70%),
+      linear-gradient(0deg,var(--maroon) 2%,transparent 45%),
+      radial-gradient(60% 50% at 50% 8%,rgba(212,175,90,0.14),transparent 60%);}
   /* faint royal arch behind the title */
   .arch{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:min(560px,86vw);height:min(680px,90vh);z-index:0;opacity:.5;pointer-events:none}
   .arch svg{width:100%;height:100%}
@@ -177,6 +180,7 @@
 
   <!-- HERO -->
   <header class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
     <div class="arch" aria-hidden="true">
       <svg viewBox="0 0 400 500" fill="none">
         <path d="M60 500 V200 C60 90 130 40 200 40 C270 40 340 90 340 200 V500" stroke="#d4af5a" stroke-width="1.2" opacity="0.5"/>
@@ -202,7 +206,7 @@
     <div class="wrap">
       <div class="sig-grid">
         <div class="sig-photo" style="background:none">
-          <img src="img/bbq.jpg" alt="Charcoal BBQ platter at Hyderabad Darbar" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+          <img src="img/food-bbq.jpg" alt="Charcoal BBQ platter at Hyderabad Darbar" loading="lazy" style="width:100%;height:100%;object-fit:cover">
         </div>
         <div class="sig-body">
           <div class="sec-kick">The Signature</div>
@@ -250,13 +254,13 @@
   <section id="gallery" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
-        <div class="sec-kick">Off the Table</div>
-        <h2 class="sec-title cor">Straight from the kitchen</h2>
+        <div class="sec-kick">The Setting</div>
+        <h2 class="sec-title cor">Dining under the stars</h2>
       </div>
       <div class="gal">
-        <div class="gcell"><img src="img/bbq.jpg" alt="BBQ tikka platter" loading="lazy"><span class="lab">Charcoal BBQ</span></div>
-        <div class="gcell"><img src="img/naan.jpg" alt="Fresh naan" loading="lazy"><span class="lab">Fresh Naan</span></div>
-        <div class="gcell"><img src="img/karahi.jpg" alt="Karahi" loading="lazy"><span class="lab">Karahi</span></div>
+        <div class="gcell"><img src="img/amb-terrace.jpg" alt="Outdoor terrace at night with string lights" loading="lazy"><span class="lab">The Terrace</span></div>
+        <div class="gcell"><img src="img/amb-venue.jpg" alt="Hyderabad Darbar lit up at night" loading="lazy"><span class="lab">Under the Lights</span></div>
+        <div class="gcell"><img src="img/amb-garden.jpg" alt="Garden dining at night" loading="lazy"><span class="lab">The Garden</span></div>
       </div>
     </div>
   </section>
