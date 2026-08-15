@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TRIO Burger — Think Burger. Think Trio. · Hyderabad</title>
+<meta name="description" content="TRIO Burger — premium beef burgers, freshly made, in Hyderabad. Unique Mall, Main Autobahn Road. Open 5PM–3AM. Kasam say, banger hai!" />
+<meta name="theme-color" content="#0e0b0a" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="TRIO Burger — Think Burger. Think Trio." />
+<meta property="og:description" content="Premium beef burgers, freshly made. Hyderabad. Open 5PM–3AM." />
+<meta property="og:image" content="img/poster-banger.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="img/logo.png" />
+<link rel="apple-touch-icon" href="img/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,800;0,900;1,800;1,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --black:#0e0b0a; --black-2:#161110; --red:#cf2417; --red-d:#a81c11; --orange:#f2891a; --orange-2:#ffb14d;
+    --cream:#fdf3e3; --muted:#b6a493; --line:rgba(253,243,227,0.14);
+  }
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition-duration:.001ms!important}}
+  body{font-family:'Inter',sans-serif;background:var(--black);color:var(--cream);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  .hd{font-family:'Archivo',sans-serif;font-weight:900;font-style:italic;letter-spacing:-1px;text-transform:uppercase;line-height:.9}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 26px}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(14,11,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{max-width:1160px;margin:0 auto;padding:12px 26px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand img{width:42px;height:42px;border-radius:50%}
+  .brand b{font-family:'Archivo';font-weight:900;font-style:italic;font-size:22px;letter-spacing:-.5px}
+  .brand b i{color:var(--orange);font-style:italic}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:color .2s}
+  .nav-links a:hover{color:var(--cream)}
+  .nav-cta{background:var(--red);color:#fff!important;font-family:'Archivo';font-weight:800;font-style:italic;font-size:13px;letter-spacing:.5px;text-transform:uppercase;padding:10px 18px;border-radius:6px;transition:background .2s,transform .15s}
+  .nav-cta:hover{background:var(--red-d);transform:translateY(-1px)}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:
+    radial-gradient(120% 90% at 85% 10%, var(--orange) 0%, var(--red) 42%, var(--red-d) 100%);}
+  .hero::before{content:'';position:absolute;inset:0;background:
+    repeating-linear-gradient(115deg,rgba(0,0,0,0.05) 0 40px,transparent 40px 80px);opacity:.5}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center;min-height:88vh;padding:60px 0}
+  .hero-left .kick{display:inline-flex;align-items:center;gap:9px;font-family:'Archivo';font-weight:800;font-style:italic;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#2a0c07;background:var(--orange-2);padding:6px 14px;border-radius:100px;margin-bottom:24px}
+  .hero h1{font-family:'Archivo';font-weight:900;font-style:italic;font-size:clamp(52px,9vw,108px);line-height:.86;text-transform:uppercase;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,0.25)}
+  .hero h1 .o{color:#1a0805;-webkit-text-stroke:0}
+  .hero p.lede{font-size:clamp(16px,2vw,20px);font-weight:600;color:#fff;max-width:400px;margin:22px 0 30px;opacity:.95}
+  .hero-actions{display:flex;gap:13px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:'Archivo';font-weight:800;font-style:italic;font-size:16px;letter-spacing:.5px;text-transform:uppercase;padding:15px 28px;border-radius:8px;cursor:pointer;transition:transform .15s,background .2s,box-shadow .2s}
+  .btn-dark{background:var(--black);color:var(--cream);box-shadow:0 8px 24px rgba(0,0,0,0.28)}
+  .btn-dark:hover{transform:translateY(-2px);background:#000}
+  .btn-cream{background:var(--cream);color:var(--black)}
+  .btn-cream:hover{transform:translateY(-2px);background:#fff}
+  .hero-photo{position:relative;border-radius:14px;overflow:hidden;border:3px solid rgba(0,0,0,0.2);box-shadow:0 30px 70px rgba(0,0,0,0.35);transform:rotate(1.5deg)}
+  .hero-photo img{width:100%;display:block}
+
+  /* MARQUEE */
+  .marq{background:var(--black);border-top:3px solid var(--red);border-bottom:3px solid var(--red);overflow:hidden;padding:14px 0}
+  .marq .t{display:flex;gap:28px;width:max-content;animation:sl 24s linear infinite;white-space:nowrap}
+  .marq span{font-family:'Archivo';font-weight:900;font-style:italic;font-size:22px;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:28px}
+  .marq span::after{content:'';width:14px;height:14px;border-radius:50%;background:var(--red)}
+  @keyframes sl{to{transform:translateX(-50%)}}
+
+  /* SECTION */
+  section{padding:90px 0}
+  .head{text-align:center;max-width:620px;margin:0 auto 50px}
+  .head .lbl{font-family:'Archivo';font-weight:800;font-style:italic;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--orange);margin-bottom:10px}
+  .head h2{font-family:'Archivo';font-weight:900;font-style:italic;font-size:clamp(38px,6.5vw,68px);text-transform:uppercase;line-height:.92}
+  .head p{color:var(--muted);margin-top:12px}
+
+  /* LINE-UP (posters) */
+  .lineup{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .lcard{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--black-2);transition:transform .25s,box-shadow .25s}
+  .lcard:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 20px 40px rgba(207,36,23,0.25)}
+  .lcard img{width:100%;display:block}
+
+  /* MENU (echoes their real orange menu) */
+  #menu{background:#eea93a;color:#2a120c}
+  #menu .head .lbl{color:#7a1a12}
+  #menu .head h2{color:#5f140c}
+  #menu .head p{color:#7a3b28}
+  .menu-list{max-width:840px;margin:0 auto}
+  .mcat-pill{display:block;width:max-content;margin:38px auto 16px;font-family:'Archivo';font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:1px;font-size:15px;background:#7a1a12;color:#fde9c8;padding:8px 22px;border-radius:6px}
+  .mcat-pill:first-child{margin-top:0}
+  .mrow{padding:13px 0;border-bottom:1px solid rgba(42,18,12,0.2)}
+  .mrow .top{display:flex;align-items:baseline;gap:10px}
+  .mrow .n{font-family:'Archivo';font-weight:800;font-style:italic;font-size:18px;text-transform:uppercase;white-space:nowrap;color:#2a120c}
+  .mrow .dots{flex:1;border-bottom:2px dotted rgba(42,18,12,0.4);transform:translateY(-5px)}
+  .mrow .p{font-family:'Archivo';font-weight:900;font-style:italic;font-size:18px;color:#7a1a12;white-space:nowrap}
+  .mrow .desc{font-size:13px;color:#5a3320;margin-top:3px;max-width:640px;font-weight:500}
+  .menu-tag{text-align:center;margin-top:30px;color:#7a3b28;font-size:14px;font-weight:600}
+  .menu-tag a{color:#7a1a12;border-bottom:1px solid rgba(122,26,18,0.4)}
+
+  /* INFO */
+  #visit{background:var(--black-2);border-top:1px solid var(--line)}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:stretch}
+  .info-cards{display:flex;flex-direction:column;gap:14px}
+  .icard{display:flex;gap:16px;padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--black)}
+  .icard .ic{width:46px;height:46px;flex-shrink:0;border-radius:12px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center}
+  .icard h4{font-family:'Archivo';font-weight:800;font-style:italic;font-size:14px;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
+  .icard p{font-size:16px}
+  .icard a{color:var(--orange-2)}
+  .map{border-radius:12px;overflow:hidden;border:1px solid var(--line);min-height:340px}
+  .map iframe{width:100%;height:100%;min-height:340px;border:0;filter:invert(0.92) hue-rotate(180deg) saturate(0.7)}
+
+  /* CTA */
+  .cta{text-align:center;padding:90px 22px;background:radial-gradient(120% 120% at 50% 0%,var(--orange) 0%,var(--red) 55%,var(--red-d) 100%)}
+  .cta h2{font-family:'Archivo';font-weight:900;font-style:italic;font-size:clamp(38px,7vw,80px);text-transform:uppercase;color:#fff;line-height:.9;margin-bottom:14px;text-shadow:0 6px 26px rgba(0,0,0,0.25)}
+  .cta p{color:#fff;font-weight:600;margin-bottom:26px;opacity:.95}
+
+  /* FOOTER */
+  footer{background:var(--black);padding:40px 0 30px;border-top:1px solid var(--line)}
+  .foot-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center}
+  .foot-in .brand b{font-size:20px}
+  .foot-in p{font-size:12.5px;color:var(--muted)}
+  .foot-in a{color:var(--orange)}
+
+  @media(max-width:900px){
+    .nav-links a:not(.nav-cta){display:none}
+    .hero-grid{grid-template-columns:1fr;min-height:0;gap:34px}
+    .hero-photo{order:-1;max-width:400px;transform:none}
+    .lineup{grid-template-columns:1fr 1fr}
+    .info-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:520px){.hero-actions .btn{flex:1;justify-content:center}.lineup{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-in">
+      <a class="brand" href="#"><img src="img/logo.png" alt="TRIO Burger"><b>TR<i>IO</i></b></a>
+      <div class="nav-links">
+        <a href="#lineup">The Line-up</a>
+        <a href="#menu">Menu</a>
+        <a href="#visit">Visit</a>
+        <a class="nav-cta" href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener">Order Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <span class="kick">🍔 Premium Beef · Freshly Made</span>
+          <h1 class="hd">Think burger.<br><span class="o">Think Trio.</span></h1>
+          <p class="lede">Hyderabad's smash burger obsession — thick, juicy, dripping. Kasam say… banger hai. Open 5PM till 3AM on Autobahn Road.</p>
+          <div class="hero-actions">
+            <a class="btn btn-dark" href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener">Order on Instagram</a>
+            <a class="btn btn-cream" href="https://maps.app.goo.gl/gdnunE89qz5tnc4J9" target="_blank" rel="noopener">Get Directions</a>
+          </div>
+        </div>
+        <div class="hero-photo"><img src="img/hero-burger.jpg" alt="TRIO smash burger, split open" loading="eager"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MARQUEE -->
+  <div class="marq">
+    <div class="t">
+      <span>Kasam Say Banger Hai</span><span>Pure Supremacy</span><span>League of Its Own</span><span>Unbeatable · No Rival</span>
+      <span>Kasam Say Banger Hai</span><span>Pure Supremacy</span><span>League of Its Own</span><span>Unbeatable · No Rival</span>
+    </div>
+  </div>
+
+  <!-- LINE-UP -->
+  <section id="lineup">
+    <div class="wrap">
+      <div class="head">
+        <div class="lbl">The Line-up</div>
+        <h2 class="hd">Meet the burgers</h2>
+        <p>Premium beef, smashed thin and crispy, freshly made to order. Every single one, a banger.</p>
+      </div>
+      <div class="lineup">
+        <div class="lcard"><img src="img/poster-banger.jpg" alt="TRIO — Kasam Say Banger Hai" loading="lazy"></div>
+        <div class="lcard"><img src="img/poster-league.jpg" alt="TRIO — League of Its Own" loading="lazy"></div>
+        <div class="lcard"><img src="img/poster-supremacy.jpg" alt="TRIO — Pure Supremacy" loading="lazy"></div>
+        <div class="lcard"><img src="img/poster-rival.jpg" alt="TRIO — Unbeatable No Rival" loading="lazy"></div>
+      </div>
+      <p style="text-align:center;margin-top:30px;color:var(--muted);font-size:14px">Full menu &amp; today's specials on <a href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener" style="color:var(--orange)">@trio_brgrs</a></p>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="head">
+        <div class="lbl">The Menu</div>
+        <h2 class="hd">What's cooking</h2>
+        <p>Sandos, loaded fries, wings and a wall of signature sauces. Prices in PKR.</p>
+      </div>
+      <div class="menu-list">
+
+        <span class="mcat-pill">Sando &amp; Loaded Fries</span>
+        <div class="mrow"><div class="top"><span class="n">Trio Crunch Sando</span><span class="dots"></span><span class="p">799</span></div><div class="desc">Crispy chicken fillet, white cheese, iceberg lettuce &amp; creamy honey mustard on freshly toasted sando bread.</div></div>
+        <div class="mrow"><div class="top"><span class="n">Trio Plain Fries</span><span class="dots"></span><span class="p">250</span></div><div class="desc">Crispy golden potato fries, perfectly seasoned and freshly fried.</div></div>
+        <div class="mrow"><div class="top"><span class="n">Trio Supreme Beef Fries</span><span class="dots"></span><span class="p">899</span></div><div class="desc">Golden fries topped with juicy smashed beef, melted cheese and our signature sauces.</div></div>
+        <div class="mrow"><div class="top"><span class="n">Trio Supreme Chicken Fries</span><span class="dots"></span><span class="p">699</span></div><div class="desc">Crispy fries, tender chicken breast, melted cheese, fajita &amp; Denver sauces.</div></div>
+
+        <span class="mcat-pill">Sides</span>
+        <div class="mrow"><div class="top"><span class="n">Trio Dragon Wings (6)</span><span class="dots"></span><span class="p">550</span></div><div class="desc">Crispy chicken wings in a sweet honey, BBQ &amp; sriracha glaze — sweet, smoky, spicy.</div></div>
+        <div class="mrow"><div class="top"><span class="n">Trio Buffalo Wings (6)</span><span class="dots"></span><span class="p">500</span></div><div class="desc">Crispy wings tossed in bold buffalo sauce. Spicy, tangy, classic heat.</div></div>
+        <div class="mrow"><div class="top"><span class="n">Trio Golden Rings (6)</span><span class="dots"></span><span class="p">349</span></div><div class="desc">Golden-fried onion rings, crunchy outside, soft inside — rich, savoury taste.</div></div>
+
+        <span class="mcat-pill">Add-Ons</span>
+        <div class="mrow"><div class="top"><span class="n">Trio Molten Cheese</span><span class="dots"></span><span class="p">150</span></div><div class="desc">Cheese sticks coated in flour, egg &amp; seasoned breadcrumbs.</div></div>
+        <div class="mrow"><div class="top"><span class="n">Trio Golden Rings (3)</span><span class="dots"></span><span class="p">150</span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Beef Patty</span><span class="dots"></span><span class="p">350</span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Cheese Slice</span><span class="dots"></span><span class="p">60</span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Chocolate Syrup</span><span class="dots"></span><span class="p">100</span></div></div>
+
+        <span class="mcat-pill">Signature Sauces · Rs 120 each</span>
+        <div class="mrow"><div class="top"><span class="n">Classic Smash · Smokey · Mushroom · Secret</span><span class="dots"></span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Denver · Honey Mustard · Buffalo · Dragon · Dark Mushroom</span><span class="dots"></span></div></div>
+
+        <span class="mcat-pill">Drinks &amp; Dessert</span>
+        <div class="mrow"><div class="top"><span class="n">Coke</span><span class="dots"></span><span class="p">120</span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Iced Tea</span><span class="dots"></span><span class="p">400</span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Water Bottle</span><span class="dots"></span><span class="p">120</span></div></div>
+        <div class="mrow"><div class="top"><span class="n">Churros</span><span class="dots"></span><span class="p">500</span></div><div class="desc">Crispy cinnamon-sugar dough sticks, soft inside, served with chocolate dip.</div></div>
+
+      </div>
+      <p class="menu-tag">Signature smash burgers &amp; today's specials — see the line-up above or DM <a href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener">@trio_brgrs</a>.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2 class="hd">Hungry yet?</h2>
+    <p>Slide into our DMs to order, or pull up — the grill's on till 3AM.</p>
+    <a class="btn btn-dark" href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener">Order on Instagram</a>
+  </div>
+
+  <!-- VISIT -->
+  <section id="visit">
+    <div class="wrap">
+      <div class="head">
+        <div class="lbl">Find Us</div>
+        <h2 class="hd">Pull up to Trio</h2>
+      </div>
+      <div class="info-grid">
+        <div class="info-cards">
+          <div class="icard">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+            <div><h4>Location</h4><p>Unique Mall (beside Mattam Shinwari),<br>Main Autobahn Road, Hyderabad, Sindh</p></div>
+          </div>
+          <div class="icard">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+            <div><h4>Hours</h4><p>Open Daily · 5:00 PM – 3:00 AM</p></div>
+          </div>
+          <div class="icard">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+            <div><h4>Order &amp; Instagram</h4><p><a href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener">@trio_brgrs</a></p></div>
+          </div>
+          <a class="btn btn-cream" style="justify-content:center" href="https://maps.app.goo.gl/gdnunE89qz5tnc4J9" target="_blank" rel="noopener">Get Directions →</a>
+        </div>
+        <div class="map">
+          <iframe src="https://maps.google.com/maps?q=Trio%20Burger%2C%20Unique%20Mall%2C%20Main%20Autobahn%20Road%2C%20Hyderabad%2C%20Sindh%2C%20Pakistan&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="TRIO Burger location"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap foot-in">
+      <a class="brand" href="#"><img src="img/logo.png" alt="TRIO" style="width:34px;height:34px;border-radius:50%"><b>TR<i style="color:var(--orange)">IO</i></b></a>
+      <p>© 2026 TRIO Burger · Hyderabad · Think Burger. Think Trio.</p>
+      <p>designed &amp; built by <a href="https://riyanmujtaba.github.io" target="_blank" rel="noopener">Riyan Mujtaba</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
