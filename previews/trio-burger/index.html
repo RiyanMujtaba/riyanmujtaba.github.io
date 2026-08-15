@@ -62,12 +62,11 @@
   .hero-photo{position:relative;border-radius:14px;overflow:hidden;border:3px solid rgba(0,0,0,0.2);box-shadow:0 30px 70px rgba(0,0,0,0.35);transform:rotate(1.5deg)}
   .hero-photo img{width:100%;display:block}
 
-  /* MARQUEE */
-  .marq{background:var(--black);border-top:3px solid var(--red);border-bottom:3px solid var(--red);overflow:hidden;padding:14px 0}
-  .marq .t{display:flex;gap:28px;width:max-content;animation:sl 24s linear infinite;white-space:nowrap}
-  .marq span{font-family:'Archivo';font-weight:900;font-style:italic;font-size:22px;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:28px}
-  .marq span::after{content:'';width:14px;height:14px;border-radius:50%;background:var(--red)}
-  @keyframes sl{to{transform:translateX(-50%)}}
+  /* HYPE ROTATOR */
+  .hype{background:var(--black);border-top:3px solid var(--red);border-bottom:3px solid var(--red);padding:clamp(34px,6vw,58px) 20px;text-align:center}
+  .hype .lead{font-family:'Archivo';font-weight:800;font-style:italic;font-size:clamp(19px,3vw,32px);text-transform:uppercase;color:var(--cream);letter-spacing:-.5px}
+  .hype .word{font-family:'Archivo';font-weight:900;font-style:italic;font-size:clamp(26px,4.6vw,54px);text-transform:uppercase;color:var(--orange);display:inline-block;transition:opacity .3s ease,transform .3s ease}
+  .hype .word.out{opacity:0;transform:translateY(-14px) rotate(-2deg)}
 
   /* SECTION */
   section{padding:90px 0}
@@ -166,12 +165,9 @@
     </div>
   </header>
 
-  <!-- MARQUEE -->
-  <div class="marq">
-    <div class="t">
-      <span>Kasam Say Banger Hai</span><span>Pure Supremacy</span><span>League of Its Own</span><span>Unbeatable · No Rival</span>
-      <span>Kasam Say Banger Hai</span><span>Pure Supremacy</span><span>League of Its Own</span><span>Unbeatable · No Rival</span>
-    </div>
+  <!-- HYPE ROTATOR -->
+  <div class="hype">
+    <span class="lead">Kasam say,</span> <span id="hypeword" class="word">it's a banger!</span>
   </div>
 
   <!-- LINE-UP -->
@@ -281,5 +277,18 @@
     </div>
   </footer>
 
+  <script>
+    (function(){
+      var el=document.getElementById('hypeword');
+      if(!el) return;
+      var words=["it's a banger!","pure supremacy","league of its own","unbeatable — no rival"];
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var i=0;
+      setInterval(function(){
+        el.classList.add('out');
+        setTimeout(function(){ i=(i+1)%words.length; el.textContent=words[i]; el.classList.remove('out'); },300);
+      },2400);
+    })();
+  </script>
 </body>
 </html>
