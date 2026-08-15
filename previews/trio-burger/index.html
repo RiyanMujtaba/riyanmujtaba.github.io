@@ -9,7 +9,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="TRIO Burger — Think Burger. Think Trio." />
 <meta property="og:description" content="Premium beef burgers, freshly made. Hyderabad. Open 5PM–3AM." />
-<meta property="og:image" content="img/poster-banger.jpg" />
+<meta property="og:image" content="img/poster-supremacy.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" href="img/logo.png" />
 <link rel="apple-touch-icon" href="img/logo.png" />
@@ -76,7 +76,7 @@
   .head p{color:var(--muted);margin-top:12px}
 
   /* LINE-UP (posters) */
-  .lineup{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .lineup{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   .lcard{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--black-2);transition:transform .25s,box-shadow .25s}
   .lcard:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 20px 40px rgba(207,36,23,0.25)}
   .lcard img{width:100%;display:block}
@@ -154,7 +154,7 @@
         <div class="hero-left">
           <span class="kick">🍔 Premium Beef · Freshly Made</span>
           <h1 class="hd">Think burger.<br><span class="o">Think Trio.</span></h1>
-          <p class="lede">Hyderabad's smash burger obsession — thick, juicy, dripping. Kasam say… banger hai. Open 5PM till 3AM on Autobahn Road.</p>
+          <p class="lede">Hyderabad's smash burger obsession — thick, juicy, dripping, freshly smashed to order. Open 5PM till 3AM on Autobahn Road.</p>
           <div class="hero-actions">
             <a class="btn btn-dark" href="https://www.instagram.com/trio_brgrs/" target="_blank" rel="noopener">Order on Instagram</a>
             <a class="btn btn-cream" href="https://maps.app.goo.gl/gdnunE89qz5tnc4J9" target="_blank" rel="noopener">Get Directions</a>
@@ -167,7 +167,7 @@
 
   <!-- HYPE ROTATOR -->
   <div class="hype">
-    <span class="lead">Kasam say,</span> <span id="hypeword" class="word">it's a banger!</span>
+    <span class="lead">Trio is —</span> <span id="hypeword" class="word">a banger!</span>
   </div>
 
   <!-- LINE-UP -->
@@ -179,7 +179,6 @@
         <p>Premium beef, smashed thin and crispy, freshly made to order. Every single one, a banger.</p>
       </div>
       <div class="lineup">
-        <div class="lcard"><img src="img/poster-banger.jpg" alt="TRIO — Kasam Say Banger Hai" loading="lazy"></div>
         <div class="lcard"><img src="img/poster-league.jpg" alt="TRIO — League of Its Own" loading="lazy"></div>
         <div class="lcard"><img src="img/poster-supremacy.jpg" alt="TRIO — Pure Supremacy" loading="lazy"></div>
         <div class="lcard"><img src="img/poster-rival.jpg" alt="TRIO — Unbeatable No Rival" loading="lazy"></div>
@@ -281,7 +280,7 @@
     (function(){
       var el=document.getElementById('hypeword');
       if(!el) return;
-      var words=["it's a banger!","pure supremacy","league of its own","unbeatable — no rival"];
+      var words=["a banger!","pure supremacy","in a league of its own","unbeatable, no rival"];
       if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       var i=0;
       setInterval(function(){
