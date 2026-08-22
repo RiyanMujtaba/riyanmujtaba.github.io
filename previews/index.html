@@ -71,10 +71,24 @@
     ];
     document.getElementById('grid').innerHTML = SITES.map(function(s){
       return '<a class="card" href="'+s.slug+'/" target="_blank" rel="noopener">'
-        + '<div class="thumb"><iframe src="'+s.slug+'/" loading="lazy" scrolling="no" title="'+s.name+'"></iframe></div>'
+        + '<div class="thumb"><iframe data-src="'+s.slug+'/" scrolling="no" title="'+s.name+'"></iframe></div>'
         + '<div class="body"><div><div class="n">'+s.name+'</div><div class="t">'+s.type+'</div></div>'
         + '<div class="arr">↗</div></div></a>';
     }).join('');
+
+    // Only load each preview iframe when its card scrolls near view — keeps the
+    // gallery fast on mobile instead of booting all 9 sites at once.
+    var frames = document.querySelectorAll('iframe[data-src]');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries, obs){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ var f = e.target; f.src = f.dataset.src; obs.unobserve(f); }
+        });
+      }, { rootMargin: '300px' });
+      frames.forEach(function(f){ io.observe(f); });
+    } else {
+      frames.forEach(function(f){ f.src = f.dataset.src; });
+    }
   </script>
 </body>
 </html>
