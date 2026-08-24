@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /previews/
+
+Sitemap: https://riyanmujtaba.github.io/sitemap.xml
