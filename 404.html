@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Riyan Mujtaba</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#080808">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#080808;--surface:#111;--border:rgba(255,255,255,0.07);--text:#e8e8e8;--muted:#505050;--accent:#e5383b}
+    html,body{height:100%}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+      display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;overflow:hidden;-webkit-font-smoothing:antialiased}
+    .wrap{max-width:460px}
+    .code{font-family:'JetBrains Mono',monospace;font-size:clamp(96px,26vw,190px);font-weight:500;line-height:1;letter-spacing:-4px}
+    .code .z{color:var(--accent)}
+    .path{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin:14px 0 22px;word-break:break-all}
+    h1{font-size:clamp(20px,4vw,26px);font-weight:900;letter-spacing:-.5px;margin-bottom:10px}
+    p{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:30px}
+    .btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;text-decoration:none;
+      color:#fff;background:var(--accent);padding:13px 26px;border-radius:10px;transition:transform .15s,opacity .2s}
+    .btn:hover{transform:translateY(-2px);opacity:.92}
+    .blink{display:inline-block;width:11px;height:20px;background:var(--accent);margin-left:3px;transform:translateY(3px);animation:b 1.1s step-end infinite}
+    @keyframes b{50%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.blink{animation:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">4<span class="z">0</span>4</div>
+    <div class="path" id="path">// page not found</div>
+    <h1>This one didn't build.</h1>
+    <p>The page you're after doesn't exist — moved, renamed, or never shipped. Occasionally it even happens. 🤷</p>
+    <a class="btn" href="/">Back home<span class="blink"></span></a>
+  </div>
+  <script>
+    var p = location.pathname;
+    if (p && p !== '/') document.getElementById('path').textContent = '// not found: ' + p;
+  </script>
+</body>
+</html>
