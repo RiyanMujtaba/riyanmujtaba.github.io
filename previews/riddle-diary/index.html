@@ -166,7 +166,7 @@
     await fadeCanvas(); strokes=[]; ctx.clearRect(0,0,W,H); canvas.style.opacity='1';
     statusEl.style.opacity='1';
     let answer='';
-    try{ answer=await askDiary(b64); }
+    try{ answer=await askWithRetry(b64); }
     catch(err){
       statusEl.style.opacity='0';
       toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again"));
@@ -203,8 +203,24 @@
     });
     if(!res.ok){ throw {status:res.status,msg:trimErr(await res.text())}; }
     const j=await res.json();
-    if(j.error) throw {msg:trimErr(JSON.stringify(j.error))};
+    if(j.error) throw {msg:trimErr(typeof j.error==='string'?j.error:JSON.stringify(j.error))};
     return clean(j.reply||'');
+  }
+
+  // Gemini sometimes returns 503/429 when overloaded — retry a few times, it self-heals.
+  async function askWithRetry(b64){
+    const delays=[0,1500,3200];
+    let lastErr;
+    for(let i=0;i<delays.length;i++){
+      if(delays[i]) await sleep(delays[i]);
+      try{ return await askDiary(b64); }
+      catch(e){
+        lastErr=e;
+        const sig=((e&&e.msg)||'')+' '+((e&&e.status)||'');
+        if(!/50[023]|429|overload|unavailable|timeout|network|fetch|try again/i.test(sig)) throw e; // not transient
+      }
+    }
+    throw lastErr;
   }
 
   function clean(s){ return (s||'').trim().replace(/^["']|["']$/g,''); }
