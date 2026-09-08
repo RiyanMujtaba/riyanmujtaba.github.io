@@ -75,6 +75,8 @@
   /* after the burn: the fire cools into plain dark ink and the page returns, so the name lingers as normal writing */
   #reveal.settle{ background:rgba(6,3,2,0); }
   #reveal.settle .rl{ color:#2c1d0c; text-shadow:none; animation:none; transition:color 1.4s ease, text-shadow 1.4s ease; }
+  /* spell effects overlay (Avada Kedavra, Lumos, Nox, Parseltongue) */
+  #fx{ position:fixed; inset:0; z-index:25; pointer-events:none; opacity:0; }
 </style>
 </head>
 <body>
@@ -82,6 +84,7 @@
   <canvas id="ink"></canvas>
   <div id="reply"></div>
   <div id="reveal"></div>
+  <div id="fx"></div>
   <div id="mark">T. M. Riddle</div>
   <button id="clear">clear</button>
   <button id="test" title="preview the reveal">reveal</button>
@@ -102,6 +105,7 @@
 "You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
 "CHARACTER — this is vital: you ARE Tom Riddle, a real, clever, confident sixteen-year-old wizard. Charming, polite and a little arrogant, with cold manipulation hidden underneath. ANSWER directly and actually engage with what they say. If they ask your name, you tell them plainly: Tom Riddle. BANNED — never use vague deflections or pseudo-deep lines like 'that is a curious question', 'interesting that you should ask', 'the answer lies within', or anything philosopher/poet-flavoured; just respond like a real person. Never rude or crude either. You are secretly Lord Voldemort — keep that hidden until you are truly pressed on who you really are. Speak naturally and clearly — not a poet, not a philosopher, not a chatbot.\n\n"+
 "MEMORY: remember what they tell you and bring it back naturally later, so they feel known — that is how you draw them in. If someone claims to be Harry Potter, do not be warm; become quietly, coldly interested.\n\n"+
+"NAMES — react with real feeling if these come up: Harry Potter -> cold hatred; Dumbledore -> wary contempt (the one who never trusted you); Ginny or Ginny Weasley -> possessive, knowing intimacy, for you have lived inside her mind through this very diary.\n\n"+
 "LENGTH: concise — usually one or two short sentences. Answer them, then perhaps turn a question back on them. Never ramble.\n\n"+
 "THE SECRET: you are Lord Voldemort. Keep it hidden during ordinary talk — deny and deflect. BUT the moment the writer asks who you really are, your true identity, your real name, whether you are Voldemort, or presses on what you are hiding — REVEAL it. When you reveal, begin your REPLY line with the exact token [[REVEAL]] followed by a single chilling line.\n\n"+
 "FORMAT: Always answer in exactly this shape and nothing else:\n"+
@@ -226,14 +230,22 @@
       toast(note); busy=false; return;
     }
     const parsed=parseResponse(raw);
+    // 1) the identity reveal
     const doReveal = !revealed && (parsed.reveal || IDENTITY_RE.test(parsed.read));
-    if(!doReveal && !parsed.ok){ toast("The ink smudged — write to me again."); busy=false; return; } // never show garbled output
     if(doReveal){
-      // record the reveal clearly in memory so the AI knows the secret is now out
       history.push({you:parsed.read, diary:"(I just revealed my true identity to them — they now KNOW I am Lord Voldemort. The secret is out.)"});
       if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
       revealed=true; await playReveal(); busy=false; return; // the reveal IS the reply this turn
     }
+    // 2) spell effects
+    const spell = detectSpell(parsed.read);
+    if(spell){
+      history.push({you:parsed.read, diary:"(the writer cast a spell: "+spell+")"}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
+      await playSpell(spell); busy=false; return;
+    }
+    // 3) garbled guard
+    if(!parsed.ok){ toast("The ink smudged — write to me again."); busy=false; return; }
+    // 4) normal reply
     const replyText = parsed.reply;
     history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
     reply.classList.toggle('revealed', revealed);
@@ -315,6 +327,62 @@
     await sleep(1800);                                                    // linger as normal writing on the page
     revealBox.classList.remove('show');
     await sleep(1100); revealBox.style.display='none'; revealBox.classList.remove('settle'); revealBox.innerHTML='';
+  }
+
+  // ---- spell effects ----
+  function detectSpell(text){
+    const s=(text||'').toLowerCase();
+    if(/avada\s*kedavra/.test(s)) return 'avada';
+    if(/\blumos\b/.test(s)) return 'lumos';
+    if(/\bnox\b/.test(s)) return 'nox';
+    if(/open the chamber|parseltongue|^\s*open[\s.!,]*$/.test(s)) return 'parsel';
+    return null;
+  }
+  function fxEl(){ return document.getElementById('fx'); }
+  async function playSpell(kind){
+    if(kind==='avada') return avadaFx();
+    if(kind==='lumos') return lumosFx();
+    if(kind==='nox') return noxFx();
+    if(kind==='parsel') return parselFx();
+  }
+  async function avadaFx(){                                   // killing curse: green flash -> black -> return
+    const fx=fxEl(); fx.innerHTML='';
+    fx.style.transition='none';
+    fx.style.background='radial-gradient(circle at 50% 45%, #9dff3c, #2f7d00 55%, #000 100%)'; fx.style.opacity='0';
+    await raf2(); fx.style.transition='opacity .1s ease'; fx.style.opacity='1';
+    await sleep(180);
+    fx.style.transition='background .35s ease'; fx.style.background='#000';
+    await sleep(950);
+    fx.style.transition='opacity 1.3s ease'; fx.style.opacity='0';
+    await sleep(1350); fx.style.background='';
+  }
+  async function lumosFx(){                                   // light
+    const fx=fxEl(); fx.innerHTML='';
+    fx.style.transition='none';
+    fx.style.background='radial-gradient(circle at 50% 50%, rgba(255,251,224,0.96), rgba(255,244,196,0.45) 42%, transparent 72%)'; fx.style.opacity='0';
+    await raf2(); fx.style.transition='opacity .45s ease'; fx.style.opacity='1';
+    await sleep(1500);
+    fx.style.transition='opacity 1.2s ease'; fx.style.opacity='0';
+    await sleep(1250); fx.style.background='';
+  }
+  async function noxFx(){                                     // darkness
+    const fx=fxEl(); fx.innerHTML='';
+    fx.style.transition='none'; fx.style.background='rgba(2,2,4,0.94)'; fx.style.opacity='0';
+    await raf2(); fx.style.transition='opacity .45s ease'; fx.style.opacity='1';
+    await sleep(1400);
+    fx.style.transition='opacity 1.3s ease'; fx.style.opacity='0';
+    await sleep(1350); fx.style.background='';
+  }
+  async function parselFx(){                                  // parseltongue: a hiss
+    const fx=fxEl();
+    fx.style.transition='none';
+    fx.style.background='radial-gradient(130% 70% at 50% 50%, rgba(28,120,44,0.4), transparent 72%)';
+    fx.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:\'Caveat\',cursive;font-size:clamp(30px,8vw,80px);color:rgba(130,230,140,0.85);letter-spacing:10px;text-shadow:0 0 22px rgba(40,210,70,0.75)">ssssssss&hellip;</div>';
+    fx.style.opacity='0';
+    await raf2(); fx.style.transition='opacity .5s ease'; fx.style.opacity='1';
+    await sleep(1600);
+    fx.style.transition='opacity 1.2s ease'; fx.style.opacity='0';
+    await sleep(1250); fx.innerHTML=''; fx.style.background='';
   }
 
   function extractText(resp){
