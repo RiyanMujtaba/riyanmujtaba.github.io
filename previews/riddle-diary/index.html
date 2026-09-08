@@ -11,7 +11,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=IM+Fell+English:ital@0;1&family=Metamorphous&display=swap" rel="stylesheet">
-<script src="https://js.puter.com/v2/"></script>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -90,8 +89,7 @@
 <script>
 (function(){
   "use strict";
-  const MODELS = ["gemini-2.0-flash","gemini-2.5-flash","gpt-4o-mini"];   // via Puter.js — tries Gemini first (nicer tone), falls back
-  const USERTEXT = "This is what I just wrote to you on the page:";
+  const WORKER_URL = "https://tomriddlediary.mujtabariyan91.workers.dev";   // holds the Gemini key server-side; users need zero setup
   const MAX_TOKENS = 180;   // keep replies short (fewer line-wraps too)
   const IDLE_MS = 3500;
   const HISTORY_CAP = 8;
@@ -187,13 +185,24 @@
 
   function parseResponse(t){
     t=(t||'').trim();
-    let read='', rep=t, reveal=false;
-    const rm=t.match(/READ:\s*([\s\S]*?)\s*REPLY:/i);
-    const pm=t.match(/REPLY:\s*([\s\S]*)$/i);
-    if(rm) read=rm[1].trim();
-    if(pm) rep=pm[1].trim();
-    if(/\[\[\s*REVEAL\s*\]\]/i.test(rep)){ reveal=true; rep=rep.replace(/\[\[\s*REVEAL\s*\]\]/ig,'').trim(); }
-    return { read: read||'(their note)', reply: rep||'…', reveal };
+    let reveal=false;
+    if(/\[\[\s*REVEAL\s*\]\]/i.test(t)) reveal=true;
+    t=t.replace(/\[\[\s*REVEAL\s*\]\]/ig,'').trim();
+    let read='', rep='';
+    const pm=t.match(/REPLY\s*:\s*([\s\S]*)$/i);
+    if(pm){
+      rep=pm[1];
+      const rm=t.match(/READ\s*:\s*([\s\S]*?)\s*REPLY\s*:/i);
+      if(rm) read=rm[1].trim();
+    } else {
+      const rm=t.match(/^\s*READ\s*:\s*(.*)$/im);
+      if(rm){ read=rm[1].trim(); rep=t.replace(/^\s*READ\s*:.*$/im,''); }
+      else rep=t;
+    }
+    // scrub any stray labels / leading '>' / wrapping quotes that leaked through
+    rep=rep.replace(/\b(READ|REPLY)\s*:\s*/ig,' ').replace(/^[>\s"'`*_-]+/,'').replace(/["'`\s]+$/,'').trim();
+    const ok = rep.replace(/[^a-z0-9]/ig,'').length >= 2;   // has real words, not just symbols
+    return { read: read||'(their note)', reply: rep, reveal, ok };
   }
 
   async function absorbAndAsk(){
@@ -213,8 +222,9 @@
       toast(note); busy=false; return;
     }
     const parsed=parseResponse(raw);
+    if(!parsed.ok && !parsed.reveal){ toast("The ink smudged — write to me again."); busy=false; return; } // never show garbled output
     let replyText=parsed.reply;
-    if(parsed.reveal && (!replyText || replyText==='…')) replyText="I am Lord Voldemort.";
+    if(parsed.reveal && (!replyText || replyText.length<2)) replyText="I am Lord Voldemort.";
     history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
     if(parsed.reveal && !revealed){ revealed=true; await playReveal(); busy=false; return; } // the reveal IS the reply this turn
     reply.classList.toggle('revealed', revealed);
@@ -298,37 +308,17 @@
     await sleep(1100); revealBox.style.display='none'; revealBox.classList.remove('settle'); revealBox.innerHTML='';
   }
 
-  function extractText(resp){
-    let text='';
-    const c = resp && resp.message && resp.message.content;
-    if(typeof c==='string') text=c;
-    else if(Array.isArray(c)) text=c.map(x=>(x&&x.text)||'').join('');
-    else if(resp && typeof resp.text==='string') text=resp.text;
-    else if(typeof resp==='string') text=resp;
-    else if(resp && resp.toString) text=resp.toString();
-    return (text||'').trim();
-  }
   async function askDiary(b64,prompt){
-    if(typeof puter==='undefined' || !puter.ai) throw {msg:"the diary is not connected"};
-    const dataUrl="data:image/jpeg;base64,"+b64;
-    const messages=[
-      { role:'system', content:prompt },
-      { role:'user', content:[
-        { type:'text', text:USERTEXT },
-        { type:'image_url', image_url:{ url:dataUrl } }
-      ]}
-    ];
-    let lastErr;
-    for(const model of MODELS){
-      try{
-        const resp=await puter.ai.chat(messages,{ model, max_tokens:MAX_TOKENS });
-        const text=extractText(resp);
-        if(text) return text;
-        lastErr={msg:'empty reply'};
-      }catch(e){ lastErr={msg:(e&&(e.message||(e.error&&e.error.message)))||'failed'}; }
-    }
-    throw lastErr||{msg:'failed'};
+    const res=await fetch(WORKER_URL,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:b64, prompt:prompt, maxTokens:MAX_TOKENS})
+    });
+    if(!res.ok){ throw {status:res.status,msg:trimErr(await res.text())}; }
+    const j=await res.json();
+    if(j.error) throw {msg:trimErr(typeof j.error==='string'?j.error:JSON.stringify(j.error))};
+    return (j.reply||'').trim();
   }
+  function trimErr(t){ try{ const j=JSON.parse(t); return ((j.error&&(j.error.message||j.error))||t).toString().slice(0,90);}catch(_){ return (t||'').slice(0,90);} }
 
   async function askWithRetry(b64,prompt){
     const delays=[0,1600];
@@ -336,7 +326,7 @@
     for(let i=0;i<delays.length;i++){
       if(delays[i]) await sleep(delays[i]);
       try{ const r=await askDiary(b64,prompt); if(r) return r; lastErr={msg:'empty reply'}; }
-      catch(e){ lastErr=e; }
+      catch(e){ lastErr=e; const sig=((e&&e.msg)||'')+' '+((e&&e.status)||''); if(!/50[023]|overload|unavailable|timeout|network|fetch/i.test(sig)||/429|quota|resource/i.test(sig)) throw e; }
     }
     throw lastErr;
   }
