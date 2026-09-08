@@ -87,7 +87,7 @@
   const WORKER_URL = "https://tomriddlediary.mujtabariyan91.workers.dev";
   const MAX_TOKENS = 230;
   const IDLE_MS = 3500;
-  const HISTORY_CAP = 12;
+  const HISTORY_CAP = 8;
 
   const SYSTEM_BASE =
 "You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
@@ -194,7 +194,13 @@
     await fadeCanvas(); strokes=[]; ctx.clearRect(0,0,W,H); canvas.style.opacity='1';
     let raw='';
     try{ raw=await pending; }
-    catch(err){ toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again")); busy=false; return; }
+    catch(err){
+      const m=((err&&err.msg)||'')+' '+((err&&err.status)||'');
+      let note;
+      if(/429|quota|exhaust|rate|resource/i.test(m)) note="The diary rests — too many questions, too quickly. Wait a minute, then write again.";
+      else note="The ink runs dry — "+((err&&err.msg)||"try again");
+      toast(note); busy=false; return;
+    }
     const {read, reply:replyText, reveal}=parseResponse(raw);
     history.push({you:read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
     if(reveal && !revealed){ revealed=true; await playReveal(); }
