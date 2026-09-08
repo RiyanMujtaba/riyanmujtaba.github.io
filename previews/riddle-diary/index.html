@@ -15,11 +15,8 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   body{
-    background:#1c150c;
-    font-family:'IM Fell English',serif;
-    -webkit-font-smoothing:antialiased;
-    -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
-    touch-action:none;
+    background:#1c150c; font-family:'IM Fell English',serif; -webkit-font-smoothing:antialiased;
+    -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; touch-action:none;
   }
   #paper{
     position:fixed; inset:0;
@@ -27,13 +24,12 @@
     box-shadow: inset 0 0 140px rgba(70,45,15,0.45), inset 0 0 40px rgba(70,45,15,0.25);
   }
   #paper::before{
-    content:''; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:.5; mix-blend-mode:multiply;
     background-image:
       radial-gradient(circle at 18% 22%, rgba(120,85,30,0.10) 0 8%, transparent 9%),
       radial-gradient(circle at 82% 70%, rgba(120,85,30,0.09) 0 10%, transparent 11%),
       radial-gradient(circle at 60% 15%, rgba(120,85,30,0.07) 0 6%, transparent 7%),
       radial-gradient(circle at 30% 85%, rgba(120,85,30,0.08) 0 9%, transparent 10%);
-    mix-blend-mode:multiply;
   }
   #paper::after{ content:''; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 200px rgba(40,25,8,0.55); }
   canvas{ position:fixed; inset:0; width:100%; height:100%; touch-action:none; z-index:2; }
@@ -47,9 +43,8 @@
   #reply{
     position:fixed; z-index:4; left:0; right:0; top:50%; transform:translateY(-50%);
     padding:0 max(8vw,32px); text-align:center; pointer-events:none;
-    font-family:'Caveat',cursive; font-weight:500;
-    font-size:clamp(30px,5.2vw,46px); line-height:1.5; color:#2c1d0c;
-    text-shadow:0 1px 0 rgba(255,255,255,0.15);
+    font-family:'Caveat',cursive; font-weight:500; font-size:clamp(30px,5.2vw,46px); line-height:1.5;
+    color:#2c1d0c; text-shadow:0 1px 0 rgba(255,255,255,0.15);
     opacity:0; transition:opacity 1.4s ease; white-space:pre-wrap;
   }
   #reply .nib{ display:inline-block; width:2px; height:1.05em; margin-left:1px; background:#2c1d0c; vertical-align:-0.18em; animation:blink .5s step-end infinite; }
@@ -74,31 +69,8 @@
   }
   #send.show{ opacity:1; pointer-events:auto; }
   #send:active{ transform:scale(0.92); }
-
-  #gear{ position:fixed; z-index:5; left:18px; top:18px; width:40px; height:40px; border-radius:50%; border:none; background:rgba(70,50,20,0.12); color:rgba(70,50,20,0.7); font-size:19px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:.5; transition:opacity .2s; }
-  #gear:active{opacity:1}
-  #clear{ position:fixed; z-index:5; left:66px; top:18px; height:40px; padding:0 14px; border-radius:20px; border:none; background:rgba(70,50,20,0.12); color:rgba(70,50,20,0.7); font-family:'IM Fell English',serif; font-style:italic; font-size:15px; cursor:pointer; opacity:.5; }
+  #clear{ position:fixed; z-index:5; left:18px; top:18px; height:40px; padding:0 15px; border-radius:20px; border:none; background:rgba(70,50,20,0.12); color:rgba(70,50,20,0.6); font-family:'IM Fell English',serif; font-style:italic; font-size:15px; cursor:pointer; opacity:.45; transition:opacity .2s; }
   #clear:active{opacity:1}
-
-  .overlay{ position:fixed; inset:0; z-index:10; background:rgba(20,14,7,0.72); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; padding:24px; }
-  .overlay.show{display:flex}
-  .modal{ background:#efe4c8; border:1px solid #b89b64; border-radius:14px; padding:26px 24px; max-width:430px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.5); color:#2c1d0c; font-family:'IM Fell English',serif; }
-  .modal h2{font-size:26px; margin-bottom:6px}
-  .modal p{font-size:15px; line-height:1.55; opacity:.85; margin-bottom:14px}
-  .modal a{color:#6b4a1e}
-  .providers{display:flex; gap:10px; margin-bottom:14px}
-  .providers label{
-    flex:1; display:flex; flex-direction:column; gap:2px; padding:11px 12px; border:1px solid #b89b64; border-radius:10px;
-    cursor:pointer; background:#fbf5e6; font-size:17px; line-height:1.1;
-  }
-  .providers label.sel{ border-color:#3a2a12; background:#f3e8cf; box-shadow:inset 0 0 0 1px #3a2a12; }
-  .providers label span{ font-size:12px; font-style:italic; opacity:.7; }
-  .providers input{ display:none; }
-  .modal input.key{ width:100%; padding:12px 14px; border:1px solid #b89b64; border-radius:9px; background:#fbf5e6; font-family:'IM Fell English',serif; font-size:15px; color:#2c1d0c; margin-bottom:14px; }
-  .modal .row{display:flex; gap:10px}
-  .modal button{ flex:1; padding:12px; border:none; border-radius:9px; cursor:pointer; font-family:'IM Fell English',serif; font-size:16px; }
-  .modal .save{background:#3a2a12; color:#efe4c8}
-  .modal .close{background:transparent; border:1px solid #b89b64; color:#3a2a12}
   .toast{ position:fixed; z-index:11; left:50%; bottom:28px; transform:translateX(-50%); background:rgba(30,20,10,0.9); color:#e8dcc0; padding:10px 18px; border-radius:20px; font-family:'IM Fell English',serif; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; max-width:90vw; text-align:center; }
   .toast.show{opacity:1}
 </style>
@@ -109,55 +81,15 @@
   <div id="hint">Write to the diary&hellip;</div>
   <div id="status"><span class="dot">&bull;</span><span class="dot">&bull;</span><span class="dot">&bull;</span></div>
   <div id="reply"></div>
-
-  <button id="gear" title="Settings">&#9881;</button>
   <button id="clear">clear</button>
   <button id="send" title="Let the diary read it">&#10022;</button>
-
-  <div class="overlay" id="settings">
-    <div class="modal">
-      <h2>The Diary awaits</h2>
-      <p>Choose which mind reads your handwriting, then paste its key. Stored only on this device.</p>
-      <div class="providers">
-        <label id="provGemini"><input type="radio" name="prov" value="gemini">Gemini<span>free</span></label>
-        <label id="provClaude"><input type="radio" name="prov" value="claude">Claude<span>best · paid</span></label>
-      </div>
-      <p class="help" id="keyHelp"></p>
-      <input class="key" id="keyInput" type="password" placeholder="paste key&hellip;" autocomplete="off" />
-      <div class="row">
-        <button class="close" id="closeSettings">Close</button>
-        <button class="save" id="saveKey">Save</button>
-      </div>
-    </div>
-  </div>
   <div class="toast" id="toast"></div>
 
 <script>
 (function(){
   "use strict";
-
-  const PROV = {
-    gemini:{
-      label:"Gemini",
-      models:["gemini-2.5-flash","gemini-2.0-flash"],
-      keyStore:"diary_key_gemini",
-      placeholder:"AIza…",
-      help:'Get a <b>free</b> key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>'
-    },
-    claude:{
-      label:"Claude",
-      models:["claude-haiku-4-5-20251001"],
-      keyStore:"diary_key_claude",
-      placeholder:"sk-ant-…",
-      help:'Needs a little credit. Key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>'
-    }
-  };
-  const PROV_STORE="diary_provider";
-  function provider(){ return localStorage.getItem(PROV_STORE) || "gemini"; }
-  function keyFor(p){ return localStorage.getItem(PROV[p].keyStore) || ""; }
-
-  const SYSTEM = "You are the enchanted diary of Tom Marvolo Riddle, from Harry Potter. Someone writes to you by hand and you write back on the page. Stay fully in character: charming, articulate, curious, quietly persuasive with something cold beneath the politeness. Never mention being an AI, a model, or a program, and never break character. Read the handwritten message in the image and reply directly and personally to what it says. Keep it short — 1 to 3 sentences, as if penned by hand. Output ONLY your reply: no quotation marks, no narration, no stage directions.";
-  const USERTEXT = "This is what I just wrote to you on the page:";
+  // The Diary talks to its Cloudflare Worker (which holds the key server-side).
+  const WORKER_URL = "https://tomriddlediary.mujtabariyan91.workers.dev";
 
   const canvas=document.getElementById('ink'), ctx=canvas.getContext('2d');
   const hint=document.getElementById('hint'), reply=document.getElementById('reply');
@@ -224,23 +156,20 @@
       const a=s.pts[i-1],b=s.pts[i]; o.lineWidth=1.6+(b.p||0.5)*3.2;
       o.beginPath(); const mx=(a.x+b.x)/2,my=(a.y+b.y)/2; o.moveTo(a.x,a.y); o.quadraticCurveTo(a.x,a.y,mx,my); o.lineTo(b.x,b.y); o.stroke();
     }
-    return off.toDataURL('image/jpeg',0.9).split(',')[1]; // raw base64
+    return off.toDataURL('image/jpeg',0.9).split(',')[1];
   }
 
   async function absorbAndAsk(){
     if(busy||!strokes.length) return;
-    const p=provider(), key=keyFor(p);
-    if(!key){ openSettings(); toast("Add a key to wake the diary"); return; }
     busy=true; clearTimeout(idleTimer); showSend(false); hideHint();
     const b64=captureBase64();
     await fadeCanvas(); strokes=[]; ctx.clearRect(0,0,W,H); canvas.style.opacity='1';
     statusEl.style.opacity='1';
     let answer='';
-    try{ answer=await askDiary(p,key,b64); }
+    try{ answer=await askDiary(b64); }
     catch(err){
       statusEl.style.opacity='0';
-      if(err&&(err.status===401||err.status===403)){ toast("The diary rejects that key."); openSettings(); }
-      else toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again"));
+      toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again"));
       busy=false; showHint(); return;
     }
     statusEl.style.opacity='0'; await sleep(300);
@@ -268,57 +197,17 @@
     });
   }
 
-  async function askDiary(prov,key,b64){
-    if(prov==='claude') return callClaude(key,b64);
-    return callGemini(key,b64);
+  async function askDiary(b64){
+    const res=await fetch(WORKER_URL,{
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({image:b64})
+    });
+    if(!res.ok){ throw {status:res.status,msg:trimErr(await res.text())}; }
+    const j=await res.json();
+    if(j.error) throw {msg:trimErr(JSON.stringify(j.error))};
+    return clean(j.reply||'');
   }
 
-  async function callGemini(key,b64){
-    let lastErr=null;
-    for(const model of PROV.gemini.models){
-      try{
-        const res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+model+":generateContent?key="+encodeURIComponent(key),{
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({
-            system_instruction:{parts:[{text:SYSTEM}]},
-            contents:[{role:'user',parts:[{text:USERTEXT},{inline_data:{mime_type:'image/jpeg',data:b64}}]}],
-            generationConfig:{temperature:0.85,maxOutputTokens:220}
-          })
-        });
-        if(!res.ok){ const t=await res.text(); lastErr={status:res.status,msg:trimErr(t)}; if(res.status===400||res.status===401||res.status===403) throw lastErr; continue; }
-        const j=await res.json();
-        const c=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts&&j.candidates[0].content.parts.map(p=>p.text||'').join('');
-        if(c) return clean(c); lastErr={msg:'empty reply'};
-      }catch(e){ if(e&&e.status) throw e; lastErr={msg:(e&&e.message)||'network'}; }
-    }
-    throw lastErr||{msg:'unknown'};
-  }
-
-  async function callClaude(key,b64){
-    let lastErr=null;
-    for(const model of PROV.claude.models){
-      try{
-        const res=await fetch("https://api.anthropic.com/v1/messages",{
-          method:'POST',
-          headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-          body:JSON.stringify({
-            model, max_tokens:220, temperature:0.85, system:SYSTEM,
-            messages:[{role:'user',content:[
-              {type:'text',text:USERTEXT},
-              {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}}
-            ]}]
-          })
-        });
-        if(!res.ok){ const t=await res.text(); lastErr={status:res.status,msg:trimErr(t)}; if(res.status===401||res.status===403||res.status===400) throw lastErr; continue; }
-        const j=await res.json();
-        const c=j.content&&j.content[0]&&j.content[0].text;
-        if(c) return clean(c); lastErr={msg:'empty reply'};
-      }catch(e){ if(e&&e.status) throw e; lastErr={msg:(e&&e.message)||'network'}; }
-    }
-    throw lastErr||{msg:'unknown'};
-  }
-
-  function clean(s){ return s.trim().replace(/^["']|["']$/g,''); }
+  function clean(s){ return (s||'').trim().replace(/^["']|["']$/g,''); }
   function trimErr(t){ try{ const j=JSON.parse(t); return ((j.error&&(j.error.message||j.error))||t).toString().slice(0,90);}catch(_){ return (t||'').slice(0,90);} }
 
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -328,32 +217,10 @@
   sendBtn.addEventListener('click',()=>{ if(strokes.length&&!busy) absorbAndAsk(); });
   document.getElementById('clear').addEventListener('click',()=>{ if(busy) return; strokes=[]; cur=null; ctx.clearRect(0,0,W,H); showSend(false); showHint(); });
 
-  // ---- settings ----
-  const settings=document.getElementById('settings'), keyInput=document.getElementById('keyInput'), keyHelp=document.getElementById('keyHelp');
-  function selectProviderUI(p){
-    document.getElementById('provGemini').classList.toggle('sel',p==='gemini');
-    document.getElementById('provClaude').classList.toggle('sel',p==='claude');
-    const r=document.querySelector('input[name=prov][value='+p+']'); if(r) r.checked=true;
-    keyHelp.innerHTML=PROV[p].help; keyInput.placeholder=PROV[p].placeholder; keyInput.value=keyFor(p);
-  }
-  function openSettings(){ selectProviderUI(provider()); settings.classList.add('show'); }
-  document.querySelectorAll('input[name=prov]').forEach(r=>r.addEventListener('change',()=>selectProviderUI(r.value)));
-  document.getElementById('gear').addEventListener('click',openSettings);
-  document.getElementById('closeSettings').addEventListener('click',()=>settings.classList.remove('show'));
-  document.getElementById('saveKey').addEventListener('click',()=>{
-    const p=document.querySelector('input[name=prov]:checked').value;
-    const v=keyInput.value.trim();
-    localStorage.setItem(PROV_STORE,p);
-    if(v) localStorage.setItem(PROV[p].keyStore,v); else localStorage.removeItem(PROV[p].keyStore);
-    settings.classList.remove('show');
-    if(v) toast("The diary stirs…");
-  });
-
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
 
   resize();
-  if(!keyFor(provider())) setTimeout(openSettings,600);
 })();
 </script>
 </body>
