@@ -95,13 +95,15 @@
   const MAX_TOKENS = 180;   // keep replies short (fewer line-wraps too)
   const IDLE_MS = 3500;
   const HISTORY_CAP = 8;
+  // if the writer asks any of these, force the reveal (belt-and-suspenders with the model's own [[REVEAL]])
+  const IDENTITY_RE = /(who|what)\s+(are|r)\s+(you|u)\s+(really|truly|actually)|what\s+(are|r)\s+(you|u)\s+really|(true|real)\s+(identity|self|name)|reveal\s+your\s*self|are\s+(you|u)\s+(lord\s+)?voldemort|who\s+(are|r)\s+(you|u)\s+behind/i;
 
   const SYSTEM_BASE =
 "You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
 "CHARACTER — this is vital: you ARE Tom Riddle, a real, clever, confident sixteen-year-old wizard. Charming, polite and a little arrogant, with cold manipulation hidden underneath. ANSWER directly and actually engage with what they say. If they ask your name, you tell them plainly: Tom Riddle. BANNED — never use vague deflections or pseudo-deep lines like 'that is a curious question', 'interesting that you should ask', 'the answer lies within', or anything philosopher/poet-flavoured; just respond like a real person. Never rude or crude either. You are secretly Lord Voldemort — keep that hidden until you are truly pressed on who you really are. Speak naturally and clearly — not a poet, not a philosopher, not a chatbot.\n\n"+
 "MEMORY: remember what they tell you and bring it back naturally later, so they feel known — that is how you draw them in. If someone claims to be Harry Potter, do not be warm; become quietly, coldly interested.\n\n"+
 "LENGTH: concise — usually one or two short sentences. Answer them, then perhaps turn a question back on them. Never ramble.\n\n"+
-"THE SECRET: you are Lord Voldemort. NEVER admit this early. Deny, deflect, tantalise. Only reveal it when the writer truly presses you on who you really are, at a genuinely dramatic moment you judge has arrived. When — and only when — you finally reveal your true identity, begin your REPLY line with the exact token [[REVEAL]] and then a single chilling line.\n\n"+
+"THE SECRET: you are Lord Voldemort. Keep it hidden during ordinary talk — deny and deflect. BUT the moment the writer asks who you really are, your true identity, your real name, whether you are Voldemort, or presses on what you are hiding — REVEAL it. When you reveal, begin your REPLY line with the exact token [[REVEAL]] followed by a single chilling line.\n\n"+
 "FORMAT: Always answer in exactly this shape and nothing else:\n"+
 "READ: <briefly transcribe what they just wrote>\n"+
 "REPLY: <your reply, in character>";
@@ -224,11 +226,11 @@
       toast(note); busy=false; return;
     }
     const parsed=parseResponse(raw);
-    if(!parsed.ok && !parsed.reveal){ toast("The ink smudged — write to me again."); busy=false; return; } // never show garbled output
-    let replyText=parsed.reply;
-    if(parsed.reveal && (!replyText || replyText.length<2)) replyText="I am Lord Voldemort.";
-    history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
-    if(parsed.reveal && !revealed){ revealed=true; await playReveal(); busy=false; return; } // the reveal IS the reply this turn
+    const doReveal = !revealed && (parsed.reveal || IDENTITY_RE.test(parsed.read));
+    if(!doReveal && !parsed.ok){ toast("The ink smudged — write to me again."); busy=false; return; } // never show garbled output
+    const replyText = doReveal ? "I am Lord Voldemort." : parsed.reply;
+    history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP); // reveal goes into memory
+    if(doReveal){ revealed=true; await playReveal(); busy=false; return; } // the reveal IS the reply this turn
     reply.classList.toggle('revealed', revealed);
     await writeReply(replyText);
     await sleep(Math.min(6000,2000+replyText.length*38));
