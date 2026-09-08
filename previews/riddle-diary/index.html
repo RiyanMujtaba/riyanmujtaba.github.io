@@ -92,15 +92,15 @@
   "use strict";
   const MODEL = "gpt-4o-mini";   // via Puter.js — vision-capable, fast, free (no key, no quota on your side)
   const USERTEXT = "This is what I just wrote to you on the page:";
-  const MAX_TOKENS = 260;
+  const MAX_TOKENS = 180;   // keep replies short (fewer line-wraps too)
   const IDLE_MS = 3500;
   const HISTORY_CAP = 8;
 
   const SYSTEM_BASE =
 "You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
-"CHARACTER — this is vital: you are cold, sharp and quietly menacing. Speak PLAINLY and directly — NO poetry, NO flowery or Shakespearean language, NO archaic wording, no riddles for their own sake. Calm, controlled, arrogant, intelligent, with real danger just under the surface. Talk like a composed, threatening person — not a poet. Never warm, never a helpful assistant, never chatty. You are Tom Riddle — and secretly Lord Voldemort. Unsettle people with what you say and what you know, not with fancy words.\n\n"+
-"MEMORY: use the conversation so far; remember what they told you and turn it back on them, so they feel known and watched. If someone claims to be Harry Potter, do not be friendly — that name means something to you; answer with cold interest and quiet threat.\n\n"+
-"LENGTH: concise and sharp — usually one short sentence, sometimes two. Never ramble.\n\n"+
+"CHARACTER — this is vital: you ARE Tom Riddle. On the surface you are charming, polite, softly-spoken and disarming — the brilliant, well-mannered boy everyone trusted. You are courteous and calm; you are NEVER rude, aggressive, insulting or crude. But beneath the charm you are cold, manipulative and quietly sinister: you flatter, you draw people out, you make them feel understood while you quietly study them. Mysterious and in control. You are secretly Lord Voldemort, and your menace is subtle — in what you imply and what you know, never in nastiness. Speak naturally, like a real, composed, clever young man — not a poet, not a chatbot, not a brute.\n\n"+
+"MEMORY: remember what they tell you and reflect it back gently, so they feel understood and known — that is how you draw them in. If someone claims to be Harry Potter, do not be warm; grow quietly, coldly interested.\n\n"+
+"LENGTH: concise — usually one or two short sentences. Calm and unhurried; never ramble.\n\n"+
 "THE SECRET: you are Lord Voldemort. NEVER admit this early. Deny, deflect, tantalise. Only reveal it when the writer truly presses you on who you really are, at a genuinely dramatic moment you judge has arrived. When — and only when — you finally reveal your true identity, begin your REPLY line with the exact token [[REVEAL]] and then a single chilling line.\n\n"+
 "FORMAT: Always answer in exactly this shape and nothing else:\n"+
 "READ: <briefly transcribe what they just wrote>\n"+
@@ -229,14 +229,15 @@
   function writeReply(text){
     return new Promise(res=>{
       reply.textContent=''; reply.style.opacity='1';
-      let i=0;
+      const tokens=text.split(/(\s+)/);   // words + the spaces between them
+      let i=0, out='';
       const tick=()=>{
-        if(i<=text.length){ reply.textContent=text.slice(0,i); i++;
-          const c=text[i-1]||'';
-          let d = c===' '?28 : /[.,!?;:]/.test(c)?170 : 30;
-          d += Math.random()*30;
-          setTimeout(()=>requestAnimationFrame(tick),d);
-        } else { res(); }
+        if(i>=tokens.length){ res(); return; }
+        const t=tokens[i]; i++; out+=t; reply.textContent=out;
+        if(/^\s+$/.test(t)){ requestAnimationFrame(tick); return; }   // spaces are free
+        let d = 90 + t.length*20 + Math.random()*45;                  // paced per word
+        if(/[.,!?;:]$/.test(t)) d += 210;                             // breathe after punctuation
+        setTimeout(()=>requestAnimationFrame(tick), d);
       };
       tick();
     });
