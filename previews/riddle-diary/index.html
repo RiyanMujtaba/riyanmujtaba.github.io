@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=IM+Fell+English:ital@0;1&family=Metamorphous&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -89,8 +90,9 @@
 <script>
 (function(){
   "use strict";
-  const WORKER_URL = "https://tomriddlediary.mujtabariyan91.workers.dev";
-  const MAX_TOKENS = 230;
+  const MODEL = "gpt-4o-mini";   // via Puter.js — vision-capable, fast, free (no key, no quota on your side)
+  const USERTEXT = "This is what I just wrote to you on the page:";
+  const MAX_TOKENS = 260;
   const IDLE_MS = 3500;
   const HISTORY_CAP = 8;
 
@@ -204,10 +206,10 @@
     let raw='';
     try{ raw=await pending; }
     catch(err){
-      const m=((err&&err.msg)||'')+' '+((err&&err.status)||'');
+      const m=((err&&(err.msg||err.message))||'')+'';
       let note;
-      if(/429|quota|exhaust|rate|resource/i.test(m)) note="The diary rests — too many questions, too quickly. Wait a minute, then write again.";
-      else note="The ink runs dry — "+((err&&err.msg)||"try again");
+      if(/429|quota|exhaust|rate|resource|usage|limit|permission/i.test(m)) note="The diary rests — its power is spent for now. Try again in a little while.";
+      else note="The ink runs dry — "+(m||"try again");
       toast(note); busy=false; return;
     }
     const parsed=parseResponse(raw);
@@ -296,33 +298,36 @@
   }
 
   async function askDiary(b64,prompt){
-    const res=await fetch(WORKER_URL,{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({image:b64, prompt:prompt, maxTokens:MAX_TOKENS})
-    });
-    if(!res.ok){ throw {status:res.status,msg:trimErr(await res.text())}; }
-    const j=await res.json();
-    if(j.error) throw {msg:trimErr(typeof j.error==='string'?j.error:JSON.stringify(j.error))};
-    return (j.reply||'').trim();
+    if(typeof puter==='undefined' || !puter.ai) throw {msg:"the diary is not connected"};
+    const dataUrl="data:image/jpeg;base64,"+b64;
+    const resp=await puter.ai.chat([
+      { role:'system', content:prompt },
+      { role:'user', content:[
+        { type:'text', text:USERTEXT },
+        { type:'image_url', image_url:{ url:dataUrl } }
+      ]}
+    ], { model:MODEL, max_tokens:MAX_TOKENS });
+    // Puter returns different shapes depending on model — dig out the text robustly
+    let text='';
+    const c = resp && resp.message && resp.message.content;
+    if(typeof c==='string') text=c;
+    else if(Array.isArray(c)) text=c.map(x=>(x&&x.text)||'').join('');
+    else if(resp && typeof resp.text==='string') text=resp.text;
+    else if(typeof resp==='string') text=resp;
+    else if(resp && resp.toString) text=resp.toString();
+    return (text||'').trim();
   }
 
   async function askWithRetry(b64,prompt){
-    const delays=[0,1800];
+    const delays=[0,1600];
     let lastErr;
     for(let i=0;i<delays.length;i++){
       if(delays[i]) await sleep(delays[i]);
-      try{ return await askDiary(b64,prompt); }
-      catch(e){
-        lastErr=e;
-        const sig=((e&&e.msg)||'')+' '+((e&&e.status)||'');
-        // retry only transient server hiccups — NOT 429 (that's quota; retrying won't help and wastes it)
-        if(!/50[023]|overload|unavailable|timeout|network|fetch/i.test(sig) || /429|quota|resource/i.test(sig)) throw e;
-      }
+      try{ const r=await askDiary(b64,prompt); if(r) return r; lastErr={msg:'empty reply'}; }
+      catch(e){ lastErr=e; }
     }
     throw lastErr;
   }
-
-  function trimErr(t){ try{ const j=JSON.parse(t); return ((j.error&&(j.error.message||j.error))||t).toString().slice(0,90);}catch(_){ return (t||'').slice(0,90);} }
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   let toastT=null;
   function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('show'),3400); }
