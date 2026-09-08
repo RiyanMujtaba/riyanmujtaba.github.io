@@ -96,7 +96,7 @@
   const IDLE_MS = 3500;
   const HISTORY_CAP = 8;
   // if the writer asks any of these, force the reveal (belt-and-suspenders with the model's own [[REVEAL]])
-  const IDENTITY_RE = /(who|what)\s+(are|r)\s+(you|u)\s+(really|truly|actually)|what\s+(are|r)\s+(you|u)\s+really|(true|real)\s+(identity|self|name)|reveal\s+your\s*self|are\s+(you|u)\s+(lord\s+)?voldemort|who\s+(are|r)\s+(you|u)\s+behind/i;
+  const IDENTITY_RE = /(who|what)\s+(are|r)\s+(you|u)\s+(really|truly|actually)|what\s+(are|r)\s+(you|u)\s+really|(true|real)\s+(identity|self|name)|reveal\s+your\s*self|are\s+(you|u)\s+(lord\s+)?voldemort|who\s+(are|r)\s+(you|u)\s+behind|\breveli?o\b/i;
 
   const SYSTEM_BASE =
 "You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
@@ -176,7 +176,7 @@
   function buildPrompt(){
     let base=SYSTEM_BASE;
     if(revealed){
-      base+="\n\nIMPORTANT: You have ALREADY revealed to this writer that you are Lord Voldemort. Do NOT deny it or pretend to be merely a diary any longer — speak openly, coldly, triumphantly, as Voldemort himself. Do not use the [[REVEAL]] token again.";
+      base+="\n\nIMPORTANT: You have ALREADY revealed to this writer that you are Lord Voldemort — that moment has passed. Do NOT deny it, but do NOT keep re-announcing it or repeating 'I am Lord Voldemort'; that would be tiresome. Simply carry on the conversation, answering openly and coldly as Voldemort. Never use the [[REVEAL]] token again.";
     }
     let convo;
     if(history.length){
