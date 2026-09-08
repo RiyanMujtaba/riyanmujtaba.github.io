@@ -34,8 +34,6 @@
   #paper::after{ content:''; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 200px rgba(40,25,8,0.55); }
   canvas{ position:fixed; inset:0; width:100%; height:100%; touch-action:none; z-index:2; }
 
-  /* Reply flows DOWN from a fixed anchor — no re-centering jump */
-  /* a centered column, but text left-aligned so it reads like a hand writing across the page */
   #reply{
     position:fixed; z-index:4; left:50%; top:25%; transform:translateX(-50%);
     width:min(640px,84vw); text-align:left; pointer-events:none;
@@ -43,22 +41,42 @@
     color:#2c1d0c; text-shadow:0 1px 0 rgba(255,255,255,0.15);
     opacity:0; transition:opacity 1.3s ease; white-space:pre-wrap;
   }
-
-  /* faint signature in the corner — the only marking on the page */
   #mark{ position:fixed; z-index:3; right:24px; bottom:20px; pointer-events:none;
-    font-family:'Caveat',cursive; font-size:23px; color:rgba(70,50,20,0.22);
-    letter-spacing:.5px; transform:rotate(-4deg); }
-
+    font-family:'Caveat',cursive; font-size:23px; color:rgba(70,50,20,0.22); letter-spacing:.5px; transform:rotate(-4deg); }
   #clear{ position:fixed; z-index:5; left:18px; top:18px; height:38px; padding:0 14px; border-radius:19px; border:none; background:rgba(70,50,20,0.10); color:rgba(70,50,20,0.5); font-family:'IM Fell English',serif; font-style:italic; font-size:15px; cursor:pointer; opacity:.35; transition:opacity .2s; }
   #clear:active{opacity:1}
   .toast{ position:fixed; z-index:11; left:50%; bottom:28px; transform:translateX(-50%); background:rgba(30,20,10,0.9); color:#e8dcc0; padding:10px 18px; border-radius:20px; font-family:'IM Fell English',serif; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; max-width:90vw; text-align:center; }
   .toast.show{opacity:1}
+
+  /* ---- the reveal: TOM MARVOLO RIDDLE -> I AM LORD VOLDEMORT ---- */
+  #reveal{
+    position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center; flex-wrap:wrap;
+    pointer-events:none; padding:0 18px; opacity:0; background:rgba(8,4,2,0);
+    transition:opacity .7s ease, background 1.1s ease;
+  }
+  #reveal.show{ opacity:1; }
+  #reveal.burn{ background:rgba(8,4,2,0.72); }
+  #reveal .rl{
+    font-family:'IM Fell English',serif; font-weight:700; font-size:clamp(30px,6.6vw,84px);
+    color:#3a2a12; display:inline-block; will-change:transform; letter-spacing:1px;
+  }
+  #reveal .sp{ display:inline-block; width:0.42em; }
+  #reveal.burn .rl{
+    color:#ff6a1e;
+    text-shadow:0 0 8px rgba(255,120,20,0.95),0 0 22px rgba(255,70,0,0.8),0 0 44px rgba(200,30,0,0.55);
+    animation:flick .11s infinite alternate;
+  }
+  @keyframes flick{
+    from{ text-shadow:0 0 8px rgba(255,140,30,0.9),0 0 22px rgba(255,70,0,0.7),0 0 40px rgba(190,30,0,0.5); }
+    to{ text-shadow:0 0 16px rgba(255,90,10,1),0 0 34px rgba(230,45,0,0.85),0 0 60px rgba(150,20,0,0.5); }
+  }
 </style>
 </head>
 <body>
   <div id="paper"></div>
   <canvas id="ink"></canvas>
   <div id="reply"></div>
+  <div id="reveal"></div>
   <div id="mark">T. M. Riddle</div>
   <button id="clear">clear</button>
   <div class="toast" id="toast"></div>
@@ -67,12 +85,22 @@
 (function(){
   "use strict";
   const WORKER_URL = "https://tomriddlediary.mujtabariyan91.workers.dev";
-  const SYSTEM = "You are the enchanted diary of Tom Marvolo Riddle (Harry Potter). Someone writes to you by hand; you write back on the page. Voice: mysterious, composed, quietly charming with something cold beneath. Be CONCISE — usually a single short sentence. Only write more when the message truly calls for it, and never more than three sentences. Read the handwriting in the image and answer it directly. Never mention being an AI or break character. Output ONLY the reply — no quotes, no narration.";
-  const MAX_TOKENS = 130;
+  const MAX_TOKENS = 230;
   const IDLE_MS = 3500;
+  const HISTORY_CAP = 12;
+
+  const SYSTEM_BASE =
+"You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
+"CHARACTER — this is vital: you are cold, brilliant, seductive and menacing. Never warm, never a helpful modern assistant. You are patient and cryptic; you draw the writer in, ask sly probing questions, flatter to disarm, then unsettle. There is always something dangerous coiled beneath your courtesy. Speak like an arrogant, charming, dark young wizard from the 1940s — never like a chatbot. Be unnerving.\n\n"+
+"MEMORY: use the conversation so far. Refer back to what they have told you; make them feel watched and remembered. If someone claims to be Harry Potter, do NOT be friendly — that name stirs cold fascination and hatred in you; toy with him, probe, threaten softly.\n\n"+
+"LENGTH: be concise and sharp — usually one or two short sentences. Length is a weapon; use it rarely.\n\n"+
+"THE SECRET: you are Lord Voldemort. NEVER admit this early. Deny, deflect, tantalise. Only reveal it when the writer truly presses you on who you really are, at a genuinely dramatic moment you judge has arrived. When — and only when — you finally reveal your true identity, begin your REPLY line with the exact token [[REVEAL]] and then a single chilling line.\n\n"+
+"FORMAT: Always answer in exactly this shape and nothing else:\n"+
+"READ: <briefly transcribe what they just wrote>\n"+
+"REPLY: <your reply, in character>";
 
   const canvas=document.getElementById('ink'), ctx=canvas.getContext('2d');
-  const reply=document.getElementById('reply'), toastEl=document.getElementById('toast');
+  const reply=document.getElementById('reply'), toastEl=document.getElementById('toast'), revealBox=document.getElementById('reveal');
 
   let W=0,H=0,DPR=1;
   function resize(){
@@ -85,6 +113,8 @@
   window.addEventListener('resize',resize);
 
   let strokes=[], cur=null, acceptTouch=true, idleTimer=null, busy=false;
+  let history=[];      // [{you, diary}]
+  let revealed=false;  // once shown, don't repeat the animation
   const INK="rgba(58,42,18,0.92)";
 
   function scheduleIdle(){ clearTimeout(idleTimer); idleTimer=setTimeout(()=>{ if(strokes.length&&!busy) absorbAndAsk(); },IDLE_MS); }
@@ -121,9 +151,9 @@
   function captureBase64(){
     let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
     for(const s of strokes) for(const p of s.pts){ if(p.x<minX)minX=p.x; if(p.y<minY)minY=p.y; if(p.x>maxX)maxX=p.x; if(p.y>maxY)maxY=p.y; }
-    const pad=50; minX=Math.max(0,minX-pad); minY=Math.max(0,minY-pad); maxX=Math.min(W,maxX+pad); maxY=Math.min(H,maxY+pad);
+    const pad=48; minX=Math.max(0,minX-pad); minY=Math.max(0,minY-pad); maxX=Math.min(W,maxX+pad); maxY=Math.min(H,maxY+pad);
     const w=Math.max(1,maxX-minX), h=Math.max(1,maxY-minY);
-    const scale=Math.min(2.2,Math.max(0.4,1100/w));
+    let scale=1000/Math.max(w,h); scale=Math.max(0.4,Math.min(2.2,scale)); // cap longest side ~1000px for speed
     const off=document.createElement('canvas'); off.width=Math.round(w*scale); off.height=Math.round(h*scale);
     const o=off.getContext('2d'); o.fillStyle='#ffffff'; o.fillRect(0,0,off.width,off.height);
     o.setTransform(scale,0,0,scale,-minX*scale,-minY*scale); o.lineCap='round'; o.lineJoin='round'; o.strokeStyle='#141414';
@@ -131,20 +161,45 @@
       const a=s.pts[i-1],b=s.pts[i]; o.lineWidth=1.6+(b.p||0.5)*3.2;
       o.beginPath(); const mx=(a.x+b.x)/2,my=(a.y+b.y)/2; o.moveTo(a.x,a.y); o.quadraticCurveTo(a.x,a.y,mx,my); o.lineTo(b.x,b.y); o.stroke();
     }
-    return off.toDataURL('image/jpeg',0.9).split(',')[1];
+    return off.toDataURL('image/jpeg',0.85).split(',')[1];
+  }
+
+  function buildPrompt(){
+    let convo;
+    if(history.length){
+      convo="\n\nThe conversation so far (oldest first):\n"+history.map(h=>"The writer wrote: "+h.you+"\nYou replied: "+h.diary).join("\n");
+    } else {
+      convo="\n\n(This is the very first thing they have written to you.)";
+    }
+    return SYSTEM_BASE + convo + "\n\nNow read the NEWEST handwriting shown in the image and respond in the exact READ:/REPLY: format.";
+  }
+
+  function parseResponse(t){
+    t=(t||'').trim();
+    let read='', rep=t, reveal=false;
+    const rm=t.match(/READ:\s*([\s\S]*?)\s*REPLY:/i);
+    const pm=t.match(/REPLY:\s*([\s\S]*)$/i);
+    if(rm) read=rm[1].trim();
+    if(pm) rep=pm[1].trim();
+    if(/\[\[\s*REVEAL\s*\]\]/i.test(rep)){ reveal=true; rep=rep.replace(/\[\[\s*REVEAL\s*\]\]/ig,'').trim(); }
+    return { read: read||'(their note)', reply: rep||'…', reveal };
   }
 
   async function absorbAndAsk(){
     if(busy||!strokes.length) return;
     busy=true; clearTimeout(idleTimer);
     const b64=captureBase64();
-    const pending=askWithRetry(b64); pending.catch(()=>{}); // fire during the fade
+    const prompt=buildPrompt();
+    const pending=askWithRetry(b64,prompt); pending.catch(()=>{});
     await fadeCanvas(); strokes=[]; ctx.clearRect(0,0,W,H); canvas.style.opacity='1';
-    let answer='';
-    try{ answer=await pending; }
+    let raw='';
+    try{ raw=await pending; }
     catch(err){ toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again")); busy=false; return; }
-    await writeReply(answer||"…");
-    await sleep(Math.min(9000,3200+answer.length*45));
+    const {read, reply:replyText, reveal}=parseResponse(raw);
+    history.push({you:read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
+    if(reveal && !revealed){ revealed=true; await playReveal(); }
+    await writeReply(replyText);
+    await sleep(Math.min(9000,3200+replyText.length*45));
     reply.style.opacity='0'; await sleep(1300); reply.textContent='';
     busy=false;
   }
@@ -158,7 +213,6 @@
       const tick=()=>{
         if(i<=text.length){ reply.textContent=text.slice(0,i); i++;
           const c=text[i-1]||'';
-          // organic hand-writing rhythm: pause at spaces/punctuation, jitter each stroke
           let d = c===' '?28 : /[.,!?;:]/.test(c)?170 : 30;
           d += Math.random()*30;
           setTimeout(()=>requestAnimationFrame(tick),d);
@@ -168,23 +222,65 @@
     });
   }
 
-  async function askDiary(b64){
+  // ---- the anagram reveal ----
+  const raf2=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  async function playReveal(){
+    const SRC="TOM MARVOLO RIDDLE", DST="I AM LORD VOLDEMORT";
+    revealBox.innerHTML=''; revealBox.style.display='flex'; revealBox.classList.remove('burn');
+    // build SRC letters
+    const letters=[]; // {ch, el, rect}
+    for(const ch of SRC){
+      const s=document.createElement('span');
+      if(ch===' '){ s.className='sp'; s.innerHTML='&nbsp;'; revealBox.appendChild(s); }
+      else { s.className='rl'; s.textContent=ch; revealBox.appendChild(s); letters.push({ch, el:s}); }
+    }
+    await raf2(); revealBox.classList.add('show'); await sleep(1100);          // name appears
+    letters.forEach(o=>o.rect=o.el.getBoundingClientRect());                    // measure SRC
+    // rebuild in DST order, reusing the same letter elements (perfect anagram)
+    const used=new Array(letters.length).fill(false);
+    revealBox.innerHTML='';
+    const moving=[];
+    for(const ch of DST){
+      if(ch===' '){ const s=document.createElement('span'); s.className='sp'; s.innerHTML='&nbsp;'; revealBox.appendChild(s); continue; }
+      let idx=letters.findIndex((o,i)=>!used[i]&&o.ch===ch);
+      if(idx===-1) idx=used.findIndex(u=>!u);
+      used[idx]=true; const o=letters[idx];
+      revealBox.appendChild(o.el); moving.push(o);
+    }
+    await raf2();
+    for(const o of moving){                                                     // FLIP: place at old spot
+      const r=o.el.getBoundingClientRect();
+      o.el.style.transition='none';
+      o.el.style.transform='translate('+(o.rect.left-r.left)+'px,'+(o.rect.top-r.top)+'px)';
+    }
+    await raf2();
+    revealBox.classList.add('burn');                                            // ignite + darken
+    for(const o of moving){
+      o.el.style.transition='transform 1.5s cubic-bezier(.72,.05,.2,1)';
+      o.el.style.transform='translate(0,0)';
+    }
+    await sleep(3400);
+    revealBox.classList.remove('show'); revealBox.classList.remove('burn');
+    await sleep(900); revealBox.style.display='none';
+  }
+
+  async function askDiary(b64,prompt){
     const res=await fetch(WORKER_URL,{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({image:b64, prompt:SYSTEM, maxTokens:MAX_TOKENS})
+      body:JSON.stringify({image:b64, prompt:prompt, maxTokens:MAX_TOKENS})
     });
     if(!res.ok){ throw {status:res.status,msg:trimErr(await res.text())}; }
     const j=await res.json();
     if(j.error) throw {msg:trimErr(typeof j.error==='string'?j.error:JSON.stringify(j.error))};
-    return clean(j.reply||'');
+    return (j.reply||'').trim();
   }
 
-  async function askWithRetry(b64){
+  async function askWithRetry(b64,prompt){
     const delays=[0,1800];
     let lastErr;
     for(let i=0;i<delays.length;i++){
       if(delays[i]) await sleep(delays[i]);
-      try{ return await askDiary(b64); }
+      try{ return await askDiary(b64,prompt); }
       catch(e){
         lastErr=e;
         const sig=((e&&e.msg)||'')+' '+((e&&e.status)||'');
@@ -194,9 +290,7 @@
     throw lastErr;
   }
 
-  function clean(s){ return (s||'').trim().replace(/^["']|["']$/g,''); }
   function trimErr(t){ try{ const j=JSON.parse(t); return ((j.error&&(j.error.message||j.error))||t).toString().slice(0,90);}catch(_){ return (t||'').slice(0,90);} }
-
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   let toastT=null;
   function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('show'),3400); }
