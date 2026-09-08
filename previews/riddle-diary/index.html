@@ -71,6 +71,9 @@
     from{ text-shadow:0 0 9px rgba(255,140,30,0.9),0 0 24px rgba(255,70,0,0.72),0 0 46px rgba(190,30,0,0.5); }
     to{ text-shadow:0 0 18px rgba(255,90,10,1),0 0 38px rgba(230,45,0,0.88),0 0 68px rgba(150,20,0,0.55); }
   }
+  /* after the burn: the fire cools into plain dark ink and the page returns, so the name lingers as normal writing */
+  #reveal.settle{ background:rgba(6,3,2,0); }
+  #reveal.settle .rl{ color:#2c1d0c; text-shadow:none; animation:none; transition:color 1.4s ease, text-shadow 1.4s ease; }
 </style>
 </head>
 <body>
@@ -211,7 +214,7 @@
     let replyText=parsed.reply;
     if(parsed.reveal && (!replyText || replyText==='…')) replyText="I am Lord Voldemort.";
     history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
-    if(parsed.reveal && !revealed){ revealed=true; await playReveal(); }
+    if(parsed.reveal && !revealed){ revealed=true; await playReveal(); busy=false; return; } // the reveal IS the reply this turn
     reply.classList.toggle('revealed', revealed);
     await writeReply(replyText);
     await sleep(Math.min(9000,3200+replyText.length*45));
@@ -284,9 +287,12 @@
     await raf2();
     moving.forEach(m=>{ m.el.style.transition='transform 2.4s cubic-bezier(.6,.03,.2,1)'; m.el.style.transform='translate(0,0)'; });
     await sleep(2600);                                                    // the words fall into place
-    await sleep(4200);                                                    // linger on I AM LORD VOLDEMORT
-    revealBox.classList.remove('show','burn');
-    await sleep(1100); revealBox.style.display='none'; revealBox.innerHTML='';
+    await sleep(2600);                                                    // linger, burning
+    revealBox.classList.remove('burn'); revealBox.classList.add('settle');// fire cools to plain ink, page returns
+    await sleep(1500);                                                    // cooling
+    await sleep(3200);                                                    // linger as normal writing on the page
+    revealBox.classList.remove('show');
+    await sleep(1100); revealBox.style.display='none'; revealBox.classList.remove('settle'); revealBox.innerHTML='';
   }
 
   async function askDiary(b64,prompt){
