@@ -45,6 +45,8 @@
     font-family:'Caveat',cursive; font-size:23px; color:rgba(70,50,20,0.22); letter-spacing:.5px; transform:rotate(-4deg); }
   #clear{ position:fixed; z-index:5; left:18px; top:18px; height:38px; padding:0 14px; border-radius:19px; border:none; background:rgba(70,50,20,0.10); color:rgba(70,50,20,0.5); font-family:'IM Fell English',serif; font-style:italic; font-size:15px; cursor:pointer; opacity:.35; transition:opacity .2s; }
   #clear:active{opacity:1}
+  #test{ position:fixed; z-index:5; left:18px; bottom:18px; height:34px; padding:0 13px; border-radius:17px; border:1px solid rgba(120,30,10,0.28); background:rgba(120,30,10,0.07); color:rgba(120,40,15,0.55); font-family:'IM Fell English',serif; font-style:italic; font-size:13px; cursor:pointer; opacity:.4; transition:opacity .2s; }
+  #test:active{opacity:1}
   .toast{ position:fixed; z-index:11; left:50%; bottom:28px; transform:translateX(-50%); background:rgba(30,20,10,0.9); color:#e8dcc0; padding:10px 18px; border-radius:20px; font-family:'IM Fell English',serif; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; max-width:90vw; text-align:center; }
   .toast.show{opacity:1}
 
@@ -79,6 +81,7 @@
   <div id="reveal"></div>
   <div id="mark">T. M. Riddle</div>
   <button id="clear">clear</button>
+  <button id="test" title="preview the reveal">reveal</button>
   <div class="toast" id="toast"></div>
 
 <script>
@@ -302,6 +305,7 @@
   function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('show'),3400); }
 
   document.getElementById('clear').addEventListener('click',()=>{ if(busy) return; strokes=[]; cur=null; ctx.clearRect(0,0,W,H); });
+  document.getElementById('test').addEventListener('click', async ()=>{ if(busy) return; busy=true; clearTimeout(idleTimer); await playReveal(); busy=false; });
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
 
