@@ -309,7 +309,8 @@
       catch(e){
         lastErr=e;
         const sig=((e&&e.msg)||'')+' '+((e&&e.status)||'');
-        if(!/50[023]|429|overload|unavailable|timeout|network|fetch|try again/i.test(sig)) throw e;
+        // retry only transient server hiccups — NOT 429 (that's quota; retrying won't help and wastes it)
+        if(!/50[023]|overload|unavailable|timeout|network|fetch/i.test(sig) || /429|quota|resource/i.test(sig)) throw e;
       }
     }
     throw lastErr;

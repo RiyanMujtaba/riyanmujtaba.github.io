@@ -86,7 +86,8 @@ async function ask(model, key, b64, system, maxTokens) {
       throw new Error("empty reply");
     }
     const status = res.status;
-    if ((status === 503 || status === 429 || status >= 500) && attempt < 2) { await sleep(600 * (attempt + 1)); continue; }
+    // retry transient server errors only; 429 is a quota limit — fail fast, don't hang or waste quota
+    if (status >= 500 && attempt < 2) { await sleep(600 * (attempt + 1)); continue; }
     throw new Error("gemini error " + status);
   }
   throw new Error("gemini unavailable");
