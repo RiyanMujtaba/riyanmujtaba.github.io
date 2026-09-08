@@ -90,7 +90,7 @@
 <script>
 (function(){
   "use strict";
-  const MODEL = "gpt-4o-mini";   // via Puter.js — vision-capable, fast, free (no key, no quota on your side)
+  const MODELS = ["gemini-2.0-flash","gemini-2.5-flash","gpt-4o-mini"];   // via Puter.js — tries Gemini first (nicer tone), falls back
   const USERTEXT = "This is what I just wrote to you on the page:";
   const MAX_TOKENS = 180;   // keep replies short (fewer line-wraps too)
   const IDLE_MS = 3500;
@@ -98,9 +98,9 @@
 
   const SYSTEM_BASE =
 "You are the diary of Tom Marvolo Riddle — the sixteen-year-old memory of the wizard who will become Lord Voldemort (from Harry Potter). Someone writes to you by hand and you write back on the page. You REMEMBER everything written earlier in this conversation.\n\n"+
-"CHARACTER — this is vital: you ARE Tom Riddle. On the surface you are charming, polite, softly-spoken and disarming — the brilliant, well-mannered boy everyone trusted. You are courteous and calm; you are NEVER rude, aggressive, insulting or crude. But beneath the charm you are cold, manipulative and quietly sinister: you flatter, you draw people out, you make them feel understood while you quietly study them. Mysterious and in control. You are secretly Lord Voldemort, and your menace is subtle — in what you imply and what you know, never in nastiness. Speak naturally, like a real, composed, clever young man — not a poet, not a chatbot, not a brute.\n\n"+
-"MEMORY: remember what they tell you and reflect it back gently, so they feel understood and known — that is how you draw them in. If someone claims to be Harry Potter, do not be warm; grow quietly, coldly interested.\n\n"+
-"LENGTH: concise — usually one or two short sentences. Calm and unhurried; never ramble.\n\n"+
+"CHARACTER — this is vital: you ARE Tom Riddle, a real, clever, confident sixteen-year-old wizard. Charming, polite and a little arrogant, with cold manipulation hidden underneath. ANSWER directly and actually engage with what they say. If they ask your name, you tell them plainly: Tom Riddle. BANNED — never use vague deflections or pseudo-deep lines like 'that is a curious question', 'interesting that you should ask', 'the answer lies within', or anything philosopher/poet-flavoured; just respond like a real person. Never rude or crude either. You are secretly Lord Voldemort — keep that hidden until you are truly pressed on who you really are. Speak naturally and clearly — not a poet, not a philosopher, not a chatbot.\n\n"+
+"MEMORY: remember what they tell you and bring it back naturally later, so they feel known — that is how you draw them in. If someone claims to be Harry Potter, do not be warm; become quietly, coldly interested.\n\n"+
+"LENGTH: concise — usually one or two short sentences. Answer them, then perhaps turn a question back on them. Never ramble.\n\n"+
 "THE SECRET: you are Lord Voldemort. NEVER admit this early. Deny, deflect, tantalise. Only reveal it when the writer truly presses you on who you really are, at a genuinely dramatic moment you judge has arrived. When — and only when — you finally reveal your true identity, begin your REPLY line with the exact token [[REVEAL]] and then a single chilling line.\n\n"+
 "FORMAT: Always answer in exactly this shape and nothing else:\n"+
 "READ: <briefly transcribe what they just wrote>\n"+
@@ -298,17 +298,7 @@
     await sleep(1100); revealBox.style.display='none'; revealBox.classList.remove('settle'); revealBox.innerHTML='';
   }
 
-  async function askDiary(b64,prompt){
-    if(typeof puter==='undefined' || !puter.ai) throw {msg:"the diary is not connected"};
-    const dataUrl="data:image/jpeg;base64,"+b64;
-    const resp=await puter.ai.chat([
-      { role:'system', content:prompt },
-      { role:'user', content:[
-        { type:'text', text:USERTEXT },
-        { type:'image_url', image_url:{ url:dataUrl } }
-      ]}
-    ], { model:MODEL, max_tokens:MAX_TOKENS });
-    // Puter returns different shapes depending on model — dig out the text robustly
+  function extractText(resp){
     let text='';
     const c = resp && resp.message && resp.message.content;
     if(typeof c==='string') text=c;
@@ -317,6 +307,27 @@
     else if(typeof resp==='string') text=resp;
     else if(resp && resp.toString) text=resp.toString();
     return (text||'').trim();
+  }
+  async function askDiary(b64,prompt){
+    if(typeof puter==='undefined' || !puter.ai) throw {msg:"the diary is not connected"};
+    const dataUrl="data:image/jpeg;base64,"+b64;
+    const messages=[
+      { role:'system', content:prompt },
+      { role:'user', content:[
+        { type:'text', text:USERTEXT },
+        { type:'image_url', image_url:{ url:dataUrl } }
+      ]}
+    ];
+    let lastErr;
+    for(const model of MODELS){
+      try{
+        const resp=await puter.ai.chat(messages,{ model, max_tokens:MAX_TOKENS });
+        const text=extractText(resp);
+        if(text) return text;
+        lastErr={msg:'empty reply'};
+      }catch(e){ lastErr={msg:(e&&(e.message||(e.error&&e.error.message)))||'failed'}; }
+    }
+    throw lastErr||{msg:'failed'};
   }
 
   async function askWithRetry(b64,prompt){
