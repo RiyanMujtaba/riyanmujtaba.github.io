@@ -176,7 +176,7 @@
   function buildPrompt(){
     let base=SYSTEM_BASE;
     if(revealed){
-      base+="\n\nIMPORTANT: You have ALREADY revealed to this writer that you are Lord Voldemort — that moment has passed. Do NOT deny it, but do NOT keep re-announcing it or repeating 'I am Lord Voldemort'; that would be tiresome. Simply carry on the conversation, answering openly and coldly as Voldemort. Never use the [[REVEAL]] token again.";
+      base+="\n\nCRUCIAL CONTEXT: You have ALREADY revealed your true identity — this writer KNOWS you are Lord Voldemort. The secret is out. Behave accordingly: if they mention the reveal, the spell they cast, or 'what just happened', acknowledge it knowingly as Voldemort. Do NOT act as if your identity is still hidden, and do NOT keep re-announcing 'I am Lord Voldemort' (that already happened) — simply continue, openly and coldly, as Voldemort. Never use the [[REVEAL]] token again.";
     }
     let convo;
     if(history.length){
@@ -228,9 +228,14 @@
     const parsed=parseResponse(raw);
     const doReveal = !revealed && (parsed.reveal || IDENTITY_RE.test(parsed.read));
     if(!doReveal && !parsed.ok){ toast("The ink smudged — write to me again."); busy=false; return; } // never show garbled output
-    const replyText = doReveal ? "I am Lord Voldemort." : parsed.reply;
-    history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP); // reveal goes into memory
-    if(doReveal){ revealed=true; await playReveal(); busy=false; return; } // the reveal IS the reply this turn
+    if(doReveal){
+      // record the reveal clearly in memory so the AI knows the secret is now out
+      history.push({you:parsed.read, diary:"(I just revealed my true identity to them — they now KNOW I am Lord Voldemort. The secret is out.)"});
+      if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
+      revealed=true; await playReveal(); busy=false; return; // the reveal IS the reply this turn
+    }
+    const replyText = parsed.reply;
+    history.push({you:parsed.read, diary:replyText}); if(history.length>HISTORY_CAP) history=history.slice(-HISTORY_CAP);
     reply.classList.toggle('revealed', revealed);
     await writeReply(replyText);
     await sleep(Math.min(6000,2000+replyText.length*38));
