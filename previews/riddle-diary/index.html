@@ -34,13 +34,7 @@
   #paper::after{ content:''; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 200px rgba(40,25,8,0.55); }
   canvas{ position:fixed; inset:0; width:100%; height:100%; touch-action:none; z-index:2; }
 
-  #hint{
-    position:fixed; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;
-    pointer-events:none; color:rgba(70,50,20,0.45);
-    font-family:'IM Fell English',serif; font-style:italic; font-size:clamp(20px,4vw,30px);
-    letter-spacing:.5px; transition:opacity .8s ease;
-  }
-  /* Reply is anchored near the top so it flows DOWN like a page being written — no re-centering jump */
+  /* Reply flows DOWN from a fixed anchor — no re-centering jump */
   #reply{
     position:fixed; z-index:4; left:0; right:0; top:26%;
     padding:0 max(9vw,34px); text-align:center; pointer-events:none;
@@ -51,17 +45,12 @@
   #reply .nib{ display:inline-block; width:2px; height:1.02em; margin-left:1px; background:#2c1d0c; vertical-align:-0.16em; animation:blink .5s step-end infinite; }
   @keyframes blink{50%{opacity:0}}
 
-  #status{
-    position:fixed; z-index:4; left:0; right:0; top:26%;
-    text-align:center; pointer-events:none; opacity:0; transition:opacity .5s ease;
-    font-family:'IM Fell English',serif; font-style:italic; color:rgba(60,40,15,0.55);
-    font-size:clamp(18px,3.5vw,26px); letter-spacing:3px;
-  }
-  #status .dot{ display:inline-block; animation:pulse 1.3s ease-in-out infinite; }
-  #status .dot:nth-child(2){animation-delay:.2s} #status .dot:nth-child(3){animation-delay:.4s}
-  @keyframes pulse{0%,100%{opacity:.2}50%{opacity:.85}}
+  /* faint signature in the corner — the only marking on the page */
+  #mark{ position:fixed; z-index:3; right:24px; bottom:20px; pointer-events:none;
+    font-family:'Caveat',cursive; font-size:23px; color:rgba(70,50,20,0.22);
+    letter-spacing:.5px; transform:rotate(-4deg); }
 
-  #clear{ position:fixed; z-index:5; left:18px; top:18px; height:40px; padding:0 15px; border-radius:20px; border:none; background:rgba(70,50,20,0.12); color:rgba(70,50,20,0.55); font-family:'IM Fell English',serif; font-style:italic; font-size:15px; cursor:pointer; opacity:.4; transition:opacity .2s; }
+  #clear{ position:fixed; z-index:5; left:18px; top:18px; height:38px; padding:0 14px; border-radius:19px; border:none; background:rgba(70,50,20,0.10); color:rgba(70,50,20,0.5); font-family:'IM Fell English',serif; font-style:italic; font-size:15px; cursor:pointer; opacity:.35; transition:opacity .2s; }
   #clear:active{opacity:1}
   .toast{ position:fixed; z-index:11; left:50%; bottom:28px; transform:translateX(-50%); background:rgba(30,20,10,0.9); color:#e8dcc0; padding:10px 18px; border-radius:20px; font-family:'IM Fell English',serif; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; max-width:90vw; text-align:center; }
   .toast.show{opacity:1}
@@ -70,9 +59,8 @@
 <body>
   <div id="paper"></div>
   <canvas id="ink"></canvas>
-  <div id="hint">Write to the diary&hellip;</div>
-  <div id="status"><span class="dot">&bull;</span><span class="dot">&bull;</span><span class="dot">&bull;</span></div>
   <div id="reply"></div>
+  <div id="mark">T. M. Riddle</div>
   <button id="clear">clear</button>
   <div class="toast" id="toast"></div>
 
@@ -85,8 +73,7 @@
   const IDLE_MS = 3500;
 
   const canvas=document.getElementById('ink'), ctx=canvas.getContext('2d');
-  const hint=document.getElementById('hint'), reply=document.getElementById('reply');
-  const statusEl=document.getElementById('status'), toastEl=document.getElementById('toast');
+  const reply=document.getElementById('reply'), toastEl=document.getElementById('toast');
 
   let W=0,H=0,DPR=1;
   function resize(){
@@ -116,7 +103,7 @@
     if(e.pointerType==='pen') acceptTouch=false;
     if(e.pointerType==='touch'&&!acceptTouch) return;
     e.preventDefault(); canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);
-    cur={pts:[pos(e)]}; hideHint(); clearTimeout(idleTimer);
+    cur={pts:[pos(e)]}; clearTimeout(idleTimer);
   }
   function move(e){
     if(!cur||busy) return;
@@ -131,9 +118,6 @@
   canvas.addEventListener('pointerup',up);
   canvas.addEventListener('pointercancel',up);
   canvas.addEventListener('pointerleave',up);
-
-  function hideHint(){ hint.style.opacity='0'; }
-  function showHint(){ hint.style.opacity='1'; }
 
   function captureBase64(){
     let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
@@ -153,24 +137,17 @@
 
   async function absorbAndAsk(){
     if(busy||!strokes.length) return;
-    busy=true; clearTimeout(idleTimer); hideHint();
+    busy=true; clearTimeout(idleTimer);
     const b64=captureBase64();
-    // fire the request NOW so it runs during the fade (feels instant)
-    const pending=askWithRetry(b64); pending.catch(()=>{});
+    const pending=askWithRetry(b64); pending.catch(()=>{}); // fire during the fade
     await fadeCanvas(); strokes=[]; ctx.clearRect(0,0,W,H); canvas.style.opacity='1';
-    statusEl.style.opacity='1';
     let answer='';
     try{ answer=await pending; }
-    catch(err){
-      statusEl.style.opacity='0';
-      toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again"));
-      busy=false; showHint(); return;
-    }
-    statusEl.style.opacity='0'; await sleep(180);
+    catch(err){ toast("The ink runs dry — "+(err&&err.msg?err.msg:"try again")); busy=false; return; }
     await writeReply(answer||"…");
     await sleep(Math.min(9000,3200+answer.length*45));
     reply.style.opacity='0'; await sleep(1300); reply.textContent='';
-    busy=false; showHint();
+    busy=false;
   }
 
   function fadeCanvas(){ return new Promise(res=>{ let op=1; canvas.style.transition='none'; const step=()=>{ op-=0.06; canvas.style.opacity=String(Math.max(0,op)); if(op>0)requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
@@ -185,7 +162,7 @@
         if(i<=text.length){ span.textContent=text.slice(0,i); i++;
           const c=text[i-1]||'';
           let d = c===' '?24 : /[.,!?;:]/.test(c)?140 : 32;
-          d += Math.random()*22; // organic, less "computerized"
+          d += Math.random()*22;
           setTimeout(()=>requestAnimationFrame(tick),d);
         } else { nib.remove(); res(); }
       };
@@ -205,7 +182,7 @@
   }
 
   async function askWithRetry(b64){
-    const delays=[0,1500,3200];
+    const delays=[0,1800];
     let lastErr;
     for(let i=0;i<delays.length;i++){
       if(delays[i]) await sleep(delays[i]);
@@ -226,7 +203,7 @@
   let toastT=null;
   function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('show'),3400); }
 
-  document.getElementById('clear').addEventListener('click',()=>{ if(busy) return; strokes=[]; cur=null; ctx.clearRect(0,0,W,H); showHint(); });
+  document.getElementById('clear').addEventListener('click',()=>{ if(busy) return; strokes=[]; cur=null; ctx.clearRect(0,0,W,H); });
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
 

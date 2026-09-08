@@ -73,7 +73,7 @@ async function ask(model, key, b64, system, maxTokens) {
   const payload = {
     system_instruction: { parts: [{ text: system }] },
     contents: [{ role: "user", parts: [{ text: USERTEXT }, { inline_data: { mime_type: "image/jpeg", data: b64 } }] }],
-    generationConfig: { temperature: 0.85, maxOutputTokens: maxTokens }
+    generationConfig: { temperature: 0.85, maxOutputTokens: maxTokens, thinkingConfig: { thinkingBudget: 0 } }
   };
   for (let attempt = 0; attempt < 3; attempt++) {
     const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
