@@ -174,12 +174,12 @@
       startScratch(){
         if(!on||!ensure()||scratch) return; res();
         const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
-        const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2600; f.Q.value=0.7;
+        const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1400; f.Q.value=0.5;
         const g=ac.createGain(); g.gain.value=0.0001; src.connect(f).connect(g).connect(master); src.start();
-        g.gain.exponentialRampToValueAtTime(0.05,t()+0.05); scratch={src,g};
+        g.gain.exponentialRampToValueAtTime(0.013,t()+0.08); scratch={src,g};   // very soft, dull scratch
       },
       stopScratch(){ if(!scratch) return; const s=scratch; scratch=null; try{ s.g.gain.setTargetAtTime(0.0001,t(),0.04); setTimeout(()=>{try{s.src.stop()}catch(e){}},150);}catch(e){} },
-      tick(){ if(!on||!ac) return; noise(0.05,0.04,'bandpass',3000+Math.random()*1500,0.8); },
+      tick(){ if(!on||!ac) return; noise(0.045,0.018,'bandpass',2000+Math.random()*1000,0.6); },
       absorb(){ if(!on||!ensure()) return; res(); noise(0.7,0.08,'lowpass',900,0.6); tone('sine',300,120,0.65,0.05); },
       chime(){ if(!on||!ensure()) return; res(); [880,1320,1760,2640].forEach((f,i)=>tone('sine',f,null,1.6,0.11/(i+1))); },
       thud(){ if(!on||!ensure()) return; res(); tone('sine',180,42,0.7,0.35); noise(0.5,0.12,'lowpass',600,0.5); },
