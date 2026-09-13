@@ -158,6 +158,21 @@
       const end=Date.now()+dur*1000;
       (function pop(){ if(!on||Date.now()>end) return; noise(0.04,0.06+Math.random()*0.05,'bandpass',800+Math.random()*2000,1); setTimeout(pop,60+Math.random()*140); })();
     }
+    function bell(freq,dur,peak){   // shimmering magical chime (two slightly-detuned sines)
+      const o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain();
+      o.type='sine'; o2.type='sine'; o.frequency.value=freq; o2.frequency.value=freq*1.004;
+      g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(peak,t()+0.015); g.gain.exponentialRampToValueAtTime(0.0001,t()+dur);
+      o.connect(g); o2.connect(g); g.connect(master); o.start(); o2.start(); o.stop(t()+dur+0.05); o2.stop(t()+dur+0.05);
+    }
+    function pad(freq,dur,peak,type){   // slow swelling drone note
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type=type||'sine'; o.frequency.value=freq;
+      g.gain.setValueAtTime(0.0001,t()); g.gain.linearRampToValueAtTime(peak,t()+dur*0.6); g.gain.exponentialRampToValueAtTime(0.0001,t()+dur);
+      o.connect(g).connect(master); o.start(); o.stop(t()+dur+0.05);
+    }
+    function boom(){   // deep resonant gong for the ignition
+      tone('sine',110,44,1.8,0.4); bell(220,2.4,0.12); bell(330,2.2,0.07); noise(0.5,0.14,'lowpass',400,0.4);
+    }
     const S={
       resume(){ if(ensure()) res(); },
       isOn(){ return on; },
@@ -191,12 +206,18 @@
         src.connect(f).connect(g).connect(master); src.start(); src.stop(t()+1.85); lfo.stop(t()+1.85);
       },
       reveal(){ if(!on||!ensure()) return; res();
-        const o=ac.createOscillator(),g=ac.createGain(),f=ac.createBiquadFilter();
-        o.type='sawtooth'; o.frequency.setValueAtTime(55,t()); o.frequency.exponentialRampToValueAtTime(180,t()+2.6);
-        f.type='lowpass'; f.frequency.setValueAtTime(250,t()); f.frequency.exponentialRampToValueAtTime(1600,t()+2.6);
-        g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(0.22,t()+2.4); g.gain.exponentialRampToValueAtTime(0.0001,t()+4.8);
-        o.connect(f).connect(g).connect(master); o.start(); o.stop(t()+4.9);
-        setTimeout(()=>{ if(!on) return; S.thud(); fire(3.2); },2400);
+        // low mystical pad swelling underneath
+        pad(65,4.6,0.12,'sine'); pad(97.5,4.6,0.08,'triangle');
+        // shimmering ascending bells — the "magic"
+        const notes=[523.25,587.33,698.46,783.99,1046.5,1174.66];
+        notes.forEach((f,i)=>setTimeout(()=>{ if(!on) return; bell(f,1.9,0.12); bell(f*2,1.5,0.04); }, i*240));
+        // airy rising sweep
+        const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+        const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.setValueAtTime(400,t()); f.frequency.exponentialRampToValueAtTime(6000,t()+2.4); f.Q.value=1.5;
+        const g=ac.createGain(); g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(0.05,t()+2.0); g.gain.exponentialRampToValueAtTime(0.0001,t()+2.8);
+        src.connect(f).connect(g).connect(master); src.start(); src.stop(t()+2.9);
+        // ignition: deep resonant boom + crackling fire as it burns
+        setTimeout(()=>{ if(!on) return; boom(); fire(3.4); },2500);
       }
     };
     return S;
