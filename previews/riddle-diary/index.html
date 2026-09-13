@@ -53,6 +53,9 @@
   #clear:active{opacity:1}
   #test{ position:fixed; z-index:5; left:18px; bottom:18px; height:34px; padding:0 13px; border-radius:17px; border:1px solid rgba(120,30,10,0.28); background:rgba(120,30,10,0.07); color:rgba(120,40,15,0.55); font-family:'IM Fell English',serif; font-style:italic; font-size:13px; cursor:pointer; opacity:.4; transition:opacity .2s; display:none; }
   #test:active{opacity:1}
+  #sound{ position:fixed; z-index:5; right:18px; top:18px; width:38px; height:38px; border-radius:50%; border:none; background:rgba(70,50,20,0.10); cursor:pointer; opacity:.4; transition:opacity .2s; display:flex; align-items:center; justify-content:center; font-size:16px; line-height:1; }
+  #sound:active{opacity:1}
+  body.dark #sound{ background:rgba(200,210,235,0.12); }
   .toast{ position:fixed; z-index:11; left:50%; bottom:28px; transform:translateX(-50%); background:rgba(30,20,10,0.9); color:#e8dcc0; padding:10px 18px; border-radius:20px; font-family:'IM Fell English',serif; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; max-width:90vw; text-align:center; }
   .toast.show{opacity:1}
 
@@ -93,6 +96,7 @@
   <div id="mark">T. M. Riddle</div>
   <button id="clear">clear</button>
   <button id="test" title="preview the reveal">reveal</button>
+  <button id="sound" title="Sound on/off">🔊</button>
   <div class="toast" id="toast"></div>
 
 <script>
@@ -116,6 +120,87 @@
 "FORMAT: Always answer in exactly this shape and nothing else:\n"+
 "READ: <briefly transcribe what they just wrote>\n"+
 "REPLY: <your reply, in character>";
+
+  // ---- SOUND: everything synthesized with Web Audio (no files, works offline) ----
+  const Sound = (function(){
+    let ac=null, master=null, noiseBuf=null, ambient=null, scratch=null;
+    let on = (localStorage.getItem('diary_sound')!=='off');   // default ON
+    const t=()=>ac.currentTime;
+    function ensure(){
+      if(ac) return true;
+      try{
+        ac=new (window.AudioContext||window.webkitAudioContext)();
+        master=ac.createGain(); master.gain.value=on?1:0; master.connect(ac.destination);
+        noiseBuf=ac.createBuffer(1, ac.sampleRate*2, ac.sampleRate);
+        const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+      }catch(e){ ac=null; return false; }
+      return true;
+    }
+    function res(){ if(ac&&ac.state==='suspended') ac.resume(); }
+    function tone(type,f0,f1,dur,peak){
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type=type; o.frequency.setValueAtTime(f0,t());
+      if(f1!=null) o.frequency.exponentialRampToValueAtTime(Math.max(1,f1),t()+dur);
+      g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(peak,t()+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t()+dur);
+      o.connect(g).connect(master); o.start(); o.stop(t()+dur+0.05);
+    }
+    function noise(dur,peak,type,freq,Q){
+      const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+      const f=ac.createBiquadFilter(); f.type=type||'bandpass'; f.frequency.value=freq||2000; if(Q!=null) f.Q.value=Q;
+      const g=ac.createGain(); g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(peak,t()+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t()+dur);
+      src.connect(f).connect(g).connect(master); src.start(); src.stop(t()+dur+0.05);
+    }
+    function fire(dur){
+      const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+      const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1200; f.Q.value=0.6;
+      const g=ac.createGain(); g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(0.1,t()+0.3); g.gain.setValueAtTime(0.1,t()+dur-0.8); g.gain.exponentialRampToValueAtTime(0.0001,t()+dur);
+      src.connect(f).connect(g).connect(master); src.start(); src.stop(t()+dur+0.05);
+      const end=Date.now()+dur*1000;
+      (function pop(){ if(!on||Date.now()>end) return; noise(0.04,0.06+Math.random()*0.05,'bandpass',800+Math.random()*2000,1); setTimeout(pop,60+Math.random()*140); })();
+    }
+    const S={
+      resume(){ if(ensure()) res(); },
+      isOn(){ return on; },
+      toggle(){ on=!on; localStorage.setItem('diary_sound',on?'on':'off'); if(ensure()){ master.gain.setTargetAtTime(on?1:0,t(),0.05); if(on){ res(); S.startAmbient(); } } return on; },
+      startAmbient(){
+        if(!on||!ensure()||ambient) return; res();
+        const g=ac.createGain(); g.gain.value=0.0001; g.connect(master); const a=[g];
+        [55,82.5].forEach(freq=>{ const o=ac.createOscillator(); o.type='sine'; o.frequency.value=freq; const og=ac.createGain(); og.gain.value=0.5; o.connect(og).connect(g); o.start(); a.push(o); });
+        const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true; const f=ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value=420; const ng=ac.createGain(); ng.gain.value=0.18; src.connect(f).connect(ng).connect(g); src.start(); a.push(src);
+        const lfo=ac.createOscillator(),lg=ac.createGain(); lfo.frequency.value=0.05; lg.gain.value=180; lfo.connect(lg).connect(f.frequency); lfo.start(); a.push(lfo);
+        g.gain.exponentialRampToValueAtTime(0.09,t()+5);
+        ambient={g,a};
+      },
+      startScratch(){
+        if(!on||!ensure()||scratch) return; res();
+        const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+        const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2600; f.Q.value=0.7;
+        const g=ac.createGain(); g.gain.value=0.0001; src.connect(f).connect(g).connect(master); src.start();
+        g.gain.exponentialRampToValueAtTime(0.05,t()+0.05); scratch={src,g};
+      },
+      stopScratch(){ if(!scratch) return; const s=scratch; scratch=null; try{ s.g.gain.setTargetAtTime(0.0001,t(),0.04); setTimeout(()=>{try{s.src.stop()}catch(e){}},150);}catch(e){} },
+      tick(){ if(!on||!ac) return; noise(0.05,0.04,'bandpass',3000+Math.random()*1500,0.8); },
+      absorb(){ if(!on||!ensure()) return; res(); noise(0.7,0.08,'lowpass',900,0.6); tone('sine',300,120,0.65,0.05); },
+      chime(){ if(!on||!ensure()) return; res(); [880,1320,1760,2640].forEach((f,i)=>tone('sine',f,null,1.6,0.11/(i+1))); },
+      thud(){ if(!on||!ensure()) return; res(); tone('sine',180,42,0.7,0.35); noise(0.5,0.12,'lowpass',600,0.5); },
+      zap(){ if(!on||!ensure()) return; res(); tone('sawtooth',700,55,0.45,0.3); tone('square',120,50,0.5,0.15); noise(0.25,0.22,'highpass',1200,0.5); },
+      hiss(){ if(!on||!ensure()) return; res();
+        const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true; const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=5500; f.Q.value=3;
+        const g=ac.createGain(); g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(0.14,t()+0.2); g.gain.setValueAtTime(0.14,t()+1.1); g.gain.exponentialRampToValueAtTime(0.0001,t()+1.8);
+        const lfo=ac.createOscillator(),lg=ac.createGain(); lfo.frequency.value=7; lg.gain.value=1800; lfo.connect(lg).connect(f.frequency); lfo.start();
+        src.connect(f).connect(g).connect(master); src.start(); src.stop(t()+1.85); lfo.stop(t()+1.85);
+      },
+      reveal(){ if(!on||!ensure()) return; res();
+        const o=ac.createOscillator(),g=ac.createGain(),f=ac.createBiquadFilter();
+        o.type='sawtooth'; o.frequency.setValueAtTime(55,t()); o.frequency.exponentialRampToValueAtTime(180,t()+2.6);
+        f.type='lowpass'; f.frequency.setValueAtTime(250,t()); f.frequency.exponentialRampToValueAtTime(1600,t()+2.6);
+        g.gain.setValueAtTime(0.0001,t()); g.gain.exponentialRampToValueAtTime(0.22,t()+2.4); g.gain.exponentialRampToValueAtTime(0.0001,t()+4.8);
+        o.connect(f).connect(g).connect(master); o.start(); o.stop(t()+4.9);
+        setTimeout(()=>{ if(!on) return; S.thud(); fire(3.2); },2400);
+      }
+    };
+    return S;
+  })();
 
   const canvas=document.getElementById('ink'), ctx=canvas.getContext('2d');
   const reply=document.getElementById('reply'), toastEl=document.getElementById('toast'), revealBox=document.getElementById('reveal');
@@ -157,6 +242,7 @@
     if(e.pointerType==='touch'&&!acceptTouch) return;
     e.preventDefault(); canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);
     cur={pts:[pos(e)]}; clearTimeout(idleTimer);
+    Sound.resume(); Sound.startAmbient(); Sound.startScratch();
   }
   function move(e){
     if(!cur||busy) return;
@@ -165,7 +251,7 @@
     const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
     for(const ev of evs){ const p=pos(ev),last=cur.pts[cur.pts.length-1]; if(last)drawSeg(last,p); cur.pts.push(p); }
   }
-  function up(){ if(!cur) return; if(cur.pts.length>1) strokes.push(cur); cur=null; if(strokes.length) scheduleIdle(); }
+  function up(){ Sound.stopScratch(); if(!cur) return; if(cur.pts.length>1) strokes.push(cur); cur=null; if(strokes.length) scheduleIdle(); }
   canvas.addEventListener('pointerdown',down,{passive:false});
   canvas.addEventListener('pointermove',move,{passive:false});
   canvas.addEventListener('pointerup',up);
@@ -230,6 +316,7 @@
     const b64=captureBase64();
     const prompt=buildPrompt();
     const pending=askWithRetry(b64,prompt); pending.catch(()=>{});
+    Sound.absorb();
     await fadeCanvas(); strokes=[]; ctx.clearRect(0,0,W,H); canvas.style.opacity='1';
     let raw='';
     try{ raw=await pending; }
@@ -283,6 +370,7 @@
         if(i>=tokens.length){ res(); return; }
         const t=tokens[i]; i++; out+=t; reply.textContent=out;
         if(/^\s+$/.test(t)){ requestAnimationFrame(tick); return; }   // spaces are free
+        Sound.tick();                                                 // soft quill scratch per word
         let d = 90 + t.length*20 + Math.random()*45;                  // paced per word
         if(/[.,!?;:]$/.test(t)) d += 210;                             // breathe after punctuation
         setTimeout(()=>requestAnimationFrame(tick), d);
@@ -307,6 +395,7 @@
     }
   }
   async function playReveal(){
+    Sound.reveal();
     const SRC=["TOM","MARVOLO","RIDDLE"], DST=["I AM","LORD","VOLDEMORT"];
     const src=[]; buildLines(SRC, src);
     // start hidden, ready to be "written" in fire
@@ -396,10 +485,10 @@
   }
   function fxEl(){ return document.getElementById('fx'); }
   async function playSpell(kind){
-    if(kind==='avada') return avadaFx();
-    if(kind==='lumos'){ setMode('light'); return; }             // lamp on
-    if(kind==='nox'){ setMode('dark'); return; }                // lamp off
-    if(kind==='parsel') return parselFx();
+    if(kind==='avada'){ Sound.zap(); return avadaFx(); }
+    if(kind==='lumos'){ Sound.chime(); setMode('light'); return; }   // lamp on
+    if(kind==='nox'){ Sound.thud(); setMode('dark'); return; }       // lamp off
+    if(kind==='parsel'){ Sound.hiss(); return parselFx(); }
   }
   async function avadaFx(){                                   // killing curse: green flash -> black -> return
     const fx=fxEl(); fx.innerHTML='';
@@ -472,6 +561,9 @@
 
   document.getElementById('clear').addEventListener('click',()=>{ if(busy) return; strokes=[]; cur=null; ctx.clearRect(0,0,W,H); });
   document.getElementById('test').addEventListener('click', async ()=>{ if(busy) return; busy=true; clearTimeout(idleTimer); await playReveal(); busy=false; });
+  const soundBtn=document.getElementById('sound');
+  soundBtn.textContent = Sound.isOn() ? '🔊' : '🔇';
+  soundBtn.addEventListener('click', ()=>{ soundBtn.textContent = Sound.toggle() ? '🔊' : '🔇'; });
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
 
