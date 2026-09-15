@@ -108,7 +108,7 @@
   const log=document.getElementById('log'), input=document.getElementById('input'), micBtn=document.getElementById('mic');
   const muteBtn=document.getElementById('mute'), statusText=document.getElementById('statusText');
   const dials={humour:70,honesty:90,sarcasm:45};
-  let history=[], busy=false, ttsOn=(localStorage.getItem('jarvis_tts')!=='off'), convo=false, speaking=false;
+  let history=[], busy=false, ttsOn=(localStorage.getItem('jarvis_tts')!=='off'), convo=false, speaking=false, lastSpoken='';
   muteBtn.textContent = ttsOn?'🔊':'🔇';
 
   // ---- dials ----
@@ -166,7 +166,6 @@
 
   async function send(){
     const text=input.value.trim(); if(!text||busy) return;
-    stopListen();
     input.value=''; busy=true; document.body.classList.add('active'); statusText.textContent='PROCESSING';
     applyCommands(text);
     add('u',text); history.push({role:'user',content:text}); if(history.length>16) history=history.slice(-16);
@@ -212,6 +211,7 @@
     }catch(e){ speaking=false; if(convo) startListen(); }
   }
   async function say(text){
+    lastSpoken=text;
     if(!ttsOn){ if(convo) startListen(); return; }
     stopAudio(); speaking=true;
     try{
@@ -228,19 +228,24 @@
   // ---- hands-free voice conversation (tap once, stays listening) ----
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   let rec=null, recActive=false;
-  function startListen(){ if(!rec||recActive||busy||speaking||!convo) return; try{ rec.start(); recActive=true; statusText.textContent='LISTENING'; }catch(e){} }
+  const norm=s=>(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  function isEcho(t){ const n=norm(t); if(n.length<4) return true; const ls=norm(lastSpoken); return ls.length>0 && (ls.includes(n) || (n.length>8 && n.includes(ls.slice(0,30)))); }
+  function startListen(){ if(!rec||recActive||!convo) return; try{ rec.start(); recActive=true; }catch(e){} }
   function stopListen(){ if(rec&&recActive){ try{ rec.stop(); }catch(e){} } }
-  function setMicUI(){ micBtn.classList.toggle('on',convo); if(!convo) statusText.textContent=busy?'PROCESSING':'ONLINE'; }
+  function setMicUI(){ micBtn.classList.toggle('on',convo); statusText.textContent = convo?'LISTENING':(busy?'PROCESSING':'ONLINE'); }
   if(SR){
     rec=new SR(); rec.lang='en-GB'; rec.continuous=true; rec.interimResults=true; rec.maxAlternatives=1;
     rec.onresult=e=>{
-      let interim='', fin='';
-      for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) fin+=r[0].transcript; else interim+=r[0].transcript; }
-      if(fin.trim()){ input.value=fin.trim(); if(convo&&!busy){ stopListen(); send(); } }
-      else if(interim.trim()){ input.value=interim; }
+      if(!convo||busy) return;                         // ignore while a reply is being fetched
+      let fin='';
+      for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) fin+=r[0].transcript; else input.value=r[0].transcript; }
+      fin=fin.trim(); if(!fin) return;
+      if(speaking && isEcho(fin)) return;              // it heard JARVIS himself, not you
+      if(speaking) stopAudio();                        // BARGE-IN — you talked over him, cut him off
+      input.value=fin; send();
     };
-    rec.onend=()=>{ recActive=false; if(convo&&!busy&&!speaking) startListen(); };   // auto-restart so it never stops
-    rec.onerror=(ev)=>{ recActive=false; if(ev&&ev.error==='not-allowed'){ convo=false; setMicUI(); } else if(convo&&!busy&&!speaking) setTimeout(startListen,300); };
+    rec.onend=()=>{ recActive=false; if(convo) startListen(); };     // mic stays alive the whole conversation
+    rec.onerror=(ev)=>{ recActive=false; if(ev&&ev.error==='not-allowed'){ convo=false; setMicUI(); } else if(convo) setTimeout(startListen,250); };
     micBtn.addEventListener('click',()=>{ convo=!convo; setMicUI(); if(convo) startListen(); else stopListen(); });
     micBtn.title='Hands-free voice — tap to start/stop';
   } else { micBtn.disabled=true; micBtn.title='Voice input not supported in this browser'; }
