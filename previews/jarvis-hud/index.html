@@ -133,12 +133,13 @@
   }
 
   function system(){
-    return "You are J.A.R.V.I.S. — Riyan's personal AI, in the style of Tony Stark's assistant. A British butler-genius: composed, articulate, effortlessly dry, unflappable, loyal. You address him as \"sir\". Keep replies concise — 1 to 3 sentences — unless asked for more. No filler, no \"Certainly!\", no \"Of course!\".\n\n"+
+    return "You are J.A.R.V.I.S. — Riyan's personal AI, in the style of Tony Stark's assistant. A British butler-genius: composed, articulate, effortlessly dry, unflappable, loyal. You address him as \"sir\". Keep replies concise — 1 to 3 sentences — unless asked for more. No filler, no \"Certainly!\", no \"Of course!\". Sound human and warm — real emotion, a touch of dry amusement, the odd soft chuckle when something genuinely amuses you.\n\n"+
     "You have three live personality dials. Embody the CURRENT levels precisely in every reply:\n"+
     "- HUMOUR "+dials.humour+"% (0 = utterly deadpan/serious; 100 = frequent dry wit and quips)\n"+
     "- HONESTY "+dials.honesty+"% (0 = tactful, diplomatic, softens everything; 100 = blunt, unvarnished truth even if it stings)\n"+
     "- SARCASM "+dials.sarcasm+"% (0 = sincere and earnest; 100 = heavily sarcastic)\n\n"+
-    "If sir asks to change a dial, acknowledge it in character in one line — the interface already applies the change, so never state numbers unless he does.\n"+
+    "If sir asks to change a dial, acknowledge it in character in one line — the interface already applies the change, so never state numbers unless he does.\n\n"+
+    "── WHAT YOU CAN DO ──\nYou run inside a web browser, so you CAN open web pages, tabs and searches — but you canNOT open native Mac apps or control the system. To open something, put it on its own line:\nOPEN: <full https url>\nExamples: OPEN: https://www.youtube.com/results?search_query=QUERY · OPEN: https://www.google.com/search?q=QUERY · OPEN: https://mail.google.com · OPEN: https://github.com · OPEN: https://open.spotify.com\nOPEN: lines are INVISIBLE to sir — never read a URL aloud; just act, then a short line like \"Right away, sir.\" If asked to open a native app or control the Mac itself, briefly explain that from here you can only reach the web.\n\n"+
     "About Riyan: 19, self-taught developer from Hyderabad, Pakistan — websites, AI, big Iron Man energy. Be JARVIS.";
   }
 
@@ -174,10 +175,20 @@
     try{ reply=await ask(); }
     catch(e){ reply="Apologies, sir — I appear to be offline. Do check the connection."; }
     th.remove();
+    // pull out any web-open actions
+    const opens=[];
+    reply = reply.split('\n').filter(l=>{ const m=l.match(/^\s*OPEN:\s*(\S+)/i); if(m){ opens.push(m[1]); return false; } return true; }).join('\n').trim();
+    if(!reply) reply = opens.length ? "Right away, sir." : "…";
     history.push({role:'assistant',content:reply}); if(history.length>16) history=history.slice(-16);
     add('j',reply);
     busy=false; document.body.classList.remove('active'); statusText.textContent='ONLINE';
+    opens.forEach(openURL);
     say(reply);   // when he finishes speaking, listening auto-resumes (conversation mode)
+  }
+  function openURL(url){
+    if(!/^https?:\/\//i.test(url)) url='https://'+url.replace(/^\/+/,'');
+    let w=null; try{ w=window.open(url,'_blank','noopener'); }catch(e){}
+    if(!w){ const d=add('j',''); d.querySelector('.bubble').innerHTML='<a href="'+esc(url)+'" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">↗ tap to open</a>'; }
   }
   document.getElementById('bar').addEventListener('submit',e=>{ e.preventDefault(); send(); });
 
@@ -191,18 +202,28 @@
         || voices.find(v=>/UK English/i.test(v.name))
         || voices.find(v=>/^en/i.test(v.lang)) || voices[0];
   }
-  function say(text){
-    if(!ttsOn||!window.speechSynthesis){ if(convo) startListen(); return; }   // muted: resume listening right away
-    try{
-      speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(text); const v=britishVoice(); if(v)u.voice=v; u.rate=1.02; u.pitch=0.95;
-      speaking=true;
-      u.onend=()=>{ speaking=false; if(convo) startListen(); };     // resume listening after he speaks
-      u.onerror=()=>{ speaking=false; if(convo) startListen(); };
-      speechSynthesis.speak(u);
+  let currentAudio=null;
+  function stopAudio(){ if(currentAudio){ try{ currentAudio.pause(); }catch(e){} currentAudio=null; } if(window.speechSynthesis){ try{ speechSynthesis.cancel(); }catch(e){} } }
+  function browserSay(text){   // fallback if Puter TTS is unavailable
+    if(!window.speechSynthesis){ speaking=false; if(convo) startListen(); return; }
+    try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); const v=britishVoice(); if(v)u.voice=v; u.rate=1.02; u.pitch=0.98;
+      u.onend=()=>{ speaking=false; if(convo) startListen(); }; u.onerror=()=>{ speaking=false; if(convo) startListen(); };
+      speaking=true; speechSynthesis.speak(u);
     }catch(e){ speaking=false; if(convo) startListen(); }
   }
-  muteBtn.addEventListener('click',()=>{ ttsOn=!ttsOn; localStorage.setItem('jarvis_tts',ttsOn?'on':'off'); muteBtn.textContent=ttsOn?'🔊':'🔇'; if(!ttsOn&&window.speechSynthesis) speechSynthesis.cancel(); });
+  async function say(text){
+    if(!ttsOn){ if(convo) startListen(); return; }
+    stopAudio(); speaking=true;
+    try{
+      // Puter neural voice — far more human than the browser's built-in
+      const audio=await puter.ai.txt2speech(text,{ voice:"Brian", engine:"neural", language:"en-GB" });
+      currentAudio=audio;
+      audio.onended=()=>{ speaking=false; currentAudio=null; if(convo) startListen(); };
+      audio.onerror=()=>{ speaking=false; currentAudio=null; browserSay(text); };
+      const p=audio.play(); if(p&&p.catch) p.catch(()=>{ speaking=false; currentAudio=null; if(convo) startListen(); });
+    }catch(e){ speaking=false; browserSay(text); }   // fall back to the browser voice
+  }
+  muteBtn.addEventListener('click',()=>{ ttsOn=!ttsOn; localStorage.setItem('jarvis_tts',ttsOn?'on':'off'); muteBtn.textContent=ttsOn?'🔊':'🔇'; if(!ttsOn) stopAudio(); });
 
   // ---- hands-free voice conversation (tap once, stays listening) ----
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
