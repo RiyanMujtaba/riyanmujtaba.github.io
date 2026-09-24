@@ -459,11 +459,10 @@
     .project-card:hover::after { transform: scaleY(1); }
 
     .project-card.featured {
-      grid-column: span 2;
+      grid-column: 1 / -1;
     }
 
     @media (max-width: 680px) {
-      .project-card.featured { grid-column: span 1; }
       .projects-grid { grid-template-columns: 1fr; }
     }
 
@@ -860,9 +859,6 @@
         </div>
       </div>
 
-      <!-- Potterhead corner -->
-      <div style="grid-column:1/-1;text-align:center;color:#c9a24a;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.85;margin:14px 0 -4px;">✦ &nbsp; a little something for the potterheads &nbsp; ✦</div>
-
       <!-- The Riddle Diary -->
       <div class="project-card reveal" onclick="window.open('https://riyanmujtaba.github.io/previews/riddle-diary/','_blank')">
         <div class="project-preview"><img loading="lazy" src="imgs/riddle-diary.jpg" alt="The Riddle Diary"></div>
@@ -875,7 +871,7 @@
         </div>
         <p class="project-desc">Tom Riddle's enchanted diary — you write to it by hand and the AI reads your handwriting and writes back in character, your ink fading into the page. Saw the idea going around online, so I built my own instead. Sign into the AI behind it once and keep using it. Hidden easter eggs: cast spells (Lumos, Nox, Avada Kedavra, Parseltongue), or press it on its true identity — or cast Revelio — to watch the name burn into "I am Lord Voldemort".</p>
         <div class="project-tags">
-          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">Harry Potter</span>
           <span class="project-tag">Canvas</span>
           <span class="project-tag">AI Vision</span>
         </div>
@@ -893,14 +889,11 @@
         </div>
         <p class="project-desc">A living map that shows where your friends wander in real time — sign in, pick a name, and your footprints move across an aged-parchment map. Choose who can find you (public, or private to specific people), and say "Mischief Managed" to vanish. Full-stack: Google sign-in, a realtime database, live GPS. Honestly more of a passion/learning project than a finished product — a website can't track location in the background the way a native app can, so it never quite became the always-on thing I pictured. Still, it taught me end-to-end auth, realtime data and live location, and I'm fond of it. A homage to the enchanted map from Harry Potter.</p>
         <div class="project-tags">
+          <span class="project-tag">Harry Potter</span>
           <span class="project-tag">Firebase</span>
           <span class="project-tag">Leaflet</span>
-          <span class="project-tag">Realtime</span>
         </div>
       </div>
-
-      <!-- end potterhead cluster: force a new row so KiloTrack isn't under the label -->
-      <div style="grid-column:1/-1;height:0"></div>
 
       <!-- KiloTrack -->
       <div class="project-card reveal" onclick="window.open('https://riyanmujtaba.github.io/KiloTrack','_blank')">
